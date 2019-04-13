@@ -26,9 +26,4 @@ A collection of Cycle.js apps for running a simple human robot interaction user 
     cd apps/replayer
     npm start
     ```
-    or using [`apps/charts`](./apps/charts):
-    ```
-    cd apps/charts
-    npm start
-    ```
     You should place your interaction file, e.g., the one downloaded in 2., in `./apps/replayer/` and specify the filename in [`apps/settings.json`](./apps/settings.json), e.g., `{"datareplayer": {"filename": "your_file_name"}}`.

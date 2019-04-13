@@ -1,6 +1,7 @@
 var settings = require('./settings.json');
 
 var defaultVal = {
+  charts: {},
   robot: {
     withTabletFaceRobotActionsOptions: {},
     recording: {

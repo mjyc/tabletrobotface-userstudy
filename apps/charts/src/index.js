@@ -2,9 +2,9 @@ import xs from 'xstream';
 import {run} from '@cycle/run';
 import {div, canvas, makeDOMDriver} from '@cycle/dom';
 import {config} from './config';
-import settings from './settings_helper';
+import settings from '../../settings_helper';
 
-const filename = settings.filename;
+const filename = settings.charts.filename || 'testdata.json';
 
 function main(sources) {
   const vdom$ = xs.of(

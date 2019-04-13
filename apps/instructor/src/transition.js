@@ -6,7 +6,7 @@ export function transition(state, input) {
       outputs: {
         RobotSpeechbubbleAction: 'Click \'Hello when you are ready\'',
         HumanSpeechbubbleAction: ['Next'],
-        AudioPlayerAction: '/public/G12.ogg',
+        AudioPlayerAction: '/public/snd/G12.ogg',
       },
     };
   } else if (state === 'S1' && input.type === 'HumanSpeechbubbleAction'
@@ -16,7 +16,7 @@ export function transition(state, input) {
       outputs: {
         RobotSpeechbubbleAction: 'Answer the robot',
         HumanSpeechbubbleAction: ['Next'],
-        AudioPlayerAction: '/public/G12.ogg',
+        AudioPlayerAction: '/public/snd/G12.ogg',
       },
     };
   } else if (state === 'S2' && input.type === 'HumanSpeechbubbleAction'
@@ -26,7 +26,7 @@ export function transition(state, input) {
       outputs: {
         RobotSpeechbubbleAction: 'Repeat if you like. Otherwise, you are done!',
         HumanSpeechbubbleAction: '',
-        AudioPlayerAction: '/public/G12.ogg',
+        AudioPlayerAction: '/public/snd/G12.ogg',
       },
     };
   } else {

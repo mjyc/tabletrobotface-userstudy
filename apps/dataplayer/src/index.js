@@ -12,10 +12,9 @@ import {
   initializeTabletFaceRobotDrivers,
 } from '@cycle-robot-drivers/run';
 import Replayer from './Replayer';
-// import settings from './settings_helpers';
+import settings from '../../settings_helper';
 
-// const filename = settings.filename;
-const filename = 'test/bag'
+const fileprefix = settings.fileprefix || 'test';
 
 const makeMain = (loadedStreams, videoStartTime) => (sources) => {
   const replayer = Replayer(sources.DOM, sources.Time, loadedStreams);
@@ -29,7 +28,7 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
       }
     });
 
-  const video$ = xs.of(`/${filename}.mp4`)
+  const video$ = xs.of(`/${fileprefix}.mp4`)
     .map(url => video('.replayer', {
       props: {src: url},
       style: {
@@ -37,7 +36,7 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
         height: '300px',
       }
     }));
-  const features$ = replayer.timeTravel.features.startWith({});
+  // const features$ = replayer.timeTravel.features.startWith({});
   const vdom$ = xs.combine(
     xs.combine(
       replayer.timeTravel.DOM.startWith(''),
@@ -49,9 +48,9 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
       alignItems: 'flex-start',
     }}, vdoms)),
     replayer.time.compose(dropRepeats()).map(t => div(`elapsed time: ${t}`)),
-    features$.map(f => div(`faceSize: ${f.faceSize}`)),
-    features$.map(f => div(`faceOrientation: ${f.faceOrientation}`)),
-    features$.map(f => div(`noseOrientation: ${f.noseOrientation}`)),
+    // features$.map(f => div(`faceSize: ${f.faceSize}`)),
+    // features$.map(f => div(`faceOrientation: ${f.faceOrientation}`)),
+    // features$.map(f => div(`noseOrientation: ${f.noseOrientation}`)),
     replayer.DOM.remember(),
   ).map(vdoms => div(vdoms));
 
@@ -70,7 +69,7 @@ const drivers = {
 };
 
 
-fetch(`/${filename}_merged.json`).then((r) => r.json()).then((bag) => {
+fetch(`/${fileprefix}.json`).then((r) => r.json()).then((bag) => {
   // serve streams on memory for Replayer component
   const labels2exclude = [
     'SpeechRecognition', 'PoseDetection', 'poses'

@@ -64,12 +64,22 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
 
 const drivers = {
   ...initializeTabletFaceRobotDrivers(),
-  TabletFace: makeTabletFaceDriver({styles: {eyeSize: '100px'}}),
+  TabletFace: makeTabletFaceDriver(),
   Time: timeDriver,
 };
 
+function adjustFaceSize(rawJSON) {
+  var width = '480px';
+  var height = '300px';
+  return rawJSON
+    .replace(/(\d*\.?\d+)(vw)/g, `calc(${width} * $1 * 0.01)`)
+    .replace(/(\d*\.?\d+)(vh|vmin)/g, `calc(${height} * $1 * 0.01)`)
+    .replace(/{"sel":"div.posenet","data":{"style":{"position":"relative","display":\"block\"/g, `{"sel":"div.posenet","data":{"style":{"position":"relative","display":\"none\"`);
+}
 
-fetch(`/${fileprefix}.json`).then((r) => r.json()).then((bag) => {
+fetch(`/${fileprefix}.json`).then(r => r.text()).then((rawJSON) => {
+  let bag = JSON.parse(adjustFaceSize(rawJSON));
+
   // serve streams on memory for Replayer component
   const labels2exclude = [
     'SpeechRecognition', 'PoseDetection', 'poses'

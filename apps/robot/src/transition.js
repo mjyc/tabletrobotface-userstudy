@@ -8,8 +8,12 @@ export function transition(state, input) {
         HumanSpeechbubbleAction: ['Hello'],
       },
     };
-  } else if (state === 'S1' && input.type === 'HumanSpeechbubbleAction'
-      && input.status === 'SUCCEEDED' && input.result === 'Hello') {
+  } else if (
+      (state === 'S1' && input.type === 'HumanSpeechbubbleAction'
+          && input.status === 'SUCCEEDED' && input.result === 'Hello')
+      || (state === 'S5' && input.type === 'HumanSpeechbubbleAction'
+          && input.status === 'SUCCEEDED' && input.result === 'Again')
+    ) {
     return {
       state: 'S2',
       outputs: {
@@ -46,10 +50,10 @@ export function transition(state, input) {
     && input.status === 'SUCCEEDED'
   ) {
     return {
-      state: 'S1',
+      state: 'S5',
       outputs: {
-        RobotSpeechbubbleAction: 'Tap "Hello" when you are ready',
-        HumanSpeechbubbleAction: ['Hello'],
+        RobotSpeechbubbleAction: 'Tap "Again" to repeat',
+        HumanSpeechbubbleAction: ['Again'],
       },
     };
   } else {

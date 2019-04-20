@@ -113,6 +113,13 @@ function transitionReducer(input$) {
         outputs: null,
       };
     } else if (input.type === 'FSM_INPUT') {
+      if (prev.fsm === null) {
+        console.warn(`FSM not loaded; skipping`)
+        return {
+          ...prev,
+          outputs: null,
+        };
+      }
       const state = prev.fsm.stateStamped.state;
       const inputD = input.discrete;
       const inputC = input.continuous;

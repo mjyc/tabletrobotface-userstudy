@@ -25,9 +25,9 @@ export function extractFaceFeatures(poses) {
     };
   }
 
-  var ns = person.keypoints.filter(function (kpt) {return kpt.part === 'nose';})[0].position;
-  var le = person.keypoints.filter(function (kpt) {return kpt.part === 'leftEye';})[0].position;
-  var re = person.keypoints.filter(function (kpt) {return kpt.part === 'rightEye';})[0].position;
+  var ns = poses[0].keypoints.filter(function (kpt) {return kpt.part === 'nose';})[0].position;
+  var le = poses[0].keypoints.filter(function (kpt) {return kpt.part === 'leftEye';})[0].position;
+  var re = poses[0].keypoints.filter(function (kpt) {return kpt.part === 'rightEye';})[0].position;
   var dnsre = Math.sqrt(Math.pow(ns.x - le.x, 2) + Math.pow(ns.y - le.y, 2));
   var dnsle = Math.sqrt(Math.pow(ns.x - re.x, 2) + Math.pow(ns.y - re.y, 2));
   var drele = Math.sqrt(Math.pow(re.x - le.x, 2) + Math.pow(re.y - le.y, 2));
@@ -52,7 +52,7 @@ export function extractFaceFeatures(poses) {
 
   return {
     stamp: Date.now(),
-    isVisible: isVisible,
+    isVisible: true,
     faceSize: faceSize,
     faceCenterX: faceCenterX,
     faceCenterY: faceCenterY,

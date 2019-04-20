@@ -14,14 +14,15 @@ export function extractFaceFeatures(poses) {
     || !poses[0].keypoints.find(function (kpt) {return kpt.part === 'leftEye';})
     || !poses[0].keypoints.find(function (kpt) {return kpt.part === 'rightEye';})
   )) {
-    return Object.keys(defaultFaceFeatures).reduce(function(features, name) {
-      if (name === 'isVisible') {
-        features[name] = false;
-      } else {
-        features[name] = defaultFaceFeatures[name];
-      }
-      return features;
-    }, {stamp: Date.now()});
+    return {
+      stamp: Date.now(),
+      isVisible: false,
+      faceSize: defaultFaceFeatures.faceSize,
+      faceCenterX: defaultFaceFeatures.faceCenterX,
+      faceCenterY: defaultFaceFeatures.faceCenterY,
+      faceOrientation: defaultFaceFeatures.faceOrientation,
+      noseOrientation: defaultFaceFeatures.noseOrientation,
+    };
   }
 
   var ns = person.keypoints.filter(function (kpt) {return kpt.part === 'nose';})[0].position;

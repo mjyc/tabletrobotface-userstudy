@@ -26,6 +26,8 @@ import {transition} from './transition.js';
 
 
 function TabletRobotFaceApp(sources) {
+  // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
+
   const S0 = 'S0';
   const T = (s, input) => transition(s, input).state;
   const G = (state, input) => transition(state, input).outputs;
@@ -48,8 +50,6 @@ function TabletRobotFaceApp(sources) {
 
 
 function main(sources) {
-  // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
-
   const options = settings.robot.withTabletFaceRobotActionsOptions;
   const sinks = withState(
     withTabletFaceRobotActions(TabletRobotFaceApp, options)

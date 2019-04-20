@@ -1,6 +1,9 @@
 import xs from 'xstream';
 import {initGoal} from '@cycle-robot-drivers/action';
-
+import {
+  defaultFaceFeatures,
+  extractFaceFeatures,
+} from '../../scripts/features.js';
 
 function input({
   command,
@@ -10,7 +13,7 @@ function input({
   AudioPlayerAction,
   SpeechSynthesisAction,
   SpeechRecognitionAction,
-  // PoseDetection,
+  PoseDetection,
 }) {
   const command$ = command.map(cmd => cmd.type === 'START_FSM'
     ? ({
@@ -50,35 +53,15 @@ function input({
       result: r.result,
     })),
   );
-
-
-  // TODO: update this using the example below
-  const inputC$ = xs.never();
-  // PoseDetection.events('poses').mapTo({
-  //   val1: 0,
-  //   val2: 0,
-  //   val3: 0,
-  // });
-  // const inputC$ = PoseDetection.events('poses').filter(poses =>
-  //     posses.length === 1
-  //     && poses[0].keypoints.filter(kpt => kpt.part === 'nose').length === 1
-  //   ).map(poses => {
-  //     const nose = poses[0].keypoints.filter(kpt => kpt.part === 'nose')[0];
-  //     return {
-  //       x: nose.position.x / 640,  // max value of position.x is 640
-  //       y: nose.position.y / 480,  // max value of position.y is 480
-  //     };
-  //   })
-  //   .compose(throttle(throttleDelay))
-  //   .compose(pairwise)
-  //   .map(([prev, cur]) => cur.x - prev.x)
-  //   .filter(delta => Math.abs(delta) > deltaThreshold)
-  //   .map(delta => ({type: InputType.MOVED_FACE, value: delta}));
-
+  const inputC$ = PoseDetection.events('poses')
+    .map(poses => ({
+      type: 'PoseDetection',
+      value: extractFaceFeatures(poses).startWith(defaultFaceFeatures),
+    }));
   return xs.merge(
     command$,
     inputD$.map(val => ({type: 'FSM_INPUT', value: val})),
-    inputC$.map(val => ({type: 'CONTINUOUS_INPUT', value: val})),
+    inputC$.map(val => ({type: 'FSM_INPUT', value: val})),
   );
 }
 
@@ -113,19 +96,38 @@ function transitionReducer(input$) {
       return {
         ...prev,
         fsm: {
-          state: input.value.S0,
+          stateStamped: {
+            stamp: Date.now(),
+            state: input.value.S0,
+          },
           transition: input.value.T,
           emission: input.value.G,
+        },
+        continuousInputs: {
+          ...defaultFaceFeatures,
         },
         outputs: null,
       };
     } else if (input.type === 'START_FSM' || input.type === 'FSM_INPUT') {
-      let outputs = wrapOutputs(prev.fsm.emission(prev.fsm.state, input.value));
+      // console.log('input.type', input.value.type);
+      const state = prev.fsm.stateStamped.state;
+      // const inputValue = input.value.type !== 'PoseDetection'
+      //   ? {
+      //     input.value
+      //   } : {
+      //     type: input.value.type
+      //     result;
+      //   }
+      const continuousInput
+      const outputs = wrapOutputs(prev.fsm.emission(state, input.value));
       return {
         ...prev,
         fsm: {
           ...prev.fsm,
-          state: prev.fsm.transition(prev.fsm.state, input.value),
+          stateStamped: {
+            state: prev.fsm.transition(state, input.value),
+            stamp: Date.now(),
+          },
         },
         outputs,
       };
@@ -146,9 +148,6 @@ function output(reducerState$) {
     .filter(rs => !!rs.outputs)
     .map(rs => rs.outputs);
   return {
-    result: outputs$
-      .filter(o => !!o.result)
-      .map(o => o.result),
     FacialExpressionAction: {
       goal: outputs$
         .filter(o => !!o.FacialExpressionAction
@@ -213,6 +212,8 @@ function output(reducerState$) {
 };
 
 export function RobotApp(sources) {
+  sources.state.stream.addListener({next: s => console.debug('RobotApp state', s)});
+
   const input$ = input(sources);
   const reducer = transitionReducer(input$);
   const outputs = output(sources.state.stream);

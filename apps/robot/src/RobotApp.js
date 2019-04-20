@@ -53,8 +53,9 @@ function input({
     })),
   );
   const inputC$ = PoseDetection.events('poses')
-    .map(poses => extractFaceFeatures(poses))
-    .startWith(defaultFaceFeatures);
+    .map(poses => ({face: extractFaceFeatures(poses)}))
+    .startWith({face: defaultFaceFeatures});
+
   return xs.merge(
     command$,
     inputD$.compose(sampleCombine(inputC$))

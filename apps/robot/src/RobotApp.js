@@ -56,7 +56,7 @@ function input({
   const inputC$ = PoseDetection.events('poses')
     .map(poses => ({
       type: 'PoseDetection',
-      value: extractFaceFeatures(poses).startWith(defaultFaceFeatures),
+      value: extractFaceFeatures(poses),
     }));
   return xs.merge(
     command$,
@@ -109,17 +109,9 @@ function transitionReducer(input$) {
         outputs: null,
       };
     } else if (input.type === 'START_FSM' || input.type === 'FSM_INPUT') {
-      // console.log('input.type', input.value.type);
       const state = prev.fsm.stateStamped.state;
-      // const inputValue = input.value.type !== 'PoseDetection'
-      //   ? {
-      //     input.value
-      //   } : {
-      //     type: input.value.type
-      //     result;
-      //   }
-      const continuousInput
-      const outputs = wrapOutputs(prev.fsm.emission(state, input.value));
+      const inputD = input.value;
+      const outputs = wrapOutputs(prev.fsm.emission(state, inputD));
       return {
         ...prev,
         fsm: {
@@ -212,7 +204,7 @@ function output(reducerState$) {
 };
 
 export function RobotApp(sources) {
-  sources.state.stream.addListener({next: s => console.debug('RobotApp state', s)});
+  // sources.state.stream.addListener({next: s => console.debug('RobotApp state', s)});
 
   const input$ = input(sources);
   const reducer = transitionReducer(input$);

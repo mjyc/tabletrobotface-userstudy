@@ -54,7 +54,7 @@ function main(sources) {
   const sinks = withState(
     withTabletFaceRobotActions(TabletRobotFaceApp, options)
   )(sources);
-  // save the first DOM event; it gets fired before recording starts
+  // to save the first DOM event; it gets fired before recording starts
   sinks.DOM = sinks.DOM.remember();
 
   if (!settings.robot.recording.enabled) {

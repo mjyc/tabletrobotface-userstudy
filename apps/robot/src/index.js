@@ -37,10 +37,7 @@ function TabletRobotFaceApp(sources) {
       value: {S0, T, G},
     }),
     sources.TabletFace.events('load').compose(delay(0)).mapTo({
-      type: 'FSM_INPUT',
-      discrete: {
-        type: 'START'
-      },
+      type: 'START_FSM',
     }),
   );
 

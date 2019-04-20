@@ -1,4 +1,5 @@
 import xs from 'xstream';
+import sampleCombine from 'xstream/extra/sampleCombine';
 import {initGoal} from '@cycle-robot-drivers/action';
 import {
   defaultFaceFeatures,
@@ -15,13 +16,11 @@ function input({
   SpeechRecognitionAction,
   PoseDetection,
 }) {
-  const command$ = command.map(cmd => cmd.type === 'START_FSM'
-    ? ({
-      ...cmd,
-      value: {type: 'START'},
-    }) : cmd
-  );
+  const command$ = command.filter(cmd => cmd.type === 'LOAD_FSM');
   const inputD$ = xs.merge(
+    command.filter(cmd => cmd.type === 'START_FSM').mapTo({
+      type: 'START',
+    }),
     FacialExpressionAction.result.map(r => ({
       type: 'FacialExpressionAction',
       status: r.status.status,
@@ -54,14 +53,20 @@ function input({
     })),
   );
   const inputC$ = PoseDetection.events('poses')
-    .map(poses => extractFaceFeatures(poses));
+    .map(poses => extractFaceFeatures(poses))
+    .startWith(defaultFaceFeatures);
   return xs.merge(
     command$,
-    inputD$.map(val => ({type: 'FSM_INPUT', discrete: val})),
-    inputC$.map(val => ({
+    inputD$.compose(sampleCombine(inputC$))
+      .map(([inputD, inputC]) => ({
+        type: 'FSM_INPUT',
+        discrete: inputD,
+        continuous: inputC,
+      })),
+    inputC$.map(inputC => ({
       type: 'FSM_INPUT',
-      discrete: {type: 'PoseDetection'},
-      continuous: val,
+      discrete: {type: 'Features'},
+      continuous: inputC,
     })),
   );
 }

@@ -77,7 +77,7 @@ function input({
 
   return xs.merge(
     command$,
-    inputD$.map(val => ({type: 'DISCRETE_INPUT', value: val})),
+    inputD$.map(val => ({type: 'FSM_INPUT', value: val})),
     inputC$.map(val => ({type: 'CONTINUOUS_INPUT', value: val})),
   );
 }
@@ -119,7 +119,7 @@ function transitionReducer(input$) {
         },
         outputs: null,
       };
-    } else if (input.type === 'START_FSM' || input.type === 'DISCRETE_INPUT') {
+    } else if (input.type === 'START_FSM' || input.type === 'FSM_INPUT') {
       let outputs = wrapOutputs(prev.fsm.emission(prev.fsm.state, input.value));
       return {
         ...prev,
@@ -130,13 +130,9 @@ function transitionReducer(input$) {
         outputs,
       };
     } else {
-      // TODO: update the return value
+      console.warn(`Unknown input.type=${input.type}; skipping`)
       return {
         ...prev,
-        fsm: {
-          ...prev.fsm,
-          state: 'S0',
-        },
         outputs: null,
       };
     }

@@ -1,6 +1,7 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
-export function transition(state, input) {
-  if (state === 'S0' && input.type === 'START') {
+export function transition(state, inputD, inputC) {
+  console.log('state, inputD, inputC', state, inputD, inputC);
+  if (state === 'S0' && inputD.type === 'START') {
     return {
       state: 'S1',
       outputs: {
@@ -9,10 +10,10 @@ export function transition(state, input) {
       },
     };
   } else if (
-      (state === 'S1' && input.type === 'HumanSpeechbubbleAction'
-          && input.status === 'SUCCEEDED' && input.result === 'Hello')
-      || (state === 'S5' && input.type === 'HumanSpeechbubbleAction'
-          && input.status === 'SUCCEEDED' && input.result === 'Again')
+      (state === 'S1' && inputD.type === 'HumanSpeechbubbleAction'
+          && inputD.status === 'SUCCEEDED' && inputD.result === 'Hello')
+      || (state === 'S5' && inputD.type === 'HumanSpeechbubbleAction'
+          && inputD.status === 'SUCCEEDED' && inputD.result === 'Again')
     ) {
     return {
       state: 'S2',
@@ -22,8 +23,8 @@ export function transition(state, input) {
         SpeechSynthesisAction: 'How are you?',
       },
     };
-  } else if (state === 'S2' && input.type === 'HumanSpeechbubbleAction'
-      && input.status === 'SUCCEEDED' && input.result === 'Great!') {
+  } else if (state === 'S2' && inputD.type === 'HumanSpeechbubbleAction'
+      && inputD.status === 'SUCCEEDED' && inputD.result === 'Great!') {
     return {
       state: 'S3',
       outputs: {
@@ -34,8 +35,8 @@ export function transition(state, input) {
             'I\'m happy to hear that!',
       },
     };
-  } else if (state === 'S2' && input.type === 'HumanSpeechbubbleAction'
-      && input.status === 'SUCCEEDED' && input.result === 'Meh') {
+  } else if (state === 'S2' && inputD.type === 'HumanSpeechbubbleAction'
+      && inputD.status === 'SUCCEEDED' && inputD.result === 'Meh') {
     return {
       state: 'S4',
       outputs: {
@@ -46,8 +47,8 @@ export function transition(state, input) {
     };
   } else if (
     (state === 'S3' || state === 'S4')
-    && input.type === 'SpeechSynthesisAction'
-    && input.status === 'SUCCEEDED'
+    && inputD.type === 'SpeechSynthesisAction'
+    && inputD.status === 'SUCCEEDED'
   ) {
     return {
       state: 'S5',

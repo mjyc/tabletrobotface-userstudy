@@ -29,15 +29,18 @@ function TabletRobotFaceApp(sources) {
   // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
 
   const S0 = 'S0';
-  const T = (s, input) => transition(s, input).state;
-  const G = (state, input) => transition(state, input).outputs;
+  const T = (...args) => transition(...args).state;
+  const G = (...args) => transition(...args).outputs;
   const command$ = xs.merge(
     sources.TabletFace.events('load').mapTo({
       type: 'LOAD_FSM',
       value: {S0, T, G},
     }),
     sources.TabletFace.events('load').compose(delay(0)).mapTo({
-      type: 'START_FSM',
+      type: 'FSM_INPUT',
+      discrete: {
+        type: 'START'
+      },
     }),
   );
 

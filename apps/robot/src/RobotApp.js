@@ -54,14 +54,15 @@ function input({
     })),
   );
   const inputC$ = PoseDetection.events('poses')
-    .map(poses => ({
-      type: 'PoseDetection',
-      value: extractFaceFeatures(poses),
-    }));
+    .map(poses => extractFaceFeatures(poses));
   return xs.merge(
     command$,
-    inputD$.map(val => ({type: 'FSM_INPUT', value: val})),
-    inputC$.map(val => ({type: 'FSM_INPUT', value: val})),
+    inputD$.map(val => ({type: 'FSM_INPUT', discrete: val})),
+    inputC$.map(val => ({
+      type: 'FSM_INPUT',
+      discrete: {type: 'PoseDetection'},
+      continuous: val,
+    })),
   );
 }
 
@@ -103,21 +104,19 @@ function transitionReducer(input$) {
           transition: input.value.T,
           emission: input.value.G,
         },
-        continuousInputs: {
-          ...defaultFaceFeatures,
-        },
         outputs: null,
       };
-    } else if (input.type === 'START_FSM' || input.type === 'FSM_INPUT') {
+    } else if (input.type === 'FSM_INPUT') {
       const state = prev.fsm.stateStamped.state;
-      const inputD = input.value;
-      const outputs = wrapOutputs(prev.fsm.emission(state, inputD));
+      const inputD = input.discrete;
+      const inputC = input.continuous;
+      const outputs = wrapOutputs(prev.fsm.emission(state, inputD, inputC));
       return {
         ...prev,
         fsm: {
           ...prev.fsm,
           stateStamped: {
-            state: prev.fsm.transition(state, input.value),
+            state: prev.fsm.transition(state, inputD, inputC),
             stamp: Date.now(),
           },
         },

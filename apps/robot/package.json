@@ -5,7 +5,7 @@
     "watch": "mkdirp dist && watchify src/index.js -t babelify --outfile dist/index.js -dv",
     "live-server": "live-server --watch=./dist/index.js,./index.html",
     "start": "npm-run-all --parallel watch live-server",
-    "prestart": "test -e ./settings.json || echo {} > ../settings.json"
+    "prestart": "test -e ../settings.json || echo {} > ../settings.json"
   },
   "author": "Michael Jae-Yoon Chung",
   "license": "MIT",

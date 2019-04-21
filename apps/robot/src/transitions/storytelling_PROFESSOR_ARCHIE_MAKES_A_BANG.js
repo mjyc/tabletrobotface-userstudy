@@ -1,6 +1,6 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
-export function transition(state, input) {
-  if (state === 'S0' && input.type === 'START') {
+export function transition(state, inputD, inputC) {
+  if (state === 'S0' && inputD.type === 'START') {
     return {
       state: 'S1',
       outputs: {
@@ -8,8 +8,8 @@ export function transition(state, input) {
         HumanSpeechbubbleAction: ['Hello'],
       },
     };
-  } else if (state === 'S1' && input.type === 'HumanSpeechbubbleAction'
-      && input.status === 'SUCCEEDED' && input.result === 'Hello') {
+  } else if (state === 'S1' && inputD.type === 'HumanSpeechbubbleAction'
+      && inputD.status === 'SUCCEEDED' && inputD.result === 'Hello') {
     return {
       state: 'S2',
       outputs: {
@@ -18,8 +18,8 @@ export function transition(state, input) {
         SpeechSynthesisAction: 'PROFESSOR ARCHIE MAKES A BANG',
       },
     };
-  } else if (state === 'S2' && input.type === 'SpeechSynthesisAction'
-      && input.status === 'SUCCEEDED') {
+  } else if (state === 'S2' && inputD.type === 'SpeechSynthesisAction'
+      && inputD.status === 'SUCCEEDED') {
     return {
       state: 'S3',
       outputs: {
@@ -30,8 +30,8 @@ export function transition(state, input) {
             'Professor Archie thinks a lot.\nHe thinks of things to make.',
       },
     };
-  } else if (state === 'S3' && input.type === 'SpeechSynthesisAction'
-      && input.status === 'SUCCEEDED') {
+  } else if (state === 'S3' && inputD.type === 'SpeechSynthesisAction'
+      && inputD.status === 'SUCCEEDED') {
     return {
       state: 'S4',
       outputs: {
@@ -42,8 +42,8 @@ export function transition(state, input) {
     };
 
 
-  } else if (state === 'S2' && input.type === 'HumanSpeechbubbleAction'
-      && input.status === 'SUCCEEDED' && input.result === 'Pause') {
+  } else if (state === 'S2' && inputD.type === 'HumanSpeechbubbleAction'
+      && inputD.status === 'SUCCEEDED' && inputD.result === 'Pause') {
     return {
       state: 'SP2',
       outputs: {
@@ -52,8 +52,8 @@ export function transition(state, input) {
         SpeechSynthesisAction: ' ',
       },
     };
-  } else if (state === 'S3' && input.type === 'HumanSpeechbubbleAction'
-      && input.status === 'SUCCEEDED' && input.result === 'Pause') {
+  } else if (state === 'S3' && inputD.type === 'HumanSpeechbubbleAction'
+      && inputD.status === 'SUCCEEDED' && inputD.result === 'Pause') {
     return {
       state: 'SP3',
       outputs: {
@@ -62,8 +62,8 @@ export function transition(state, input) {
         SpeechSynthesisAction: ' ',
       },
     };
-  } else if (state === 'S4' && input.type === 'HumanSpeechbubbleAction'
-      && input.status === 'SUCCEEDED' && input.result === 'Pause') {
+  } else if (state === 'S4' && inputD.type === 'HumanSpeechbubbleAction'
+      && inputD.status === 'SUCCEEDED' && inputD.result === 'Pause') {
     return {
       state: 'SP4',
       outputs: {
@@ -73,8 +73,8 @@ export function transition(state, input) {
     };
 
 
-  } else if (state === 'SP2' && input.type === 'HumanSpeechbubbleAction'
-      && input.status === 'SUCCEEDED' && input.result === 'Resume') {
+  } else if (state === 'SP2' && inputD.type === 'HumanSpeechbubbleAction'
+      && inputD.status === 'SUCCEEDED' && inputD.result === 'Resume') {
     return {
       state: 'S2',
       outputs: {
@@ -83,8 +83,8 @@ export function transition(state, input) {
         SpeechSynthesisAction: 'PROFESSOR ARCHIE MAKES A BANG',
       },
     };
-  } else if (state === 'SP3' && input.type === 'HumanSpeechbubbleAction'
-      && input.status === 'SUCCEEDED' && input.result === 'Resume') {
+  } else if (state === 'SP3' && inputD.type === 'HumanSpeechbubbleAction'
+      && inputD.status === 'SUCCEEDED' && inputD.result === 'Resume') {
     return {
       state: 'S3',
       outputs: {
@@ -95,8 +95,8 @@ export function transition(state, input) {
             'Professor Archie thinks a lot.\nHe thinks of things to make.',
       },
     };
-  } else if (state === 'SP4' && input.type === 'HumanSpeechbubbleAction'
-      && input.status === 'SUCCEEDED' && input.result === 'Resume') {
+  } else if (state === 'SP4' && inputD.type === 'HumanSpeechbubbleAction'
+      && inputD.status === 'SUCCEEDED' && inputD.result === 'Resume') {
     return {
       state: 'S4',
       outputs: {

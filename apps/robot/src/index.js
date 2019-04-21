@@ -27,7 +27,9 @@ import * as transitions from './transitions';
 function TabletRobotFaceApp(sources) {
   // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
 
-  const transition = transitions.storytelling_PROFESSOR_ARCHIE_MAKES_A_BANG;
+  const transition = Object.keys(transitions)
+    .indexOf(settings.robot.transition) !== -1
+      ? transitions[settings.robot.transition] : transitions['demo'];
   const S0 = 'S0';
   const T = (...args) => transition(...args).state;
   const G = (...args) => transition(...args).outputs;

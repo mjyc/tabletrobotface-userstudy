@@ -78,7 +78,7 @@ export function DataDownloader(sources, data$) {
 
   return {
     DOM: vdom$,
-    DownloadDataDriver: downloadData$,
+    DownloadData: downloadData$,
     VideoRecorder: videoRecorder$,
   };
 }

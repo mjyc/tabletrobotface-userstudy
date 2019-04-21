@@ -58,16 +58,16 @@ function main(sources) {
   sinks.DOM = sinks.DOM.remember();
 
   if (!settings.robot.recording.enabled) {
-    const vdom$ = sinks.DOM;
     return {
       ...sinks,
-      DOM: vdom$,
+      DOM: sinks.DOM,
     };
   }
 
 
   const dataProxy$ = xs.create();
   const dataDownloader = DataDownloader(sources, dataProxy$);
+
   const vdom$ = xs.combine(
     sinks.DOM,
     dataDownloader.DOM,
@@ -77,6 +77,7 @@ function main(sources) {
     sources.VideoRecorder.filter(v => v.type === 'READY').mapTo('START'),
     dataDownloader.VideoRecorder,
   );
+
 
   const videoStart$ = sources.VideoRecorder.filter(v => v.type === 'START');
   const stateStamped$ = sources.state.stream
@@ -110,9 +111,9 @@ function main(sources) {
 
   return {
     ...sinks,
+    DownloadData: dataDownloader.DownloadData,
     DOM: vdom$,
     VideoRecorder: videoRecorder$,
-    DownloadDataDriver: dataDownloader.DownloadDataDriver,
   };
 }
 
@@ -121,7 +122,7 @@ const drivers = {
   TabletFace: makeTabletFaceDriver(),
   Time: timeDriver,
   VideoRecorder: makeMediaRecorderDriver(),
-  DownloadDataDriver: makeDownloadDataDriver(),
+  DownloadData: makeDownloadDataDriver(),
 };
 
 run(main, {

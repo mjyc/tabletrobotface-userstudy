@@ -80,12 +80,12 @@ function main(sources) {
 
 
   const videoStart$ = sources.VideoRecorder.filter(v => v.type === 'START');
-  const stateStamped$ = sources.state.stream
-    .filter(s => s && !!s.stateStamped)
+  const trace$ = sources.state.stream
+    .filter(s => !!s.RobotApp && !!s.RobotApp.fsm && !!s.RobotApp.fsm.stateStamped)
     .compose(dropRepeats((rs1, rs2) =>
-      rs1.stateStamped.stamp === rs2.stateStamped.stamp
-    ))
-    .map(s => s.stateStamped);
+        rs1.RobotApp.fsm.stateStamped.stamp === rs2.RobotApp.fsm.stateStamped.stamp))
+    .filter(s => !!s.RobotApp.trace)  // trace value on LOAD_FSM is null; skip that
+    .map(s => s.RobotApp.trace)
   const time$ = makeTime$(sources.Time, xs.of(true), xs.of(0));
   const recordedStreams = recordStreams([
     {stream: sinks.DOM || xs.never(), label: 'DOM'},
@@ -95,8 +95,8 @@ function main(sources) {
     {stream: sinks.SpeechRecognition || xs.never(), label: 'SpeechRecognition'},
     {stream: sinks.PoseDetection || xs.never(), label: 'PoseDetection'},
     {stream: videoStart$, label: 'videoStart'},
-    {stream: stateStamped$, label: 'stateStamped'},
-    {stream: sources.PoseDetection.events('poses'), label: 'poses'},
+    {stream: trace$, label: 'trace'},
+    // {stream: sources.PoseDetection.events('poses'), label: 'poses'},
   ], time$);
   const data$ = xs.combine.apply(null, recordedStreams)
     .map(recorded => {

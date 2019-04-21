@@ -53,8 +53,8 @@ function input({
     })),
   );
   const inputC$ = PoseDetection.events('poses')
-    .map(poses => ({face: extractFaceFeatures(poses)}))
-    .startWith({face: defaultFaceFeatures});
+    .map(poses => ({face: extractFaceFeatures(poses), poses: poses}))
+    .startWith({face: defaultFaceFeatures, poses: []});
 
   return xs.merge(
     command$,
@@ -110,6 +110,7 @@ function transitionReducer(input$) {
           transition: input.value.T,
           emission: input.value.G,
         },
+        trace: null,
         outputs: null,
       };
     } else if (input.type === 'FSM_INPUT') {
@@ -120,20 +121,27 @@ function transitionReducer(input$) {
           outputs: null,
         };
       }
-      const state = prev.fsm.stateStamped.state;
+      const prevState = prev.fsm.stateStamped.state;
       const inputD = input.discrete;
       const inputC = input.continuous;
-      const outputs = wrapOutputs(prev.fsm.emission(state, inputD, inputC));
+      const stateStamped = {  // new state
+        state: prev.fsm.transition(prevState, inputD, inputC),
+        stamp: Date.now(),
+      }
+      const outputs = wrapOutputs(prev.fsm.emission(prevState, inputD, inputC));
       return {
         ...prev,
         fsm: {
           ...prev.fsm,
-          stateStamped: {
-            state: prev.fsm.transition(state, inputD, inputC),
-            stamp: Date.now(),
-          },
+          stateStamped,
         },
         outputs,
+        trace: {
+          prevStateStamped: prev.fsm.stateStamped,
+          input,
+          stateStamped,
+          outputs,
+        },
       };
     } else {
       console.warn(`Unknown input.type=${input.type}; skipping`)

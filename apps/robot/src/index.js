@@ -30,7 +30,7 @@ function TabletRobotFaceApp(sources) {
   const appName = Object.keys(name).indexOf(settings.robot.name) !== -1
       ? settings.robot.transition : 'demo';
   const transition = transitions[appName];
-  const params = transitions._defaultParams[appName];
+  const params = transitions._params[appName];
   const S0 = 'S0';
   const T = (...args) => transition(...args, params).state;
   const G = (...args) => transition(...args, params).outputs;

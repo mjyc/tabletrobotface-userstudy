@@ -12,6 +12,8 @@
     "robot": "npm run --prefix ./apps/robot start",
     "dataplayer": "npm run --prefix ./apps/dataplayer start",
     "instructor": "npm run --prefix ./apps/instructor start",
+    "startstudy": "./apps/scripts/startstudy.js",
+    "prestartstudy": "mkdirp ./apps/data/studies",
     "cpmostrecent": "./apps/scripts/cpmostrecent.sh"
   },
   "author": "Michael Jae-Yoon Chung",

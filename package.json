@@ -11,7 +11,8 @@
     "prepublishOnly": "npm run build && npm run browserify",
     "robot": "npm run --prefix ./apps/robot start",
     "dataplayer": "npm run --prefix ./apps/dataplayer start",
-    "instructor": "npm run --prefix ./apps/instructor start"
+    "instructor": "npm run --prefix ./apps/instructor start",
+    "cp-most-recent": "./apps/scripts/cp-most-recent.sh"
   },
   "author": "Michael Jae-Yoon Chung",
   "license": "MIT",

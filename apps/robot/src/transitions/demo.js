@@ -1,5 +1,5 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
-export function transition(state, inputD, inputC) {
+export function transition(state, inputD, inputC, params) {
   if (state === 'S0' && inputD.type === 'START') {
     return {
       state: 'S1',

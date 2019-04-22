@@ -27,12 +27,15 @@ import * as transitions from './transitions';
 function TabletRobotFaceApp(sources) {
   // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
 
-  const transition = Object.keys(transitions)
-    .indexOf(settings.robot.transition) !== -1
-      ? transitions[settings.robot.transition] : transitions['demo'];
+  const appName = Object.keys(name)
+    .indexOf(settings.robot.name) !== -1
+      ? settings.robot.transition : 'demo';
+  const transition = transitions[appName];
+  const params = !!settings.robot.params
+      ? settings.robot.params : transitions._defaultParams[appName];
   const S0 = 'S0';
-  const T = (...args) => transition(...args).state;
-  const G = (...args) => transition(...args).outputs;
+  const T = (...args) => transition(...args, params).state;
+  const G = (...args) => transition(...args, params).outputs;
   const command$ = xs.merge(
     sources.TabletFace.events('load').mapTo({
       type: 'LOAD_FSM',

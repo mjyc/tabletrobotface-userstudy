@@ -3,7 +3,8 @@ var settings = require('./settings.json');
 var defaultVal = {
   datareplayer: {},
   robot: {
-    transition: 'demo',
+    name: 'demo',
+    params: undefined,
     withTabletFaceRobotActionsOptions: {},
     recording: {
       enabled: true

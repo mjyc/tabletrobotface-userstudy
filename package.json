@@ -14,6 +14,8 @@
     "instructor": "npm run --prefix ./apps/instructor start",
     "startstudy": "./apps/scripts/startstudy.js",
     "prestartstudy": "mkdirp ./apps/data/studies",
+    "makecorrections": "./apps/scripts/makecorrections.js",
+    "premakecorreions": "mkdirp ./apps/data/corrections",
     "cpmostrecent": "./apps/scripts/cpmostrecent.sh"
   },
   "author": "Michael Jae-Yoon Chung",

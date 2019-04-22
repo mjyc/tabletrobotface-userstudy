@@ -78,19 +78,19 @@ function adjustFaceSize(rawJSON) {
 }
 
 fetch(`/${fileprefix}.json`).then(r => r.text()).then((rawJSON) => {
-  let bag = JSON.parse(adjustFaceSize(rawJSON));
+  let data = JSON.parse(adjustFaceSize(rawJSON));
 
   // serve streams on memory for Replayer component
   const labels2exclude = [
     'SpeechRecognition', 'PoseDetection', 'poses'
   ];
-  const loadedStreams = Object.keys(bag).map(label => {
-    bag[label].label = label;
-    const recordedStream = xs.of(bag[label]).remember();
+  const loadedStreams = Object.keys(data).map(label => {
+    data[label].label = label;
+    const recordedStream = xs.of(data[label]).remember();
     recordedStream.label = label;
     return recordedStream;
   }).filter(s => labels2exclude.indexOf(s.label) === -1);
-  const videoStartTime = bag['videoStart'][0].timestamp;
+  const videoStartTime = data['videoStart'][0].timestamp;
 
   const main = makeMain(loadedStreams, videoStartTime);
 

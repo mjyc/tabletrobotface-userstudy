@@ -4,8 +4,9 @@ import sampleCombine from 'xstream/extra/sampleCombine';
 import {button} from '@cycle/dom';
 
 export function makeDownloadDataDriver({
-  recordVideo
-} = {recordVideo: true}) {
+  filenamePrefix = 'Data',
+  recordVideo = true,
+} = {}) {
   const downloadDataDriver = (sink$) => {
     const createDownloadLinkElement = (id, href, filename) => {
       const a = document.createElement('a');
@@ -30,7 +31,7 @@ export function makeDownloadDataDriver({
         .compose(sampleCombine(data$))
         .addListener({
           next: ([_, data]) => {
-            const filename = 'Bag ' + new Date().toLocaleString();
+            const filename = `${filenamePrefix} ${new Date().toLocaleString()}`;
             const a1 = createDownloadLinkElement('dl-json', data[0], filename);
             const a2 = createDownloadLinkElement('dl-video', data[1], filename);
             a1.click();
@@ -42,7 +43,7 @@ export function makeDownloadDataDriver({
         .compose(sampleCombine(jsonData$))
         .addListener({
           next: ([_, jsonData]) => {
-            const filename = 'Bag ' + new Date().toLocaleString();
+            const filename = `${filenamePrefix} ` + new Date().toLocaleString();
             const a1 = createDownloadLinkElement('dl-json', jsonData, filename);
             a1.click();
           },

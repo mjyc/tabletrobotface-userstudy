@@ -4,7 +4,6 @@ var defaultVal = {
   datareplayer: {},
   robot: {
     name: 'demo',
-    params: undefined,
     withTabletFaceRobotActionsOptions: {},
     recording: {
       enabled: true

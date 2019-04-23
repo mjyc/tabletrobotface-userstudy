@@ -8,7 +8,10 @@
     "build": "babel src -d lib",
     "prebrowserify": "rimraf dist && mkdirp dist",
     "browserify": "browserify src/index.js --standalone default -t babelify --outfile dist/index.js",
-    "prepublishOnly": "npm run build && npm run browserify"
+    "prepublishOnly": "npm run build && npm run browserify",
+    "robot": "npm run --prefix ./apps/robot start",
+    "dataplayer": "npm run --prefix ./apps/dataplayer start",
+    "instructor": "npm run --prefix ./apps/instructor start"
   },
   "author": "Michael Jae-Yoon Chung",
   "license": "MIT",

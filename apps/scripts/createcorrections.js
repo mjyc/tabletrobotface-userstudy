@@ -39,4 +39,4 @@ var studyFilename = `./apps/data/studies/${studyID}.json`;
 var study = JSON.parse(fs.readFileSync(studyFilename));
 study.updatedAt = now;
 study.correctionsFilename = `./apps/data/fromrobot/${id}.json`;
-fs.writeFileSync(studyFilename, study);
+fs.writeFileSync(studyFilename, JSON.stringify(study, null, 2));

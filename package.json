@@ -12,8 +12,6 @@
     "robot": "npm run --prefix ./apps/robot start",
     "dataplayer": "npm run --prefix ./apps/dataplayer start",
     "instructor": "npm run --prefix ./apps/instructor start",
-    "startstudy": "./apps/scripts/startstudy.js",
-    "prestartstudy": "mkdirp ./apps/data/studies",
     "createstudy": "./apps/scripts/createstudy.js | tail -1 | xargs -I{} npm config set studyID {}",
     "precreatestudy": "mkdirp ./apps/data/studies && npm config delete studyID dataFilename",
     "cpmostrecent": "./apps/scripts/cpmostrecent.sh | tail -1 | xargs -I{} npm config set dataFilename {}",

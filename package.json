@@ -14,6 +14,8 @@
     "instructor": "npm run --prefix ./apps/instructor start",
     "startstudy": "./apps/scripts/startstudy.js",
     "prestartstudy": "mkdirp ./apps/data/studies",
+    "createstudy": "./apps/scripts/createstudy.js",
+    "precreatestudy": "mkdirp ./apps/data/studies",
     "cpmostrecent": "./apps/scripts/cpmostrecent.sh | tail -1 | xargs -I{} npm config set dataFilename {}",
     "makecorrections": "./apps/scripts/makecorrections.js",
     "premakecorrections": "mkdirp ./apps/data/corrections"

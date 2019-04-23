@@ -12,4 +12,4 @@ fs.writeFileSync(`${filename}`, JSON.stringify({
   updatedAt: `${now}`,
   settings: require('../settings_helper'),
 }, null, 2));
-console.log(filename);
+console.log(id);

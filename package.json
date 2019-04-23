@@ -14,11 +14,11 @@
     "instructor": "npm run --prefix ./apps/instructor start",
     "startstudy": "./apps/scripts/startstudy.js",
     "prestartstudy": "mkdirp ./apps/data/studies",
-    "createstudy": "./apps/scripts/createstudy.js",
+    "createstudy": "./apps/scripts/createstudy.js | tail -1 | xargs -I{} npm config set studyID {}",
     "precreatestudy": "mkdirp ./apps/data/studies",
     "cpmostrecent": "./apps/scripts/cpmostrecent.sh | tail -1 | xargs -I{} npm config set dataFilename {}",
-    "makecorrections": "./apps/scripts/makecorrections.js",
-    "premakecorrections": "mkdirp ./apps/data/corrections"
+    "createcorrections": "./apps/scripts/createcorrections.js \"`npm config get studyID`\" \"`npm config get dataFilename`\"",
+    "precreatecorrections": "mkdirp ./apps/data/corrections"
   },
   "author": "Michael Jae-Yoon Chung",
   "license": "MIT",

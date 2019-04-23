@@ -36,7 +36,7 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
         height: '300px',
       }
     }));
-  const trace$ = replayer.timeTravel.trace.startWith({});
+  const trace$ = replayer.timeTravel['trace_dropRepeats'].startWith({});
   const vdom$ = xs.combine(
     xs.combine(
       replayer.timeTravel.DOM.startWith(''),
@@ -84,6 +84,26 @@ fetch(`/${fileprefix}.json`).then(r => r.text()).then((rawJSON) => {
     'PoseDetection'
   ];
   const loadedStreams = Object.keys(data).map(label => {
+    if (label === 'trace') {  // replace trace with trace_dropRepeats
+      const isEqualStateStamped = (s1, s2) => {
+        return s1.state === s2.state;
+      };
+      const newLabel = `${label}_dropRepeats`;
+      data[newLabel] = data[label].reduce((acc, x, i, arr) => {
+        if (i > 0 && !isEqualStateStamped(
+          arr[i-1].value.stateStamped,
+          arr[i].value.stateStamped
+        )) {
+          acc.push(arr[i]);
+          return acc;
+        } else {
+          return acc;
+        }
+      }, [data[label][0]]);
+      delete data[label];
+      label = newLabel;
+    }
+
     data[label].label = label;
     const recordedStream = xs.of(data[label]).remember();
     recordedStream.label = label;

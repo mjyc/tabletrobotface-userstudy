@@ -13,7 +13,7 @@
     "dataplayer": "npm run --prefix ./apps/dataplayer start",
     "instructor": "npm run --prefix ./apps/instructor start",
     "createstudy": "./apps/scripts/createstudy.js | tail -1 | xargs -I{} npm config set studyID {}",
-    "precreatestudy": "mkdirp ./apps/data/studies && npm config delete studyID dataFilename",
+    "precreatestudy": "mkdirp ./apps/data/studies && npm config delete studyID && npm config delete dataFilename",
     "cpmostrecent": "./apps/scripts/cpmostrecent.sh | tail -1 | xargs -I{} npm config set dataFilename {}",
     "createcorrections": "./apps/scripts/createcorrections.js \"`npm config get studyID`\" \"`npm config get dataFilename`\"",
     "precreatecorrections": "mkdirp ./apps/data/corrections"

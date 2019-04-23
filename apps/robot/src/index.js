@@ -86,6 +86,7 @@ function main(sources) {
         rs1.RobotApp.fsm.stateStamped.stamp === rs2.RobotApp.fsm.stateStamped.stamp))
     .filter(s => !!s.RobotApp.trace)  // trace value on LOAD_FSM is null; skip that
     .map(s => s.RobotApp.trace)
+    .remember()
   const time$ = makeTime$(sources.Time, xs.of(true), xs.of(0));
   const recordedStreams = recordStreams([
     {stream: sinks.DOM || xs.never(), label: 'DOM'},
@@ -96,7 +97,6 @@ function main(sources) {
     {stream: sinks.PoseDetection || xs.never(), label: 'PoseDetection'},
     {stream: videoStart$, label: 'videoStart'},
     {stream: trace$, label: 'trace'},
-    // {stream: sources.PoseDetection.events('poses'), label: 'poses'},
   ], time$);
   const data$ = xs.combine.apply(null, recordedStreams)
     .map(recorded => {

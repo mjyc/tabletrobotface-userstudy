@@ -36,7 +36,7 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
         height: '300px',
       }
     }));
-  // const features$ = replayer.timeTravel.features.startWith({});
+  const trace$ = replayer.timeTravel.trace.startWith({});
   const vdom$ = xs.combine(
     xs.combine(
       replayer.timeTravel.DOM.startWith(''),
@@ -48,9 +48,7 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
       alignItems: 'flex-start',
     }}, vdoms)),
     replayer.time.compose(dropRepeats()).map(t => div(`elapsed time: ${t}`)),
-    // features$.map(f => div(`faceSize: ${f.faceSize}`)),
-    // features$.map(f => div(`faceOrientation: ${f.faceOrientation}`)),
-    // features$.map(f => div(`noseOrientation: ${f.noseOrientation}`)),
+    trace$.map(t => div(`stateStamped: ${JSON.stringify(t.stateStamped)}`)),
     replayer.DOM.remember(),
   ).map(vdoms => div(vdoms));
 
@@ -82,7 +80,8 @@ fetch(`/${fileprefix}.json`).then(r => r.text()).then((rawJSON) => {
 
   // serve streams on memory for Replayer component
   const labels2exclude = [
-    'SpeechRecognition', 'PoseDetection', 'poses'
+    'SpeechRecognition',
+    'PoseDetection'
   ];
   const loadedStreams = Object.keys(data).map(label => {
     data[label].label = label;

@@ -20,13 +20,7 @@ var corrections = {
   createdAt: now,
   studyID: studyID,
   dataFilename: dataFilename,
-  corrections: data.trace.map(function(t) {
-    return {
-      stamp: t.value.stateStamped.stamp,
-      state: t.value.stateStamped.state,
-      correction: null,
-    };
-  }),
+  corrections: [{stateStamped: undefined, correction: undefined}],  // a template
 };
 fs.writeFileSync(
   `./apps/data/corrections/${id}.json`,
@@ -40,3 +34,6 @@ var study = JSON.parse(fs.readFileSync(studyFilename));
 study.updatedAt = now;
 study.correctionsFilename = `./apps/data/fromrobot/${id}.json`;
 fs.writeFileSync(studyFilename, JSON.stringify(study, null, 2));
+
+
+console.log(id);

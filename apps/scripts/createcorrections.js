@@ -10,8 +10,6 @@ if (!studyID || !dataFilename) {
   process.exit(1);
 }
 
-console.log(studyID, dataFilename);
-
 
 // create a corrections doc
 var now = Date.now();

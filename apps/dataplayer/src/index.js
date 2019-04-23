@@ -14,7 +14,7 @@ import {
 import Replayer from './Replayer';
 import settings from '../../settings_helper';
 
-const fileprefix = settings.fileprefix || 'test';
+const fileprefix = settings.dataplayer.fileprefix || 'test';
 
 const makeMain = (loadedStreams, videoStartTime) => (sources) => {
   const replayer = Replayer(sources.DOM, sources.Time, loadedStreams);

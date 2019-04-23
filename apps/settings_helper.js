@@ -1,13 +1,15 @@
 var settings = require('./settings.json');
 
 var defaultVal = {
-  datareplayer: {},
+  dataplayer: {
+    fileprefix: 'test',
+  },
   robot: {
     name: 'demo',
     withTabletFaceRobotActionsOptions: {},
     recording: {
-      enabled: true
-    }
+      enabled: true,
+    },
   },
 };
 

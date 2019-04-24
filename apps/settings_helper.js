@@ -11,6 +11,9 @@ var defaultVal = {
       enabled: true,
     },
   },
+  srtr: {
+    options: {H: 1},
+  },
 };
 
 settings = (function defaults(s, dVal) {

@@ -23,6 +23,7 @@ import {
 import settings from '../../settings_helper';
 import {RobotApp} from './RobotApp';
 import * as transitions from './transitions';
+import * as parameters from './parameters';
 
 function TabletRobotFaceApp(sources) {
   // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
@@ -30,7 +31,7 @@ function TabletRobotFaceApp(sources) {
   const appName = Object.keys(name).indexOf(settings.robot.name) !== -1
       ? settings.robot.transition : 'demo';
   const transition = transitions[appName];
-  const params = transitions._params[appName];
+  const params = parameters[appName];
   const S0 = 'S0';
   const T = (...args) => transition(...args, params).state;
   const G = (...args) => transition(...args, params).outputs;
@@ -57,7 +58,7 @@ function main(sources) {
   const sinks = withState(
     withTabletFaceRobotActions(TabletRobotFaceApp, options)
   )(sources);
-  // to save the first DOM event; it gets fired before recording starts
+  // to save the first event; it gets fired before recording starts
   sinks.DOM = sinks.DOM.remember();
 
   if (!settings.robot.recording.enabled) {
@@ -89,7 +90,10 @@ function main(sources) {
         rs1.RobotApp.fsm.stateStamped.stamp === rs2.RobotApp.fsm.stateStamped.stamp))
     .filter(s => !!s.RobotApp.trace)  // trace value on LOAD_FSM is null; skip that
     .map(s => s.RobotApp.trace)
-    .remember()
+    .remember()  // to save the first event; it gets fired before recording starts
+  const traceDropRepeats$ = trace$
+    .map(t => t.stateStamped.state)
+    .compose(dropRepeats());
   const time$ = makeTime$(sources.Time, xs.of(true), xs.of(0));
   const recordedStreams = recordStreams([
     {stream: sinks.DOM || xs.never(), label: 'DOM'},
@@ -100,6 +104,7 @@ function main(sources) {
     {stream: sinks.PoseDetection || xs.never(), label: 'PoseDetection'},
     {stream: videoStart$, label: 'videoStart'},
     {stream: trace$, label: 'trace'},
+    {stream: traceDropRepeats$, label: 'traceDropRepeats$'},
   ], time$);
   const data$ = xs.combine.apply(null, recordedStreams)
     .map(recorded => {

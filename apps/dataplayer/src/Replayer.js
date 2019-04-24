@@ -16,7 +16,7 @@ export default function Replayer (DOM, Time, recordedStreams) {
   const timeTravel = timeTravelStreams(recordedStreams, time$);
 
   return {
-    DOM: timeTravelBarView(name, time$, playing$, recordedStreams),
+    DOM: timeTravelBarView(name, time$, playing$, recordedStreams.filter(s => !s.hidden)),
     timeTravel,
     time: time$,
   };

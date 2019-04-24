@@ -91,9 +91,6 @@ function main(sources) {
     .filter(s => !!s.RobotApp.trace)  // trace value on LOAD_FSM is null; skip that
     .map(s => s.RobotApp.trace)
     .remember()  // to save the first event; it gets fired before recording starts
-  const traceDropRepeats$ = trace$
-    .map(t => t.stateStamped.state)
-    .compose(dropRepeats());
   const time$ = makeTime$(sources.Time, xs.of(true), xs.of(0));
   const recordedStreams = recordStreams([
     {stream: sinks.DOM || xs.never(), label: 'DOM'},
@@ -104,7 +101,6 @@ function main(sources) {
     {stream: sinks.PoseDetection || xs.never(), label: 'PoseDetection'},
     {stream: videoStart$, label: 'videoStart'},
     {stream: trace$, label: 'trace'},
-    {stream: traceDropRepeats$, label: 'traceDropRepeats$'},
   ], time$);
   const data$ = xs.combine.apply(null, recordedStreams)
     .map(recorded => {

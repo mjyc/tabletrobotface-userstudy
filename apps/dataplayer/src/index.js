@@ -23,7 +23,8 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
     .addListener({
       next: (time) => {
         if (!!document.querySelector('video.replayer')) {
-          document.querySelector('video.replayer').currentTime = (time - videoStartTime) / 1000;
+          document.querySelector('video.replayer')
+            .currentTime = (time - videoStartTime) / 1000;
         }
       }
     });
@@ -36,7 +37,7 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
         height: '300px',
       }
     }));
-  const trace$ = replayer.timeTravel['trace_dropRepeats'].startWith({});
+  const stateStamped$ = replayer.timeTravel['stateStamped'].startWith(undefined);
   const vdom$ = xs.combine(
     xs.combine(
       replayer.timeTravel.DOM.startWith(''),
@@ -48,7 +49,7 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
       alignItems: 'flex-start',
     }}, vdoms)),
     replayer.time.compose(dropRepeats()).map(t => div(`elapsed time: ${t}`)),
-    trace$.map(t => div(`stateStamped: ${JSON.stringify(t.stateStamped)}`)),
+    stateStamped$.map(ss => div(`stateStamped: ${JSON.stringify(ss)}`)),
     replayer.DOM.remember(),
   ).map(vdoms => div(vdoms));
 
@@ -77,19 +78,13 @@ function adjustFaceSize(rawJSON) {
 
 fetch(`/${fileprefix}.json`).then(r => r.text()).then((rawJSON) => {
   let data = JSON.parse(adjustFaceSize(rawJSON));
-
-  // serve streams on memory for Replayer component
-  const labels2exclude = [
-    'SpeechRecognition',
-    'PoseDetection'
-  ];
-  const loadedStreams = Object.keys(data).map(label => {
-    if (label === 'trace') {  // replace trace with trace_dropRepeats
-      const isEqualStateStamped = (s1, s2) => {
-        return s1.state === s2.state;
-      };
-      const newLabel = `${label}_dropRepeats`;
-      data[newLabel] = data[label].reduce((acc, x, i, arr) => {
+  {  // derive stateStamped from trace
+    const srcLabel = 'trace';
+    const isEqualStateStamped = (s1, s2) => {
+      return s1.state === s2.state;
+    };
+    const newData = data[srcLabel]
+      .reduce((acc, x, i, arr) => {
         if (i > 0 && !isEqualStateStamped(
           arr[i-1].value.stateStamped,
           arr[i].value.stateStamped
@@ -99,16 +94,43 @@ fetch(`/${fileprefix}.json`).then(r => r.text()).then((rawJSON) => {
         } else {
           return acc;
         }
-      }, [data[label][0]]);
-      delete data[label];
-      label = newLabel;
-    }
-
+      }, [data[srcLabel][0]])
+      .map(x => ({
+        ...x,
+        value: x.value.stateStamped,
+      }));
+    const label = `stateStamped`;
+    newData.label = label;
+    data[label] = newData;
+  };
+  {  // derive state from stateStamped
+    const srcLabel = 'stateStamped';
+    const newData = data[srcLabel]
+      .map(x => ({
+        ...x,
+        value: x.value.state,
+      }));
+    const label = `state`;
+    newData.label = label;
+    data[label] = newData;
+  };
+  // serve streams on memory for Replayer component
+  const labels2exclude = [
+    'SpeechRecognition',
+    'PoseDetection',
+    'trace',
+  ];
+  const labels2hide = [
+    'stateStamped',
+  ];
+  const loadedStreams = Object.keys(data).map(label => {
     data[label].label = label;
     const recordedStream = xs.of(data[label]).remember();
     recordedStream.label = label;
+    recordedStream.hidden = labels2hide.indexOf(label) !== -1;
     return recordedStream;
   }).filter(s => labels2exclude.indexOf(s.label) === -1);
+
   const videoStartTime = data['videoStart'][0].timestamp;
 
   const main = makeMain(loadedStreams, videoStartTime);

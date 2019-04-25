@@ -28,8 +28,8 @@ import * as parameters from './parameters';
 function TabletRobotFaceApp(sources) {
   // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
 
-  const appName = Object.keys(name).indexOf(settings.robot.name) !== -1
-      ? settings.robot.transition : 'demo';
+  const appName = Object.keys(transitions).indexOf(settings.robot.name) !== -1
+      ? settings.robot.name : 'demo';
   const transition = transitions[appName];
   const params = parameters[appName];
   const S0 = 'S0';

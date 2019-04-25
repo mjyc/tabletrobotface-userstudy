@@ -35,9 +35,12 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
       style: {
         width: '400px',
         height: '300px',
+        transform: 'rotateY(180deg)',
+        '-webkit-transform':'rotateY(180deg)', /* Safari and Chrome */
+        '-moz-transform':'rotateY(180deg)', /* Firefox */
       }
     }));
-  const stateStamped$ = replayer.timeTravel['stateStamped'].startWith(undefined);
+  const stateStamped$ = replayer.timeTravel['stateStamped'].startWith({});
   const vdom$ = xs.combine(
     xs.combine(
       replayer.timeTravel.DOM.startWith(''),
@@ -48,7 +51,7 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
       justifyContent: 'space-between',
       alignItems: 'flex-start',
     }}, vdoms)),
-    replayer.time.compose(dropRepeats()).map(t => div(`elapsed time: ${t}`)),
+    replayer.timeTravel.clock.startWith(undefined).map(t => div(`clock: ${t}`)),
     stateStamped$.map(ss => div(`stateStamped: ${JSON.stringify(ss)}`)),
     replayer.DOM.remember(),
   ).map(vdoms => div(vdoms));
@@ -78,6 +81,17 @@ function adjustFaceSize(rawJSON) {
 
 fetch(`/${fileprefix}.json`).then(r => r.text()).then((rawJSON) => {
   let data = JSON.parse(adjustFaceSize(rawJSON));
+  {  // derive stateStamped from trace
+    const srcLabel = 'trace';
+    const newData = data[srcLabel]
+      .map(x => ({
+        ...x,
+        value: x.value.stateStamped.stamp,
+      }));
+    const label = `clock`;
+    newData.label = label;
+    data[label] = newData;
+  };
   {  // derive stateStamped from trace
     const srcLabel = 'trace';
     const isEqualStateStamped = (s1, s2) => {
@@ -121,6 +135,7 @@ fetch(`/${fileprefix}.json`).then(r => r.text()).then((rawJSON) => {
     'trace',
   ];
   const labels2hide = [
+    'clock',
     'stateStamped',
   ];
   const loadedStreams = Object.keys(data).map(label => {

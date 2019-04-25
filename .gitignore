@@ -1,4 +1,5 @@
 dist/
 node_modules
 apps/settings.json
-apps/**/data
+apps/data
+

@@ -45,7 +45,12 @@ var transAst = srtr.astMap(transAstRaw, function (leaf) {
   }
   return node;
 });
-console.log(srtr.astToJS(transAst.body[0].body.body[0]));
+// transAst: Program
+// transAst.body[0]: FunctionDeclaration
+// transAst.body[0].body: BlockStatement
+// transAst.body[0].body.body[0]: IfStatement <-
+var transAstIfStatement = transAst.body[0].body.body[0]
+console.log(srtr.astToJS(transAstIfStatement));
 
 var paramMap = parametersJSON;
 
@@ -73,7 +78,7 @@ var options = settings.srtr.options;
 
 // console.log('astToJS(transAst)', srtr.astToJS(transAst.body[0].body.body[0]));
 // console.log(transAst.body[0].body.body[0])
-var z3Input = srtr.createSRTRSMT2(transAst.body[0].body.body[0], paramMap, traces, corrections, options);
+var z3Input = srtr.createSRTRSMT2(transAstIfStatement, paramMap, traces, corrections, options);
 console.log(z3Input);
 
 var p = spawn('z3', ['-T:5', '-smt2', '-in'], {stdio: ['pipe', 'pipe', 'ignore']});

@@ -45,7 +45,7 @@ var transAst = srtr.astMap(transAstRaw, function (leaf) {
   }
   return node;
 });
-console.log(srtr.astToJS(transAst));
+console.log(srtr.astToJS(transAst.body[0].body.body[0]));
 
 var paramMap = parametersJSON;
 

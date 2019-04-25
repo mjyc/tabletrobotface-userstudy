@@ -62,3 +62,7 @@ export function transition(state, inputD, inputC, params) {
     };
   }
 };
+
+export let defaultParams = {
+  engagedMinX: 340,
+};

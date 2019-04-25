@@ -22,16 +22,15 @@ import {
 } from 'tabletrobotface-userstudy';
 import settings from '../../settings_helper';
 import {RobotApp} from './RobotApp';
-import * as transitions from './transitions';
-import * as parameters from './parameters';
+import transitions from './transitions';
 
 function TabletRobotFaceApp(sources) {
   // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
 
   const appName = Object.keys(transitions).indexOf(settings.robot.name) !== -1
       ? settings.robot.name : 'demo';
-  const transition = transitions[appName];
-  const params = parameters[appName];
+  const transition = transitions[appName].transition;
+  const params = transitions[appName].params;
   const S0 = 'S0';
   const T = (...args) => transition(...args, params).state;
   const G = (...args) => transition(...args, params).outputs;

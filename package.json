@@ -15,7 +15,7 @@
     "createstudy": "./apps/scripts/createstudy.js | tail -1 | xargs -I{} npm config set studyID {}",
     "precreatestudy": "mkdirp ./apps/data/studies && npm config delete studyID && npm config delete dataFilename",
     "cpmostrecent": "./apps/scripts/cpmostrecent.sh | tail -1 | xargs -I{} npm config set dataFilename {}",
-    "postcpmostrecent": "json -I -f ./apps/settings.json -e \"{this.dataplayer={fileprefix: \\\"`npm config get dataFilename | xargs -I{} basename {} .json`\\\"}}\"",
+    "postcpmostrecent": "json -I -f ./apps/settings.json -e \"{this.dataplayer={fileprefix: \\\"data/`npm config get dataFilename | xargs -I{} basename {} .json`\\\"}}\"",
     "createcorrections": "./apps/scripts/createcorrections.js \"`npm config get studyID`\" \"`npm config get dataFilename`\" | xargs -I{} npm config set correctionsID {}",
     "precreatecorrections": "mkdirp ./apps/data/corrections"
   },

@@ -7,14 +7,14 @@ var srtr = require('srtr');
 
 var transitionFilename = process.argv[2];
 var parametersFilename = process.argv[3];
-var correctionsFilename = process.argv[4];
-// var settingsFilename = process.argv[5];
+var dataFilename = process.argv[4];
+var correctionsFilename = process.argv[5];
 
 if (
   !transitionFilename
+  || !dataFilename
   || !parametersFilename
   || !correctionsFilename
-  // || !settingsFilename
 ) {
   console.log('usage: ./prepannotating {studyID} {dataFilename}');
   process.exit(1);
@@ -24,8 +24,8 @@ if (
 var transitionStr = fs.readFileSync(transitionFilename)
   .toString().replace('export ', '');
 var parametersJSON = JSON.parse(fs.readFileSync(parametersFilename));
+var tracesJSON = JSON.parse(fs.readFileSync(dataFilename)).trace;
 var correctionsJSON = JSON.parse(fs.readFileSync(correctionsFilename));
-// var settings = JSON.parse(fs.readFileSync(settingsFilename));
 var settings = require('../settings_helper');
 
 
@@ -40,32 +40,46 @@ var transAst = srtr.astMap(transAstRaw, function (leaf) {
    ) {
     node.argument.properties = node.argument.properties.filter(function(p) {
       return !(p.key.type === 'Identifier' && p.key.name === 'outputs');
-    })
+    });
+    node.argument = node.argument.properties[0].value;
   }
   return node;
 });
 
 var paramMap = parametersJSON;
 
-var traces = [];
+var traces = tracesJSON.map(function (t) {
+  return {
+    timestamp: t.value.stateStamped.stamp,
+    trace: {
+      state: t.value.stateStamped.state,
+      inputD: t.value.input.discrete,
+      inputC: t.value.input.continuous,
+    },
+  };
+});
+// console.log(traces);
 
-var corrections = [];
-// correctionsJSON.corrections.map(function(c) {
-//   return {
-//     timestamp: c.stateStamped.stamp,
-//     correction: c.correction,
-//   }
-// });
+var corrections = correctionsJSON.corrections.map(function(c) {
+  return {
+    // timestamp: c.stateStamped.stamp,
+    timestamp: c.stamp,
+    correction: c.correction,
+  }
+});
 
 var options = settings.srtr.options;
 
-var z3Input = srtr.createSRTRSMT2(transAst, paramMap, traces, corrections, options);
+// console.log('astToJS(transAst)', srtr.astToJS(transAst.body[0].body.body[0]));
+// console.log(transAst.body[0].body.body[0])
+var z3Input = srtr.createSRTRSMT2(transAst.body[0].body.body[0], paramMap, traces, corrections, options);
+console.log(z3Input);
 
 var p = spawn('z3', ['-T:5', '-smt2', '-in'], {stdio: ['pipe', 'pipe', 'ignore']});
 p.stdout.on('data', function (data) {
   console.log(data.toString());
   if (!data.toString().startsWith("sat")) {
-    var modelAst = sexpParser.parse(data.toString());
+    var modelAst = srtr.sexpParser.parse(data.toString());
     var deltas = modelAst.value.splice(1).reduce(function (acc, v) {
       if (
         v.type === 'Expression'
@@ -91,10 +105,10 @@ p.stdout.on('data', function (data) {
     console.log('deltas', deltas);
     console.log('weights', weights);
 
-    var newParams = Object.keys(prevParams).reduce(function(acc, v) {
-      acc[v] = prevParams[v] + (!!deltas[v] ? deltas[v] : 0);
-      return acc;
-    }, {});
+    // var newParams = Object.keys(prevParams).reduce(function(acc, v) {
+    //   acc[v] = prevParams[v] + (!!deltas[v] ? deltas[v] : 0);
+    //   return acc;
+    // }, {});
 
     // // backup prev params
     // const prevParams = fs.readFileSync(parametersFilename);

@@ -1,5 +1,5 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
-export function transition(state, inputD, inputC, params) {
+function transition(state, inputD, inputC, params) {
   if (state === 'S0' && inputD.type === 'START') {
     return {
       state: 'S1',
@@ -61,4 +61,13 @@ export function transition(state, inputD, inputC, params) {
       outputs: null,
     };
   }
+};
+
+var defaultParams = {
+  engagedMinX: 340,
+};
+
+module.exports = {
+  transition: transition,
+  defaultParams: defaultParams
 };

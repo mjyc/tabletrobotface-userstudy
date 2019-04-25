@@ -57,7 +57,7 @@ export function transition(state, inputD, inputC, params) {
 
   } else {
     return {
-      state,
+      state: state,
       outputs: null,
     };
   }

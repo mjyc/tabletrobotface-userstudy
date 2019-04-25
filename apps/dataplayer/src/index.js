@@ -41,6 +41,7 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
       }
     }));
   const stateStamped$ = replayer.timeTravel['stateStamped'].startWith({});
+
   const vdom$ = xs.combine(
     xs.combine(
       replayer.timeTravel.DOM.startWith(''),
@@ -51,8 +52,7 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
       justifyContent: 'space-between',
       alignItems: 'flex-start',
     }}, vdoms)),
-    replayer.timeTravel.clock.startWith(undefined).map(t => div(`clock: ${t}`)),
-    stateStamped$.map(ss => div(`stateStamped: ${JSON.stringify(ss)}`)),
+    stateStamped$.map(ss => div(`${JSON.stringify(ss)}`)),
     replayer.DOM.remember(),
   ).map(vdoms => div(vdoms));
 
@@ -86,31 +86,6 @@ fetch(`/${fileprefix}.json`).then(r => r.text()).then((rawJSON) => {
     const newData = data[srcLabel]
       .map(x => ({
         ...x,
-        value: x.value.stateStamped.stamp,
-      }));
-    const label = `clock`;
-    newData.label = label;
-    data[label] = newData;
-  };
-  {  // derive stateStamped from trace
-    const srcLabel = 'trace';
-    const isEqualStateStamped = (s1, s2) => {
-      return s1.state === s2.state;
-    };
-    const newData = data[srcLabel]
-      .reduce((acc, x, i, arr) => {
-        if (i > 0 && !isEqualStateStamped(
-          arr[i-1].value.stateStamped,
-          arr[i].value.stateStamped
-        )) {
-          acc.push(arr[i]);
-          return acc;
-        } else {
-          return acc;
-        }
-      }, [data[srcLabel][0]])
-      .map(x => ({
-        ...x,
         value: x.value.stateStamped,
       }));
     const label = `stateStamped`;
@@ -119,7 +94,21 @@ fetch(`/${fileprefix}.json`).then(r => r.text()).then((rawJSON) => {
   };
   {  // derive state from stateStamped
     const srcLabel = 'stateStamped';
+    const isEqualStateStamped = (s1, s2) => {
+      return s1.state === s2.state;
+    };
     const newData = data[srcLabel]
+      .reduce((acc, x, i, arr) => {
+        if (i > 0 && !isEqualStateStamped(
+          arr[i-1].value,
+          arr[i].value
+        )) {
+          acc.push(arr[i]);
+          return acc;
+        } else {
+          return acc;
+        }
+      }, [data[srcLabel][0]])
       .map(x => ({
         ...x,
         value: x.value.state,
@@ -132,10 +121,9 @@ fetch(`/${fileprefix}.json`).then(r => r.text()).then((rawJSON) => {
   const labels2exclude = [
     'SpeechRecognition',
     'PoseDetection',
-    'trace',
   ];
   const labels2hide = [
-    'clock',
+    'trace',
     'stateStamped',
   ];
   const loadedStreams = Object.keys(data).map(label => {

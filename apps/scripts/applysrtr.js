@@ -56,9 +56,9 @@ var paramMap = parametersJSON;
 
 var traces = tracesJSON.map(function (t) {
   return {
-    timestamp: t.value.stateStamped.stamp,
+    stamp: t.value.stateStamped.stamp,
     trace: {
-      state: t.value.stateStamped.state,
+      state: t.value.prevStateStamped.state,
       inputD: t.value.input.discrete,
       inputC: t.value.input.continuous,
     },
@@ -66,13 +66,7 @@ var traces = tracesJSON.map(function (t) {
 });
 // console.log(traces);
 
-var corrections = correctionsJSON.corrections.map(function(c) {
-  return {
-    // timestamp: c.stateStamped.stamp,
-    timestamp: c.stamp,
-    correction: c.correction,
-  }
-});
+var corrections = correctionsJSON.corrections;
 
 var options = settings.srtr.options;
 

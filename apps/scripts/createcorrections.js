@@ -20,7 +20,7 @@ var corrections = {
   createdAt: now,
   studyID: studyID,
   dataFilename: dataFilename,
-  corrections: [{stateStamped: undefined, correction: undefined}],  // a template
+  corrections: [{stamp: null, state: null}],  // a template
 };
 fs.writeFileSync(
   `./apps/data/corrections/${id}.json`,

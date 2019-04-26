@@ -48,9 +48,11 @@ var transAst = srtr.astMap(transAstRaw, function (leaf) {
 // transAst: Program
 // transAst.body[0]: FunctionDeclaration
 // transAst.body[0].body: BlockStatement
-// transAst.body[0].body.body[0]: IfStatement <-
-var transAstIfStatement = transAst.body[0].body.body[0]
-console.log(srtr.astToJS(transAstIfStatement));
+// transAst.body[0].body.body[n]: IfStatement <-
+var transAstIfStatement = transAst.body[0].body.body.filter(function(b) {
+  return b.type === 'IfStatement';
+})[0];  // must contain at least one IfStatemenet
+// console.log(srtr.astToJS(transAstIfStatement));
 
 var paramMap = parametersJSON;
 
@@ -70,17 +72,15 @@ var corrections = correctionsJSON.corrections;
 
 var options = settings.srtr.options;
 
-// console.log('astToJS(transAst)', srtr.astToJS(transAst.body[0].body.body[0]));
-// console.log(transAst.body[0].body.body[0])
 var z3Input = srtr.createSRTRSMT2(transAstIfStatement, paramMap, traces, corrections, options);
-console.log(z3Input);
+// console.log(z3Input);
 
 var p = spawn('z3', ['-T:5', '-smt2', '-in'], {stdio: ['pipe', 'pipe', 'ignore']});
 p.stdout.on('data', function (data) {
   console.log(data.toString());
   if (!data.toString().startsWith("sat")) {
     var modelAst = srtr.sexpParser.parse(data.toString());
-    var deltas = modelAst.value.splice(1).reduce(function (acc, v) {
+    var deltas = modelAst.value.slice(1).reduce(function (acc, v) {
       if (
         v.type === 'Expression'
         && v.value[1].type === 'Atom' && v.value[1].value.type === 'Identifier'
@@ -91,11 +91,11 @@ p.stdout.on('data', function (data) {
       }
       return acc;
     }, {});
-    var weights = modelAst.value.splice(1).reduce(function (acc, v) {
+    var weights = modelAst.value.slice(1).reduce(function (acc, v) {
       if (
         v.type === 'Expression'
         && v.value[1].type === 'Atom' && v.value[1].value.type === 'Identifier'
-        && (/w[0-9]+/.test(v.value[1].value.name) || /^delta_./.test(v.value[1].value.name))
+        && /w[0-9]+/.test(v.value[1].value.name)
         && v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal'
       ) {
         acc[v.value[1].value.name] = v.value[4].value.value;

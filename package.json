@@ -18,7 +18,9 @@
     "postcpmostrecent": "json -I -f ./apps/settings.json -e \"{this.dataplayer={fileprefix: \\\"fromrobot/`npm config get dataFilename | xargs -I{} basename {} .json`\\\"}}\"",
     "createcorrections": "./apps/scripts/createcorrections.js \"`npm config get studyID`\" \"`npm config get dataFilename`\" | xargs -I{} npm config set correctionsID {}",
     "precreatecorrections": "mkdirp ./apps/data/corrections",
-    "applysrtr": "node -r fs -e \"console.log(JSON.stringify(require(\\\"./apps/settings_helper\\\"), null, 2))\" | json  robot.name | xargs -I{} ./apps/scripts/applysrtr.js ./apps/robot/src/transitions/{}.js ./apps/data/parameters/{}.json \"`npm config get dataFilename`\" ./apps/data/corrections/\"`npm config get correctionsID`\".json"
+    "preapplysrtr": "mkdirp ~/tmp",
+    "applysrtr": "node -r fs -e \"console.log(JSON.stringify(require(\\\"./apps/settings_helper\\\"), null, 2))\" | json robot.name | xargs -I{} ./apps/scripts/applysrtr.js ./apps/robot/src/transitions/{}.js ./apps/data/parameters/{}.json \"`npm config get dataFilename`\" ./apps/data/corrections/\"`npm config get correctionsID`\".json | tee ~/tmp/applysrtr.log",
+    "postapplysrtr": "tail -1 ~/tmp/applysrtr.log | xargs -I{} json -I -f ./apps/data/studies/\"`npm config get studyID`\".json -e this.outputs={} && ./apps/scripts/savesettings.js ./apps/data/studies/\"`npm config get studyID`\".json"
   },
   "author": "Michael Jae-Yoon Chung",
   "license": "MIT",
@@ -42,6 +44,7 @@
     "babelify": "^8.0.0",
     "browserify": "^16.2.2",
     "js2smt2": "file:../js2smt2",
+    "loglevel-debug": "0.0.1",
     "mkdirp": "~0.5.0",
     "rimraf": "^2.6.3",
     "srtr": "file:../srtr"

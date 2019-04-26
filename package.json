@@ -14,12 +14,11 @@
     "instructor": "npm run --prefix ./apps/instructor start",
     "createstudy": "./apps/scripts/createstudy.js | tail -1 | xargs -I{} npm config set studyID {}",
     "precreatestudy": "mkdirp ./apps/data/studies && npm config delete studyID && npm config delete dataFilename",
-    "postcreatestudy": "node -r fs -e \"console.log(JSON.stringify(require(\\\"./apps/settings_helper\\\"), null, 2))\" | json robot.name  | xargs -I{} npm config set appName {}",
     "cpmostrecent": "./apps/scripts/cpmostrecent.sh | tail -1 | xargs -I{} npm config set dataFilename {}",
     "postcpmostrecent": "json -I -f ./apps/settings.json -e \"{this.dataplayer={fileprefix: \\\"fromrobot/`npm config get dataFilename | xargs -I{} basename {} .json`\\\"}}\"",
     "createcorrections": "./apps/scripts/createcorrections.js \"`npm config get studyID`\" \"`npm config get dataFilename`\" | xargs -I{} npm config set correctionsID {}",
     "precreatecorrections": "mkdirp ./apps/data/corrections",
-    "applysrtr": "npm config get appName | DEBUG=applysrtr xargs -I{} ./apps/scripts/applysrtr.js ./apps/robot/src/transitions/{}.js ./apps/data/parameters/{}.json \"`npm config get dataFilename`\" ./apps/data/corrections/\"`npm config get correctionsID`\".json | tee ~/tmp/applysrtr.log",
+    "applysrtr": "node -r fs -e \"console.log(JSON.stringify(require(\\\"./apps/settings_helper\\\"), null, 2))\" | json robot.name | DEBUG=applysrtr xargs -I{} ./apps/scripts/applysrtr.js ./apps/robot/src/transitions/{}.js ./apps/data/parameters/{}.json \"`npm config get dataFilename`\" ./apps/data/corrections/\"`npm config get correctionsID`\".json | tee ~/tmp/applysrtr.log",
     "preapplysrtr": "mkdirp ~/tmp",
     "postapplysrtr": "tail -1 ~/tmp/applysrtr.log | xargs -I{} json -I -f ./apps/data/studies/\"`npm config get studyID`\".json -e this.outputs={} && ./apps/scripts/savesettings.js ./apps/data/studies/\"`npm config get studyID`\".json",
     "saveparams": "./apps/scripts/saveparams.js ./apps/data/studies/\"`npm config get studyID`\".json"

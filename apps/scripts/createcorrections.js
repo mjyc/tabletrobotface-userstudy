@@ -23,7 +23,7 @@ var corrections = {
   corrections: [{stamp: null, state: null}],  // a template
 };
 fs.writeFileSync(
-  './apps/data/corrections/' + ${id} + '.json',
+  './apps/data/corrections/' + id + '.json',
   JSON.stringify(corrections, null, 2)
 );
 

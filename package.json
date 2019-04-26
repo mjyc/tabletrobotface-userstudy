@@ -17,7 +17,8 @@
     "cpmostrecent": "./apps/scripts/cpmostrecent.sh | tail -1 | xargs -I{} npm config set dataFilename {}",
     "postcpmostrecent": "json -I -f ./apps/settings.json -e \"{this.dataplayer={fileprefix: \\\"fromrobot/`npm config get dataFilename | xargs -I{} basename {} .json`\\\"}}\"",
     "createcorrections": "./apps/scripts/createcorrections.js \"`npm config get studyID`\" \"`npm config get dataFilename`\" | xargs -I{} npm config set correctionsID {}",
-    "precreatecorrections": "mkdirp ./apps/data/corrections"
+    "precreatecorrections": "mkdirp ./apps/data/corrections",
+    "applysrtr": "node -r fs -e \"console.log(JSON.stringify(require(\\\"./apps/settings_helper\\\"), null, 2))\" | json  robot.name | xargs -I{} ./apps/scripts/applysrtr.js ./apps/robot/src/transitions/{}.js ./apps/data/parameters/{}.json \"`npm config get dataFilename`\" ./apps/data/corrections/\"`npm config get correctionsID`\".json"
   },
   "author": "Michael Jae-Yoon Chung",
   "license": "MIT",

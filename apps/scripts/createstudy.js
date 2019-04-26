@@ -10,6 +10,5 @@ fs.writeFileSync(`${filename}`, JSON.stringify({
   _id: id,
   createdAt: now,
   updatedAt: now,
-  settings: require('../settings_helper'),
 }, null, 2));
 console.log(id);

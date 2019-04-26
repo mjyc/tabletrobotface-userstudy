@@ -77,7 +77,7 @@ var z3Input = srtr.createSRTRSMT2(transAstIfStatement, paramMap, traces, correct
 
 var p = spawn('z3', ['-T:5', '-smt2', '-in'], {stdio: ['pipe', 'pipe', 'ignore']});
 p.stdout.on('data', function (data) {
-  console.log(data.toString());
+  // console.log(data.toString());
   if (!data.toString().startsWith("sat")) {
     var modelAst = srtr.sexpParser.parse(data.toString());
     var deltas = modelAst.value.slice(1).reduce(function (acc, v) {
@@ -85,9 +85,13 @@ p.stdout.on('data', function (data) {
         v.type === 'Expression'
         && v.value[1].type === 'Atom' && v.value[1].value.type === 'Identifier'
         && /^delta_./.test(v.value[1].value.name)
-        && v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal'
+        // && v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal'
       ) {
-        acc[v.value[1].value.name] = v.value[4].value.value;
+        if (v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal')
+          acc[v.value[1].value.name] = v.value[4].value.value;
+        else {
+          acc[v.value[1].value.name] = -1 * v.value[4].value[1].value.value;
+        }
       }
       return acc;
     }, {});
@@ -96,32 +100,31 @@ p.stdout.on('data', function (data) {
         v.type === 'Expression'
         && v.value[1].type === 'Atom' && v.value[1].value.type === 'Identifier'
         && /w[0-9]+/.test(v.value[1].value.name)
-        && v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal'
+        // && v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal'
       ) {
-        acc[v.value[1].value.name] = v.value[4].value.value;
+        if (v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal')
+          acc[v.value[1].value.name] = v.value[4].value.value;
+        else {
+          acc[v.value[1].value.name] = -1 * v.value[4].value[1].value.value;
+        }
       }
       return acc;
     }, {});
-    console.log('deltas', deltas);
-    console.log('weights', weights);
+    // console.log('deltas', deltas);
+    // console.log('weights', weights);
 
-    // var newParams = Object.keys(prevParams).reduce(function(acc, v) {
-    //   acc[v] = prevParams[v] + (!!deltas[v] ? deltas[v] : 0);
-    //   return acc;
-    // }, {});
+    var prevParams = paramMap;
+    var newParams = Object.keys(prevParams).reduce(function(acc, k) {
+      var kd = 'delta_' + k;
+      acc[k] = prevParams[k] + (!!deltas[kd] ? deltas[kd] : 0);
+      return acc;
+    }, {});
 
-    // // backup prev params
-    // const prevParams = fs.readFileSync(parametersFilename);
-    // fs.writeFileSync(
-    //   parametersFilename.replace('.json', `${Date.now()}.json`),
-    //   JSON.stringify(prevParams, null, 2),
-    // );
-
-    // // write new param
-    // fs.writeFileSync(
-    //   parametersFilename,
-    //   JSON.stringify(newParams, null, 2),
-    // );
+    console.log(options);
+    console.log(deltas);
+    console.log(weights);
+    console.log(prevParams);
+    console.log(newParams);
   }
 });
 p.stdin.write(z3Input);

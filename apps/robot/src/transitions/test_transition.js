@@ -1,6 +1,7 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
 function transition(state, inputD, inputC, params) {
-  var engagedMinX = params.engagedMinX;
+  var engagedMinNoseOrientation = params.engagedMinNoseOrientation;
+  var engagedMaxNoseOrientation = params.engagedMaxNoseOrientation;
   if (state === 'S0' && inputD.type === 'START') {
     return {
       state: 'S1',
@@ -35,7 +36,7 @@ function transition(state, inputD, inputC, params) {
 
   } else if (
       state === 'S1' && inputD.type === 'Features'
-      && inputC.face.faceCenterX > engagedMinX
+      && (inputC.face.noseOrientation > engagedMaxNoseOrientation || inputC.face.noseOrientation < engagedMinNoseOrientation)
   ) {
     return {
       state: 'S2',
@@ -46,7 +47,7 @@ function transition(state, inputD, inputC, params) {
     };
   } else if (
       state === 'S2' && inputD.type === 'Features'
-      && inputC.face.faceCenterX < engagedMinX
+      && (inputC.face.noseOrientation < engagedMaxNoseOrientation && inputC.face.noseOrientation > engagedMinNoseOrientation)
   ) {
     return {
       state: 'S1',

@@ -52,10 +52,17 @@ function input({
       result: r.result,
     })),
   );
-  const inputC$ = PoseDetection.events('poses')
-    .map(poses => ({face: extractFaceFeatures(poses), poses: poses}))
-    .startWith({face: defaultFaceFeatures, poses: []});
-
+  const inputC$ = PoseDetection.events('poses').fold((prev, poses) => {
+    const features = extractFaceFeatures(poses);
+    return {
+      face: {
+        stampLastDetected: !!features.isVisible
+          ? Date.now() : prev.face.stampLastDetected,
+        ...features,
+      },
+      poses,
+    };
+  }, {face: {stampLastDetected: 0, ...defaultFaceFeatures}, poses: []});
   return xs.merge(
     command$,
     inputD$.compose(sampleCombine(inputC$))

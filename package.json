@@ -20,7 +20,8 @@
     "precreatecorrections": "mkdirp ./apps/data/corrections",
     "preapplysrtr": "mkdirp ~/tmp",
     "applysrtr": "node -r fs -e \"console.log(JSON.stringify(require(\\\"./apps/settings_helper\\\"), null, 2))\" | json robot.name | xargs -I{} ./apps/scripts/applysrtr.js ./apps/robot/src/transitions/{}.js ./apps/data/parameters/{}.json \"`npm config get dataFilename`\" ./apps/data/corrections/\"`npm config get correctionsID`\".json | tee ~/tmp/applysrtr.log",
-    "postapplysrtr": "tail -1 ~/tmp/applysrtr.log | xargs -I{} json -I -f ./apps/data/studies/\"`npm config get studyID`\".json -e this.outputs={} && ./apps/scripts/savesettings.js ./apps/data/studies/\"`npm config get studyID`\".json"
+    "postapplysrtr": "tail -1 ~/tmp/applysrtr.log | xargs -I{} json -I -f ./apps/data/studies/\"`npm config get studyID`\".json -e this.outputs={} && ./apps/scripts/savesettings.js ./apps/data/studies/\"`npm config get studyID`\".json",
+    "saveparams": "./apps/scripts/saveparams.js ./apps/data/studies/\"`npm config get studyID`\".json"
   },
   "author": "Michael Jae-Yoon Chung",
   "license": "MIT",

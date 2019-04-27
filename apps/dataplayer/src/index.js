@@ -52,6 +52,9 @@ const makeMain = (loadedStreams, videoStartTime) => (sources) => {
       justifyContent: 'space-between',
       alignItems: 'flex-start',
     }}, vdoms)),
+    stateStamped$
+      .compose(dropRepeats((s1, s2) => s1.state === s2.state))
+      .map(ss => div(`${JSON.stringify(ss)}`)),
     stateStamped$.map(ss => div(`${JSON.stringify(ss)}`)),
     replayer.DOM.remember(),
   ).map(vdoms => div(vdoms));

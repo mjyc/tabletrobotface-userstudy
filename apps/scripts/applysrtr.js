@@ -84,7 +84,7 @@ corrections.map(function (c) {
       'trace', JSON.stringify(trace), 'correction', JSON.stringify(c));
 })
 
-var options = settings.srtr.options;
+var options = settings.applysrtr.options;
 
 
 // Run SRTR

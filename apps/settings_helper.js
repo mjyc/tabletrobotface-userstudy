@@ -11,7 +11,7 @@ var defaultVal = {
       enabled: true,
     },
   },
-  srtr: {
+  applysrtr: {
     options: {H: 1},
   },
 };

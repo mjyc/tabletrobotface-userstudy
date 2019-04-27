@@ -66,7 +66,8 @@ function transition(state, inputD, inputC, params) {
 };
 
 var defaultParams = {
-  engagedMinX: 340,
+  engagedMinNoseOrientation: 1.4,
+  engagedMaxNoseOrientation: 1.8,
 };
 
 module.exports = {

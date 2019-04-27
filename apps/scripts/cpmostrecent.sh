@@ -16,3 +16,5 @@ for ext in mp4 json; do \
   cp "`ls -dtr1 ~/Downloads/Data*$ext | tail -1`" "./apps/data/fromrobot/$OUT_FILENAME";
   echo "./apps/data/fromrobot/$OUT_FILENAME"
 done;
+
+test -e "./apps/data/fromrobot/$OUT_FILENAME" && npx json -I -f ./apps/settings.json -e "{this.dataplayer={fileprefix: \"fromrobot/`basename \"$OUT_FILENAME\" .json`\"}}"

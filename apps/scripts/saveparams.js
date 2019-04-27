@@ -8,11 +8,10 @@ if (!filename) {
   process.exit(1);
 }
 
-var settings = require('../settings_helper');
-var paramsFilename = './apps/data/parameters/' + settings.robot.name + '.json'
+var studyJSON = JSON.parse(fs.readFileSync(filename));
+var paramsFilename = './apps/data/parameters/' + studyJSON.settings.robot.name + '.json'
 var paramsJSON = JSON.parse(fs.readFileSync(paramsFilename));
-fs.writeFileSync('./apps/data/parameters/' + settings.robot.name + '_' + Date.now() + '.json', JSON.stringify(paramsJSON, null, 2));
+fs.writeFileSync('./apps/data/parameters/' + studyJSON.settings.robot.name + '_' + Date.now() + '.json', JSON.stringify(paramsJSON, null, 2));
 
-var study = JSON.parse(fs.readFileSync(filename));
-paramsJSON = study.outputs.params;
+paramsJSON = studyJSON.outputs.params;
 fs.writeFileSync(paramsFilename, JSON.stringify(paramsJSON, null, 2));

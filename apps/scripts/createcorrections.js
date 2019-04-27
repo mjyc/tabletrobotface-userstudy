@@ -3,10 +3,9 @@
 var fs = require('fs');
 
 var studyID = process.argv[2];
-var dataFilename = process.argv[3];
 
-if (!studyID || !dataFilename) {
-  console.log('usage: ./prepannotating {studyID} {dataFilename}');
+if (!studyID) {
+  console.log('usage: ./createcorrections {studyID}');
   process.exit(1);
 }
 
@@ -14,12 +13,12 @@ if (!studyID || !dataFilename) {
 // create a corrections doc
 var now = Date.now();
 var id = Math.random().toString(36).substring(2) + '_' + now;
-var data = JSON.parse(fs.readFileSync(dataFilename));
+var fileprefix = require('../settings_helper').dataplayer.fileprefix;
 var corrections = {
   _id: id,
   createdAt: now,
   studyID: studyID,
-  dataFilename: dataFilename,
+  dataFilename: './apps/fromrobot/' + fileprefix,
   corrections: [{stamp: null, state: null}],  // a template
 };
 fs.writeFileSync(
@@ -32,7 +31,7 @@ fs.writeFileSync(
 var studyFilename = './apps/data/studies/' + studyID + '.json';
 var study = JSON.parse(fs.readFileSync(studyFilename));
 study.updatedAt = now;
-study.correctionsFilename = './apps/data/fromrobot/' + id + '.json';
+study.correctionsFilename = './apps/data/corrections/' + id + '.json';
 fs.writeFileSync(studyFilename, JSON.stringify(study, null, 2));
 
 

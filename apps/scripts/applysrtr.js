@@ -6,27 +6,26 @@ var log = require('loglevel-debug')('applysrtr');
 var js2smt2 = require('js2smt2');
 var srtr = require('srtr');
 
-var transitionFilename = process.argv[2];
-var parametersFilename = process.argv[3];
-var dataFilename = process.argv[4];
-var correctionsFilename = process.argv[5];
 
-if (
-  !transitionFilename
-  || !dataFilename
-  || !parametersFilename
-  || !correctionsFilename
-) {
-  log.log('usage: ./applysrtr {transitionFilename} {parametersFilename} {dataFilename} {correctionsFilename}');
+var studyID = process.argv[2];
+if (!studyID) {
+  log.log('usage: ./applysrtr {studyID}');
   process.exit(1);
 }
+
+
+var studyJSON = require('../data/studies/' + studyID + '.json')
+var transitionFilename = './apps/robot/src/transitions/' + studyJSON.settings.robot.name + '.js';
+var parametersFilename = './apps/data/parameters/' + studyJSON.settings.robot.name + '.json';
+var dataFilename = './apps/data/' + studyJSON.settings.dataplayer.fileprefix + '.json';
+var correctionsFilename = studyJSON.correctionsFilename;
 log.debug('transitionFilename', transitionFilename);
 log.debug('dataFilename', dataFilename);
 log.debug('parametersFilename', parametersFilename);
 log.debug('correctionsFilename', correctionsFilename);
 
 
-// Load data
+// // Load data
 var transitionStr = fs.readFileSync(transitionFilename)
   .toString().replace('export ', '');
 var parametersJSON = JSON.parse(fs.readFileSync(parametersFilename));
@@ -81,14 +80,16 @@ corrections.map(function (c) {
   var trace = traces.filter(function (t) {
     return t.stamp === c.stamp;
   })[0];
-  !!trace && log.debug('trace', JSON.stringify(trace), 'correction', JSON.stringify(c));
+  !!trace && log.debug(
+      'trace', JSON.stringify(trace), 'correction', JSON.stringify(c));
 })
 
 var options = settings.srtr.options;
 
 
 // Run SRTR
-var z3Input = srtr.createSRTRSMT2(transAstIfStatement, paramMap, traces, corrections, options);
+var z3Input = srtr.createSRTRSMT2(
+    transAstIfStatement, paramMap, traces, corrections, options);
 log.debug('z3Input', z3Input);
 
 var p = spawn('z3', ['-T:5', '-smt2', '-in'], {stdio: ['pipe', 'pipe', 'ignore']});
@@ -138,13 +139,20 @@ p.stdout.on('data', function (data) {
     return acc;
   }, {});
 
-  var output = {
+  var outputs = {
     inputParams: inputParams,
     deltas: deltas,
     weights: weights,
     params: params,
   };
-  console.log(JSON.stringify(output));
+  studyJSON.updatedAt = Date.now();
+  studyJSON.outputs = outputs;
+  fs.writeFileSync(
+    './apps/data/studies/' + studyID + '.json',
+    JSON.stringify(studyJSON, null, 2)
+  );
+
+  console.log(JSON.stringify(outputs));
 });
 p.stdin.write(z3Input);
 p.stdin.end();

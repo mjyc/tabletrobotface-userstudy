@@ -44,7 +44,6 @@ function transition(state, inputD, inputC, params) {
         || !inputC.face.isVisible && (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs
       )
   ) {
-    console.log(disengagedTimeoutIntervalMs, inputC.face.stampLastDetected - inputC.face.stamp, (inputC.face.noseAngle > engagedMaxNoseAngle || inputC.face.noseAngle < engagedMinNoseAngle), (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs);
     return {
       state: 'S2',
       outputs: {

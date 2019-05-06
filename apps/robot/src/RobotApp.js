@@ -58,13 +58,10 @@ function input({
           ? Date.now() : prev.face.stampLastDetected;
     return {
       face: {
-        stampSec: features.stamp === 0 ? 0 : features.stamp / 1000,
         stampLastDetected: stampLastDetected,
-        stampLastDetectedSec: stampLastDetected === 0
-          ? 0 : stampLastDetected / 1000,
-        faceOrientationDeg: !!features.isVisible
+        faceAngle: !!features.isVisible
           ? features.faceOrientation / Math.PI * 180 : 0,
-        noseOrientationDeg: !!features.isVisible
+        noseAngle: !!features.isVisible
           ? features.noseOrientation / Math.PI * 180 : 0,
         ...features,
       },

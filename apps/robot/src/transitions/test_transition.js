@@ -1,8 +1,10 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
 function transition(state, inputD, inputC, params) {
-  var engagedMinNoseOrientation = params.engagedMinNoseOrientation;
-  var engagedMaxNoseOrientation = params.engagedMaxNoseOrientation;
-  var disengagedTimeoutInterval = params.disengagedTimeoutInterval;
+  var engagedMinNoseAngle = params.engagedMinNoseAngle;
+  var engagedMaxNoseAngle = params.engagedMaxNoseAngle;
+  var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
+
+
   if (state === 'S0' && inputD.type === 'START') {
     return {
       state: 'S1',
@@ -38,10 +40,11 @@ function transition(state, inputD, inputC, params) {
   } else if (  // disengaged
       state === 'S1' && inputD.type === 'Features'
       && (
-        (inputC.face.noseOrientationDeg > engagedMaxNoseOrientationDeg || inputC.face.noseOrientationDeg < engagedMinNoseOrientationDeg)
-        || (inputC.face.stampLastDetectedSec - inputC.face.stampSec) > disengagedTimeoutIntervalSec
+        inputC.face.isVisible && (inputC.face.noseAngle > engagedMaxNoseAngle || inputC.face.noseAngle < engagedMinNoseAngle)
+        || !inputC.face.isVisible && (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs
       )
   ) {
+    console.log(disengagedTimeoutIntervalMs, inputC.face.stampLastDetected - inputC.face.stamp, (inputC.face.noseAngle > engagedMaxNoseAngle || inputC.face.noseAngle < engagedMinNoseAngle), (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs);
     return {
       state: 'S2',
       outputs: {
@@ -51,7 +54,7 @@ function transition(state, inputD, inputC, params) {
     };
   } else if (  // engaged
       state === 'S2' && inputD.type === 'Features'
-      && (inputC.face.noseOrientationDeg < engagedMaxNoseOrientationDeg && inputC.face.noseOrientationDeg > engagedMinNoseOrientationDeg)
+      && (inputC.face.noseAngle < engagedMaxNoseAngle && inputC.face.noseAngle > engagedMinNoseAngle)
   ) {
     return {
       state: 'S1',
@@ -60,6 +63,7 @@ function transition(state, inputD, inputC, params) {
         HumanSpeechbubbleAction: ['Pause'],
       },
     };
+
 
   } else {
     return {
@@ -70,8 +74,9 @@ function transition(state, inputD, inputC, params) {
 };
 
 var defaultParams = {
-  engagedMinNoseOrientationDeg: 1.4,
-  engagedMaxNoseOrientationDeg: 1.8,
+  "engagedMinNoseAngle": 80,
+  "engagedMaxNoseAngle": 110,
+  "disengagedTimeoutIntervalMs": 1000
 };
 
 module.exports = {

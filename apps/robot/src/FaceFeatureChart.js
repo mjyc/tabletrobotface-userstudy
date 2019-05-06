@@ -46,7 +46,7 @@ export const config = {
       fill: false,
       lineTension: 0,
       data: [],
-      hidden: true,
+      hidden: false,
     }, {
       label: 'noseAngle',
       backgroundColor: color(chartColors.yellow).alpha(0.5).rgbString(),
@@ -54,7 +54,7 @@ export const config = {
       fill: false,
       lineTension: 0,
       data: [],
-      hidden: true,
+      hidden: false,
     }]
   },
   options: {
@@ -101,8 +101,8 @@ export default function FaceFeatureChart(sources) {
         span([input('.faceSize', {attrs: {type: 'checkbox'}}), 'faceSize']),
         span([input('.faceCenterX', {attrs: {type: 'checkbox'}}), 'faceCenterX']),
         span([input('.faceCenterY', {attrs: {type: 'checkbox'}}), 'faceCenterY']),
-        span([input('.faceAngle', {attrs: {type: 'checkbox'}}), 'faceAngle']),
-        span([input('.noseAngle', {attrs: {type: 'checkbox'}}), 'noseAngle']),
+        span([input('.faceAngle', {attrs: {type: 'checkbox', checked: ''}}), 'faceAngle']),
+        span([input('.noseAngle', {attrs: {type: 'checkbox', checked: ''}}), 'noseAngle']),
       ]),
     ]),
   );

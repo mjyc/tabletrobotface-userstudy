@@ -54,10 +54,18 @@ function input({
   );
   const inputC$ = PoseDetection.events('poses').fold((prev, poses) => {
     const features = extractFaceFeatures(poses);
+    const stampLastDetected = !!features.isVisible
+          ? Date.now() : prev.face.stampLastDetected;
     return {
       face: {
-        stampLastDetected: !!features.isVisible
-          ? Date.now() : prev.face.stampLastDetected,
+        stampSec: features.stamp === 0 ? 0 : features.stamp / 1000,
+        stampLastDetected: stampLastDetected,
+        stampLastDetectedSec: stampLastDetected === 0
+          ? 0 : stampLastDetected / 1000,
+        faceOrientationDeg: !!features.isVisible
+          ? features.faceOrientation / Math.PI * 180 : 0,
+        noseOrientationDeg: !!features.isVisible
+          ? features.noseOrientation / Math.PI * 180 : 0,
         ...features,
       },
       poses,

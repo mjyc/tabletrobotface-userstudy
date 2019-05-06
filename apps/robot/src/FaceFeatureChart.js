@@ -37,14 +37,14 @@ export const config = {
       lineTension: 0,
       data: []
     }, {
-      label: 'faceOrientation',
+      label: 'faceOrientationDeg',
       backgroundColor: color(chartColors.purple).alpha(0.5).rgbString(),
       borderColor: chartColors.purple,
       fill: false,
       lineTension: 0,
       data: []
     }, {
-      label: 'noseOrientation',
+      label: 'noseOrientationDeg',
       backgroundColor: color(chartColors.yellow).alpha(0.5).rgbString(),
       borderColor: chartColors.yellow,
       fill: false,
@@ -96,8 +96,8 @@ export default function FaceFeatureChart(sources) {
         span([input('.faceSize', {attrs: {type: 'checkbox', checked: ''}}), 'faceSize']),
         span([input('.faceCenterX', {attrs: {type: 'checkbox', checked: ''}}), 'faceCenterX']),
         span([input('.faceCenterY', {attrs: {type: 'checkbox', checked: ''}}), 'faceCenterY']),
-        span([input('.faceOrientation', {attrs: {type: 'checkbox', checked: ''}}), 'faceOrientation']),
-        span([input('.noseOrientation', {attrs: {type: 'checkbox', checked: ''}}), 'noseOrientation']),
+        span([input('.faceOrientationDeg', {attrs: {type: 'checkbox', checked: ''}}), 'faceOrientationDeg']),
+        span([input('.noseOrientationDeg', {attrs: {type: 'checkbox', checked: ''}}), 'noseOrientationDeg']),
       ]),
     ]),
   );
@@ -109,8 +109,8 @@ export default function FaceFeatureChart(sources) {
       s.features.faceSize,
       s.features.faceCenterX,
       s.features.faceCenterY,
-      s.features.faceOrientation,
-      s.features.noseOrientation,
+      s.features.faceOrientationDeg,
+      s.features.noseOrientationDeg,
     ]));
   const chart$ = xs.merge(
     chartElem$.map(elem => ({type: 'CREATE', value: elem})),
@@ -118,8 +118,8 @@ export default function FaceFeatureChart(sources) {
     sources.DOM.select('.faceSize').events('change').map(ev => ev.target.checked).map(v => ({type: 'UPDATE', value: [{hidden: !v}]})),
     sources.DOM.select('.faceCenterX').events('change').map(ev => ev.target.checked).map(v => ({type: 'UPDATE', value: [{}, {hidden: !v}]})),
     sources.DOM.select('.faceCenterY').events('change').map(ev => ev.target.checked).map(v => ({type: 'UPDATE', value: [{}, {}, {hidden: !v}]})),
-    sources.DOM.select('.faceOrientation').events('change').map(ev => ev.target.checked).map(v => ({type: 'UPDATE', value: [{}, {}, {}, {hidden: !v}]})),
-    sources.DOM.select('.noseOrientation').events('change').map(ev => ev.target.checked).map(v => ({type: 'UPDATE', value: [{}, {}, {}, {}, {hidden: !v}]})),
+    sources.DOM.select('.faceOrientationDeg').events('change').map(ev => ev.target.checked).map(v => ({type: 'UPDATE', value: [{}, {}, {}, {hidden: !v}]})),
+    sources.DOM.select('.noseOrientationDeg').events('change').map(ev => ev.target.checked).map(v => ({type: 'UPDATE', value: [{}, {}, {}, {}, {hidden: !v}]})),
   );
 
   return {

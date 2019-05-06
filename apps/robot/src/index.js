@@ -18,14 +18,16 @@ import {
 import {
   makeMediaRecorderDriver,
   makeDownloadDataDriver,
+  makeStreamingChartDriver,
   DataDownloader,
 } from 'tabletrobotface-userstudy';
 import settings from '../../settings_helper';
 import {RobotApp} from './RobotApp';
 import transitions from './transitions';
+import FaceFeatureChart, {config} from './FaceFeatureChart';
 
 function TabletRobotFaceApp(sources) {
-  // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
+  sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
 
   const appName = Object.keys(transitions).indexOf(settings.robot.name) !== -1
       ? settings.robot.name : 'demo';
@@ -71,9 +73,24 @@ function main(sources) {
   const dataProxy$ = xs.create();
   const dataDownloader = DataDownloader(sources, dataProxy$);
 
+  const lens = {
+    get: rs => {
+      if (
+        !!rs.RobotApp && !!rs.RobotApp.trace
+        && rs.RobotApp.trace.input.type === 'FSM_INPUT'
+      ) {
+        return {features: rs.RobotApp.trace.input.continuous.face};
+      } else {
+        return {};
+      }
+    },
+  };
+  const faceFeatureChart = isolate(FaceFeatureChart, {state: lens})(sources);
+
   const vdom$ = xs.combine(
     sinks.DOM,
     dataDownloader.DOM,
+    faceFeatureChart.DOM,
   ).map(vdoms => div(vdoms));
 
   const videoRecorder$ = xs.merge(
@@ -112,11 +129,14 @@ function main(sources) {
     });
   dataProxy$.imitate(data$);
 
+
+
   return {
     ...sinks,
     DownloadData: dataDownloader.DownloadData,
     DOM: vdom$,
     VideoRecorder: videoRecorder$,
+    Chart: faceFeatureChart.Chart,
   };
 }
 
@@ -126,6 +146,7 @@ const drivers = {
   Time: timeDriver,
   VideoRecorder: makeMediaRecorderDriver(),
   DownloadData: makeDownloadDataDriver(),
+  Chart: makeStreamingChartDriver(config),
 };
 
 run(main, {

@@ -2,6 +2,8 @@
 function transition(state, inputD, inputC, params) {
   var engagedMinNoseAngle = params.engagedMinNoseAngle;
   var engagedMaxNoseAngle = params.engagedMaxNoseAngle;
+  var disengagedMinNoseAngle = params.disengagedMinNoseAngle;
+  var disengagedMaxNoseAngle = params.disengagedMaxNoseAngle;
   var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
 
 
@@ -40,7 +42,7 @@ function transition(state, inputD, inputC, params) {
   } else if (  // disengaged
       state === 'S1' && inputD.type === 'Features'
       && (
-        inputC.face.isVisible && (inputC.face.noseAngle > engagedMaxNoseAngle || inputC.face.noseAngle < engagedMinNoseAngle)
+        inputC.face.isVisible && (inputC.face.noseAngle > disengagedMaxNoseAngle || inputC.face.noseAngle < disengagedMinNoseAngle)
         || !inputC.face.isVisible && (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs
       )
   ) {
@@ -53,7 +55,7 @@ function transition(state, inputD, inputC, params) {
     };
   } else if (  // engaged
       state === 'S2' && inputD.type === 'Features'
-      && (inputC.face.noseAngle < engagedMaxNoseAngle && inputC.face.noseAngle > engagedMinNoseAngle)
+      && inputC.face.isVisible && (inputC.face.noseAngle < engagedMaxNoseAngle && inputC.face.noseAngle > engagedMinNoseAngle)
   ) {
     return {
       state: 'S1',

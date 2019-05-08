@@ -88,7 +88,7 @@ var defaultParams = {
   "engagedMaxNoseAngle": 90,
   "disengagedMinNoseAngle": 0,
   "disengagedMaxNoseAngle": 180,
-  "disengagedTimeoutIntervalMs": 10000
+  "disengagedTimeoutIntervalMs": 1000
 };
 
 module.exports = {

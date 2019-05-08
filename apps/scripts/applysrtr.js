@@ -138,6 +138,7 @@ p.stdout.on('data', function (data) {
     acc[k] = inputParams[k] + (!!deltas[kd] ? deltas[kd] : 0);
     return acc;
   }, {});
+  log.debug('params', params);
 
   var outputs = {
     inputParams: inputParams,

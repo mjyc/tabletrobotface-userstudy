@@ -6,575 +6,717 @@ function transition(state, inputD, inputC, params) {
   var disengagedMaxNoseAngle = params.disengagedMaxNoseAngle;
   var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
 
-  if (state === 'S0' && inputD.type === 'START') {
+  if (state === "S0" && inputD.type === "START") {
     return {
-      state: 'S1',
+      state: "S1",
       outputs: {
         RobotSpeechbubbleAction: 'Tap "Hello" when you are ready',
-        HumanSpeechbubbleAction: ['Hello'],
-      },
+        HumanSpeechbubbleAction: ["Hello"]
+      }
     };
-  } else if (state === 'S1' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Hello') {
+  } else if (
+    state === "S1" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Hello"
+  ) {
     return {
-      state: 'S2',
+      state: "S2",
       outputs: {
-        RobotSpeechbubbleAction: 'PROFESSOR ARCHIE MAKES A BANG',
-        HumanSpeechbubbleAction: ['Pause'],
-        SpeechSynthesisAction: 'PROFESSOR ARCHIE MAKES A BANG',
-      },
+        RobotSpeechbubbleAction: "PROFESSOR ARCHIE MAKES A BANG",
+        HumanSpeechbubbleAction: ["Pause"],
+        SpeechSynthesisAction: "PROFESSOR ARCHIE MAKES A BANG"
+      }
     };
-  } else if (state === 'S2' && inputD.type === 'SpeechSynthesisAction'
-      && inputD.status === 'SUCCEEDED') {
+  } else if (
+    state === "S2" &&
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
+  ) {
     return {
-      state: 'S3',
-      outputs: {
-        RobotSpeechbubbleAction:
-            'Professor Archie thinks a lot. He thinks of things to make.',
-        HumanSpeechbubbleAction: ['Pause'],
-        SpeechSynthesisAction:
-            'Professor Archie thinks a lot. He thinks of things to make.',
-      },
-    };
-  } else if (state === 'S3' && inputD.type === 'SpeechSynthesisAction'
-      && inputD.status === 'SUCCEEDED') {
-    return {
-      state: 'S4',
+      state: "S3",
       outputs: {
         RobotSpeechbubbleAction:
-            'Archie makes bots that can help. The bots make toast for Archie.',
-        HumanSpeechbubbleAction: ['Pause'],
+          "Professor Archie thinks a lot. He thinks of things to make.",
+        HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction:
-            'Archie makes bots that can help. The bots make toast for Archie.',
-      },
+          "Professor Archie thinks a lot. He thinks of things to make."
+      }
     };
-  } else if (state === 'S4' && inputD.type === 'SpeechSynthesisAction'
-      && inputD.status === 'SUCCEEDED') {
+  } else if (
+    state === "S3" &&
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
+  ) {
     return {
-      state: 'S5',
+      state: "S4",
       outputs: {
         RobotSpeechbubbleAction:
-            'Archie makes a pen that can do art by itself. What do you think of it?',
-        HumanSpeechbubbleAction: ['Pause'],
+          "Archie makes bots that can help. The bots make toast for Archie.",
+        HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction:
-            'Archie makes a pen that can do art by itself. What do you think of it?',
-      },
+          "Archie makes bots that can help. The bots make toast for Archie."
+      }
     };
-  } else if (state === 'S5' && inputD.type === 'SpeechSynthesisAction'
-      && inputD.status === 'SUCCEEDED') {
+  } else if (
+    state === "S4" &&
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
+  ) {
     return {
-      state: 'S6',
+      state: "S5",
       outputs: {
         RobotSpeechbubbleAction:
-            'Archie makes it so that his bike can run his laptop.',
-        HumanSpeechbubbleAction: ['Pause'],
+          "Archie makes a pen that can do art by itself. What do you think of it?",
+        HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction:
-            'Archie makes it so that his bike can run his laptop.',
-      },
+          "Archie makes a pen that can do art by itself. What do you think of it?"
+      }
     };
-  } else if (state === 'S6' && inputD.type === 'SpeechSynthesisAction'
-      && inputD.status === 'SUCCEEDED') {
+  } else if (
+    state === "S5" &&
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
+  ) {
     return {
-      state: 'S7',
+      state: "S6",
       outputs: {
         RobotSpeechbubbleAction:
-            'Archie even makes it so that cars can sail.',
-        HumanSpeechbubbleAction: ['Pause'],
+          "Archie makes it so that his bike can run his laptop.",
+        HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction:
-            'Archie even makes it so that cars can sail.',
-      },
+          "Archie makes it so that his bike can run his laptop."
+      }
     };
-  } else if (state === 'S7' && inputD.type === 'SpeechSynthesisAction'
-      && inputD.status === 'SUCCEEDED') {
+  } else if (
+    state === "S6" &&
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
+  ) {
     return {
-      state: 'S8',
+      state: "S7",
+      outputs: {
+        RobotSpeechbubbleAction: "Archie even makes it so that cars can sail.",
+        HumanSpeechbubbleAction: ["Pause"],
+        SpeechSynthesisAction: "Archie even makes it so that cars can sail."
+      }
+    };
+  } else if (
+    state === "S7" &&
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
+  ) {
+    return {
+      state: "S8",
       outputs: {
         RobotSpeechbubbleAction:
-            'Archie has a lot of plans.\nHe never stops inventing.',
-        HumanSpeechbubbleAction: ['Pause'],
+          "Archie has a lot of plans.\nHe never stops inventing.",
+        HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction:
-            'Archie has a lot of plans.\nHe never stops inventing.',
-      },
+          "Archie has a lot of plans.\nHe never stops inventing."
+      }
     };
-  } else if (state === 'S8' && inputD.type === 'SpeechSynthesisAction'
-      && inputD.status === 'SUCCEEDED') {
+  } else if (
+    state === "S8" &&
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
+  ) {
     return {
-      state: 'S9',
+      state: "S9",
       outputs: {
-        RobotSpeechbubbleAction:
-            'What would you make if you were Archie?',
-        HumanSpeechbubbleAction: ['Pause'],
-        SpeechSynthesisAction:
-            'What would you make if you were Archie?',
-      },
+        RobotSpeechbubbleAction: "What would you make if you were Archie?",
+        HumanSpeechbubbleAction: ["Pause"],
+        SpeechSynthesisAction: "What would you make if you were Archie?"
+      }
     };
-
-  } else if (state === 'S9' && inputD.type === 'SpeechSynthesisAction'
-      && inputD.status === 'SUCCEEDED') {
+  } else if (
+    state === "S9" &&
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
+  ) {
     return {
-      state: 'S10',
+      state: "S10",
       outputs: {
-        RobotSpeechbubbleAction: 'The END',
-        HumanSpeechbubbleAction: '',
-        SpeechSynthesisAction: 'The END',
-      },
+        RobotSpeechbubbleAction: "The END",
+        HumanSpeechbubbleAction: "",
+        SpeechSynthesisAction: "The END"
+      }
     };
-
-
-  } else if (state === 'S2' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Pause') {
+  } else if (
+    state === "S2" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Pause"
+  ) {
     return {
-      state: 'SP2',
+      state: "SP2",
       outputs: {
         RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-        HumanSpeechbubbleAction: ['Resume'],
-        SpeechSynthesisAction: ' ',
-      },
+        HumanSpeechbubbleAction: ["Resume"],
+        SpeechSynthesisAction: " "
+      }
     };
-  } else if (state === 'S3' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Pause') {
+  } else if (
+    state === "S3" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Pause"
+  ) {
     return {
-      state: 'SP3',
+      state: "SP3",
       outputs: {
         RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-        HumanSpeechbubbleAction: ['Resume'],
-        SpeechSynthesisAction: ' ',
-      },
+        HumanSpeechbubbleAction: ["Resume"],
+        SpeechSynthesisAction: " "
+      }
     };
-  } else if (state === 'S4' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Pause') {
+  } else if (
+    state === "S4" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Pause"
+  ) {
     return {
-      state: 'SP4',
+      state: "SP4",
       outputs: {
         RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-        HumanSpeechbubbleAction: ['Resume'],
-        SpeechSynthesisAction: ' ',
-      },
+        HumanSpeechbubbleAction: ["Resume"],
+        SpeechSynthesisAction: " "
+      }
     };
-  } else if (state === 'S5' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Pause') {
+  } else if (
+    state === "S5" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Pause"
+  ) {
     return {
-      state: 'SP5',
+      state: "SP5",
       outputs: {
         RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-        HumanSpeechbubbleAction: ['Resume'],
-        SpeechSynthesisAction: ' ',
-      },
+        HumanSpeechbubbleAction: ["Resume"],
+        SpeechSynthesisAction: " "
+      }
     };
-  } else if (state === 'S6' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Pause') {
+  } else if (
+    state === "S6" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Pause"
+  ) {
     return {
-      state: 'SP6',
+      state: "SP6",
       outputs: {
         RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-        HumanSpeechbubbleAction: ['Resume'],
-        SpeechSynthesisAction: ' ',
-      },
+        HumanSpeechbubbleAction: ["Resume"],
+        SpeechSynthesisAction: " "
+      }
     };
-  } else if (state === 'S7' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Pause') {
+  } else if (
+    state === "S7" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Pause"
+  ) {
     return {
-      state: 'SP7',
+      state: "SP7",
       outputs: {
         RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-        HumanSpeechbubbleAction: ['Resume'],
-        SpeechSynthesisAction: ' ',
-      },
+        HumanSpeechbubbleAction: ["Resume"],
+        SpeechSynthesisAction: " "
+      }
     };
-  } else if (state === 'S8' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Pause') {
+  } else if (
+    state === "S8" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Pause"
+  ) {
     return {
-      state: 'SP8',
+      state: "SP8",
       outputs: {
         RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-        HumanSpeechbubbleAction: ['Resume'],
-        SpeechSynthesisAction: ' ',
-      },
+        HumanSpeechbubbleAction: ["Resume"],
+        SpeechSynthesisAction: " "
+      }
     };
-
-
-  } else if (state === 'SP2' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Resume') {
+  } else if (
+    state === "SP2" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Resume"
+  ) {
     return {
-      state: 'S2',
+      state: "S2",
       outputs: {
-        RobotSpeechbubbleAction: 'PROFESSOR ARCHIE MAKES A BANG',
-        HumanSpeechbubbleAction: ['Pause'],
-        SpeechSynthesisAction: 'PROFESSOR ARCHIE MAKES A BANG',
-      },
+        RobotSpeechbubbleAction: "PROFESSOR ARCHIE MAKES A BANG",
+        HumanSpeechbubbleAction: ["Pause"],
+        SpeechSynthesisAction: "PROFESSOR ARCHIE MAKES A BANG"
+      }
     };
-  } else if (state === 'SP3' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Resume') {
+  } else if (
+    state === "SP3" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Resume"
+  ) {
     return {
-      state: 'S3',
-      outputs: {
-        RobotSpeechbubbleAction:
-            'Professor Archie thinks a lot. He thinks of things to make.',
-        HumanSpeechbubbleAction: ['Pause'],
-        SpeechSynthesisAction:
-            'Professor Archie thinks a lot. He thinks of things to make.',
-      },
-    };
-  } else if (state === 'SP4' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Resume') {
-    return {
-      state: 'S4',
+      state: "S3",
       outputs: {
         RobotSpeechbubbleAction:
-            'Archie makes bots that can help. The bots make toast for Archie.',
-        HumanSpeechbubbleAction: ['Pause'],
+          "Professor Archie thinks a lot. He thinks of things to make.",
+        HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction:
-            'Archie makes bots that can help. The bots make toast for Archie.',
-      },
+          "Professor Archie thinks a lot. He thinks of things to make."
+      }
     };
-  } else if (state === 'SP5' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Resume') {
+  } else if (
+    state === "SP4" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Resume"
+  ) {
     return {
-      state: 'S5',
+      state: "S4",
       outputs: {
         RobotSpeechbubbleAction:
-            'Archie makes a pen that can do art by itself. What do you think of it?',
-        HumanSpeechbubbleAction: ['Pause'],
+          "Archie makes bots that can help. The bots make toast for Archie.",
+        HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction:
-            'Archie makes a pen that can do art by itself. What do you think of it?',
-      },
+          "Archie makes bots that can help. The bots make toast for Archie."
+      }
     };
-  } else if (state === 'SP6' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Resume') {
+  } else if (
+    state === "SP5" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Resume"
+  ) {
     return {
-      state: 'S6',
+      state: "S5",
       outputs: {
         RobotSpeechbubbleAction:
-            'Archie makes it so that his bike can run his laptop.',
-        HumanSpeechbubbleAction: ['Pause'],
+          "Archie makes a pen that can do art by itself. What do you think of it?",
+        HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction:
-            'Archie makes it so that his bike can run his laptop.',
-      },
+          "Archie makes a pen that can do art by itself. What do you think of it?"
+      }
     };
-  } else if (state === 'SP7' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Resume') {
+  } else if (
+    state === "SP6" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Resume"
+  ) {
     return {
-      state: 'S7',
+      state: "S6",
       outputs: {
         RobotSpeechbubbleAction:
-            'Archie even makes it so that cars can sail.',
-        HumanSpeechbubbleAction: ['Pause'],
+          "Archie makes it so that his bike can run his laptop.",
+        HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction:
-            'Archie even makes it so that cars can sail.',
-      },
+          "Archie makes it so that his bike can run his laptop."
+      }
     };
-  } else if (state === 'SP8' && inputD.type === 'HumanSpeechbubbleAction'
-      && inputD.status === 'SUCCEEDED' && inputD.result === 'Resume') {
+  } else if (
+    state === "SP7" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Resume"
+  ) {
     return {
-      state: 'S8',
+      state: "S7",
+      outputs: {
+        RobotSpeechbubbleAction: "Archie even makes it so that cars can sail.",
+        HumanSpeechbubbleAction: ["Pause"],
+        SpeechSynthesisAction: "Archie even makes it so that cars can sail."
+      }
+    };
+  } else if (
+    state === "SP8" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Resume"
+  ) {
+    return {
+      state: "S8",
       outputs: {
         RobotSpeechbubbleAction:
-            'Archie has a lot of plans.\nHe never stops inventing.',
-        HumanSpeechbubbleAction: ['Pause'],
+          "Archie has a lot of plans.\nHe never stops inventing.",
+        HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction:
-            'Archie has a lot of plans.\nHe never stops inventing.',
-      },
+          "Archie has a lot of plans.\nHe never stops inventing."
+      }
     };
-
-
-  } else if (state === 'S2' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle > disengagedMaxNoseAngle || inputC.face.noseAngle < disengagedMinNoseAngle)
-        || !inputC.face.isVisible && (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs) {
-      return {
-        state: 'SP2',
-        outputs: {
-          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-          HumanSpeechbubbleAction: ['Resume'],
-          SpeechSynthesisAction: ' ',
-        }
-      };
-    } else {
-      return {
-        state: state,
-        outputs: null,
-      };
-    }
-  } else if (state === 'S3' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle > disengagedMaxNoseAngle || inputC.face.noseAngle < disengagedMinNoseAngle)
-        || !inputC.face.isVisible && (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs) {
-      return {
-        state: 'SP3',
-        outputs: {
-          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-          HumanSpeechbubbleAction: ['Resume'],
-          SpeechSynthesisAction: ' ',
-        }
-      };
-    } else {
-      return {
-        state: state,
-        outputs: null,
-      };
-    }
-  } else if (state === 'S4' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle > disengagedMaxNoseAngle || inputC.face.noseAngle < disengagedMinNoseAngle)
-        || !inputC.face.isVisible && (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs) {
-      return {
-        state: 'SP4',
-        outputs: {
-          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-          HumanSpeechbubbleAction: ['Resume'],
-          SpeechSynthesisAction: ' ',
-        }
-      };
-    } else {
-      return {
-        state: state,
-        outputs: null,
-      };
-    }
-  } else if (state === 'S5' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle > disengagedMaxNoseAngle || inputC.face.noseAngle < disengagedMinNoseAngle)
-        || !inputC.face.isVisible && (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs) {
-      return {
-        state: 'SP5',
-        outputs: {
-          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-          HumanSpeechbubbleAction: ['Resume'],
-          SpeechSynthesisAction: ' ',
-        }
-      };
-    } else {
-      return {
-        state: state,
-        outputs: null,
-      };
-    }
-  } else if (state === 'S6' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle > disengagedMaxNoseAngle || inputC.face.noseAngle < disengagedMinNoseAngle)
-        || !inputC.face.isVisible && (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs) {
-      return {
-        state: 'SP6',
-        outputs: {
-          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-          HumanSpeechbubbleAction: ['Resume'],
-          SpeechSynthesisAction: ' ',
-        }
-      };
-    } else {
-      return {
-        state: state,
-        outputs: null,
-      };
-    }
-  } else if (state === 'S7' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle > disengagedMaxNoseAngle || inputC.face.noseAngle < disengagedMinNoseAngle)
-        || !inputC.face.isVisible && (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs) {
-      return {
-        state: 'SP7',
-        outputs: {
-          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-          HumanSpeechbubbleAction: ['Resume'],
-          SpeechSynthesisAction: ' ',
-        }
-      };
-    } else {
-      return {
-        state: state,
-        outputs: null,
-      };
-    }
-  } else if (state === 'S8' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle > disengagedMaxNoseAngle || inputC.face.noseAngle < disengagedMinNoseAngle)
-        || !inputC.face.isVisible && (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs) {
-      return {
-        state: 'SP8',
-        outputs: {
-          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-          HumanSpeechbubbleAction: ['Resume'],
-          SpeechSynthesisAction: ' ',
-        }
-      };
-    } else {
-      return {
-        state: state,
-        outputs: null,
-      };
-    }
-
-
-  } else if (state === 'S1' && inputD.type === 'Features') {
-    if (  // disengaged
-      inputC.face.isVisible && (inputC.face.noseAngle > disengagedMaxNoseAngle || inputC.face.noseAngle < disengagedMinNoseAngle)
-      || !inputC.face.isVisible && (inputC.face.stamp - inputC.face.stampLastDetected) > disengagedTimeoutIntervalMs
+  } else if (state === "S2" && inputD.type === "Features") {
+    if (
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
+          inputC.face.noseAngle < disengagedMinNoseAngle)) ||
+      (!inputC.face.isVisible &&
+        inputC.face.stamp - inputC.face.stampLastDetected >
+          disengagedTimeoutIntervalMs)
     ) {
       return {
-        state: 'S2',
+        state: "SP2",
+        outputs: {
+          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+          HumanSpeechbubbleAction: ["Resume"],
+          SpeechSynthesisAction: " "
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
+  } else if (state === "S3" && inputD.type === "Features") {
+    if (
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
+          inputC.face.noseAngle < disengagedMinNoseAngle)) ||
+      (!inputC.face.isVisible &&
+        inputC.face.stamp - inputC.face.stampLastDetected >
+          disengagedTimeoutIntervalMs)
+    ) {
+      return {
+        state: "SP3",
+        outputs: {
+          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+          HumanSpeechbubbleAction: ["Resume"],
+          SpeechSynthesisAction: " "
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
+  } else if (state === "S4" && inputD.type === "Features") {
+    if (
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
+          inputC.face.noseAngle < disengagedMinNoseAngle)) ||
+      (!inputC.face.isVisible &&
+        inputC.face.stamp - inputC.face.stampLastDetected >
+          disengagedTimeoutIntervalMs)
+    ) {
+      return {
+        state: "SP4",
+        outputs: {
+          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+          HumanSpeechbubbleAction: ["Resume"],
+          SpeechSynthesisAction: " "
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
+  } else if (state === "S5" && inputD.type === "Features") {
+    if (
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
+          inputC.face.noseAngle < disengagedMinNoseAngle)) ||
+      (!inputC.face.isVisible &&
+        inputC.face.stamp - inputC.face.stampLastDetected >
+          disengagedTimeoutIntervalMs)
+    ) {
+      return {
+        state: "SP5",
+        outputs: {
+          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+          HumanSpeechbubbleAction: ["Resume"],
+          SpeechSynthesisAction: " "
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
+  } else if (state === "S6" && inputD.type === "Features") {
+    if (
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
+          inputC.face.noseAngle < disengagedMinNoseAngle)) ||
+      (!inputC.face.isVisible &&
+        inputC.face.stamp - inputC.face.stampLastDetected >
+          disengagedTimeoutIntervalMs)
+    ) {
+      return {
+        state: "SP6",
+        outputs: {
+          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+          HumanSpeechbubbleAction: ["Resume"],
+          SpeechSynthesisAction: " "
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
+  } else if (state === "S7" && inputD.type === "Features") {
+    if (
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
+          inputC.face.noseAngle < disengagedMinNoseAngle)) ||
+      (!inputC.face.isVisible &&
+        inputC.face.stamp - inputC.face.stampLastDetected >
+          disengagedTimeoutIntervalMs)
+    ) {
+      return {
+        state: "SP7",
+        outputs: {
+          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+          HumanSpeechbubbleAction: ["Resume"],
+          SpeechSynthesisAction: " "
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
+  } else if (state === "S8" && inputD.type === "Features") {
+    if (
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
+          inputC.face.noseAngle < disengagedMinNoseAngle)) ||
+      (!inputC.face.isVisible &&
+        inputC.face.stamp - inputC.face.stampLastDetected >
+          disengagedTimeoutIntervalMs)
+    ) {
+      return {
+        state: "SP8",
+        outputs: {
+          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+          HumanSpeechbubbleAction: ["Resume"],
+          SpeechSynthesisAction: " "
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
+  } else if (state === "S1" && inputD.type === "Features") {
+    if (
+      // disengaged
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
+          inputC.face.noseAngle < disengagedMinNoseAngle)) ||
+      (!inputC.face.isVisible &&
+        inputC.face.stamp - inputC.face.stampLastDetected >
+          disengagedTimeoutIntervalMs)
+    ) {
+      return {
+        state: "S2",
         outputs: {
           RobotSpeechbubbleAction: 'Tap "Resume" to resume',
-          HumanSpeechbubbleAction: ['Resume'],
-        },
+          HumanSpeechbubbleAction: ["Resume"]
+        }
       };
     } else {
       return {
         state: state,
-        outputs: null,
+        outputs: null
       };
     }
-  } else if (state === 'S2' && inputD.type === 'Features') {
-    if (  // engaged
-      inputC.face.isVisible && (inputC.face.noseAngle < engagedMaxNoseAngle && inputC.face.noseAngle > engagedMinNoseAngle)
+  } else if (state === "S2" && inputD.type === "Features") {
+    if (
+      // engaged
+      inputC.face.isVisible &&
+      (inputC.face.noseAngle < engagedMaxNoseAngle &&
+        inputC.face.noseAngle > engagedMinNoseAngle)
     ) {
       return {
-        state: 'S1',
+        state: "S1",
         outputs: {
           RobotSpeechbubbleAction: 'Tap "Pause" to pause',
-          HumanSpeechbubbleAction: ['Pause'],
-        },
+          HumanSpeechbubbleAction: ["Pause"]
+        }
       };
     } else {
       return {
         state: state,
-        outputs: null,
+        outputs: null
       };
     }
-
-
-  } else if (state === 'SP2' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle < engagedMaxNoseAngle && inputC.face.noseAngle > engagedMinNoseAngle)) {
+  } else if (state === "SP2" && inputD.type === "Features") {
+    if (
+      inputC.face.isVisible &&
+      (inputC.face.noseAngle < engagedMaxNoseAngle &&
+        inputC.face.noseAngle > engagedMinNoseAngle)
+    ) {
       return {
-        state: 'S2',
+        state: "S2",
         outputs: {
-          RobotSpeechbubbleAction: 'PROFESSOR ARCHIE MAKES A BANG',
-          HumanSpeechbubbleAction: ['Pause'],
-          SpeechSynthesisAction: 'PROFESSOR ARCHIE MAKES A BANG',
-        },
+          RobotSpeechbubbleAction: "PROFESSOR ARCHIE MAKES A BANG",
+          HumanSpeechbubbleAction: ["Pause"],
+          SpeechSynthesisAction: "PROFESSOR ARCHIE MAKES A BANG"
+        }
       };
     } else {
       return {
         state: state,
-        outputs: null,
+        outputs: null
       };
     }
-  } else if (state === 'SP3' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle < engagedMaxNoseAngle && inputC.face.noseAngle > engagedMinNoseAngle)) {
+  } else if (state === "SP3" && inputD.type === "Features") {
+    if (
+      inputC.face.isVisible &&
+      (inputC.face.noseAngle < engagedMaxNoseAngle &&
+        inputC.face.noseAngle > engagedMinNoseAngle)
+    ) {
       return {
-        state: 'S3',
-        outputs: {
-          RobotSpeechbubbleAction:
-              'Professor Archie thinks a lot. He thinks of things to make.',
-          HumanSpeechbubbleAction: ['Pause'],
-          SpeechSynthesisAction:
-              'Professor Archie thinks a lot. He thinks of things to make.',
-        },
-      };
-    } else {
-      return {
-        state: state,
-        outputs: null,
-      };
-    }
-  } else if (state === 'SP4' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle < engagedMaxNoseAngle && inputC.face.noseAngle > engagedMinNoseAngle)) {
-      return {
-        state: 'S4',
+        state: "S3",
         outputs: {
           RobotSpeechbubbleAction:
-              'Archie makes bots that can help. The bots make toast for Archie.',
-          HumanSpeechbubbleAction: ['Pause'],
+            "Professor Archie thinks a lot. He thinks of things to make.",
+          HumanSpeechbubbleAction: ["Pause"],
           SpeechSynthesisAction:
-              'Archie makes bots that can help. The bots make toast for Archie.',
-        },
+            "Professor Archie thinks a lot. He thinks of things to make."
+        }
       };
     } else {
       return {
         state: state,
-        outputs: null,
+        outputs: null
       };
     }
-  } else if (state === 'SP5' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle < engagedMaxNoseAngle && inputC.face.noseAngle > engagedMinNoseAngle)) {
+  } else if (state === "SP4" && inputD.type === "Features") {
+    if (
+      inputC.face.isVisible &&
+      (inputC.face.noseAngle < engagedMaxNoseAngle &&
+        inputC.face.noseAngle > engagedMinNoseAngle)
+    ) {
       return {
-        state: 'S5',
+        state: "S4",
         outputs: {
           RobotSpeechbubbleAction:
-              'Archie makes a pen that can do art by itself. What do you think of it?',
-          HumanSpeechbubbleAction: ['Pause'],
+            "Archie makes bots that can help. The bots make toast for Archie.",
+          HumanSpeechbubbleAction: ["Pause"],
           SpeechSynthesisAction:
-              'Archie makes a pen that can do art by itself. What do you think of it?',
-        },
+            "Archie makes bots that can help. The bots make toast for Archie."
+        }
       };
     } else {
       return {
         state: state,
-        outputs: null,
+        outputs: null
       };
     }
-  } else if (state === 'SP6' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle < engagedMaxNoseAngle && inputC.face.noseAngle > engagedMinNoseAngle)) {
+  } else if (state === "SP5" && inputD.type === "Features") {
+    if (
+      inputC.face.isVisible &&
+      (inputC.face.noseAngle < engagedMaxNoseAngle &&
+        inputC.face.noseAngle > engagedMinNoseAngle)
+    ) {
       return {
-        state: 'S6',
+        state: "S5",
         outputs: {
           RobotSpeechbubbleAction:
-              'Archie makes it so that his bike can run his laptop.',
-          HumanSpeechbubbleAction: ['Pause'],
+            "Archie makes a pen that can do art by itself. What do you think of it?",
+          HumanSpeechbubbleAction: ["Pause"],
           SpeechSynthesisAction:
-              'Archie makes it so that his bike can run his laptop.',
-        },
+            "Archie makes a pen that can do art by itself. What do you think of it?"
+        }
       };
     } else {
       return {
         state: state,
-        outputs: null,
+        outputs: null
       };
     }
-  } else if (state === 'SP7' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle < engagedMaxNoseAngle && inputC.face.noseAngle > engagedMinNoseAngle)) {
+  } else if (state === "SP6" && inputD.type === "Features") {
+    if (
+      inputC.face.isVisible &&
+      (inputC.face.noseAngle < engagedMaxNoseAngle &&
+        inputC.face.noseAngle > engagedMinNoseAngle)
+    ) {
       return {
-        state: 'S7',
+        state: "S6",
         outputs: {
           RobotSpeechbubbleAction:
-              'Archie even makes it so that cars can sail.',
-          HumanSpeechbubbleAction: ['Pause'],
+            "Archie makes it so that his bike can run his laptop.",
+          HumanSpeechbubbleAction: ["Pause"],
           SpeechSynthesisAction:
-              'Archie even makes it so that cars can sail.',
-        },
+            "Archie makes it so that his bike can run his laptop."
+        }
       };
     } else {
       return {
         state: state,
-        outputs: null,
+        outputs: null
       };
     }
-  } else if (state === 'SP8' && inputD.type === 'Features') {
-    if (inputC.face.isVisible && (inputC.face.noseAngle < engagedMaxNoseAngle && inputC.face.noseAngle > engagedMinNoseAngle)) {
+  } else if (state === "SP7" && inputD.type === "Features") {
+    if (
+      inputC.face.isVisible &&
+      (inputC.face.noseAngle < engagedMaxNoseAngle &&
+        inputC.face.noseAngle > engagedMinNoseAngle)
+    ) {
       return {
-        state: 'S8',
+        state: "S7",
         outputs: {
           RobotSpeechbubbleAction:
-              'Archie has a lot of plans.\nHe never stops inventing.',
-          HumanSpeechbubbleAction: ['Pause'],
-          SpeechSynthesisAction:
-              'Archie has a lot of plans.\nHe never stops inventing.',
-        },
+            "Archie even makes it so that cars can sail.",
+          HumanSpeechbubbleAction: ["Pause"],
+          SpeechSynthesisAction: "Archie even makes it so that cars can sail."
+        }
       };
     } else {
       return {
         state: state,
-        outputs: null,
+        outputs: null
       };
     }
-
-
+  } else if (state === "SP8" && inputD.type === "Features") {
+    if (
+      inputC.face.isVisible &&
+      (inputC.face.noseAngle < engagedMaxNoseAngle &&
+        inputC.face.noseAngle > engagedMinNoseAngle)
+    ) {
+      return {
+        state: "S8",
+        outputs: {
+          RobotSpeechbubbleAction:
+            "Archie has a lot of plans.\nHe never stops inventing.",
+          HumanSpeechbubbleAction: ["Pause"],
+          SpeechSynthesisAction:
+            "Archie has a lot of plans.\nHe never stops inventing."
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
   } else {
     return {
       state,
-      outputs: null,
+      outputs: null
     };
   }
-};
+}
 
 var defaultParams = {
-  "engagedMinNoseAngle": 90,
-  "engagedMaxNoseAngle": 90,
-  "disengagedMinNoseAngle": 0,
-  "disengagedMaxNoseAngle": 180,
-  "disengagedTimeoutIntervalMs": 1000
+  engagedMinNoseAngle: 90,
+  engagedMaxNoseAngle: 90,
+  disengagedMinNoseAngle: 0,
+  disengagedMaxNoseAngle: 180,
+  disengagedTimeoutIntervalMs: 1000
 };
 
 module.exports = {

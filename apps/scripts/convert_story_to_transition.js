@@ -1,5 +1,5 @@
 if (process.argv.length < 3) {
-  console.error("usage: node story_to_transition.js infile.txt");
+  console.error("usage: node story_to_transition.js story.txt");
   process.exit(1);
 }
 
@@ -53,7 +53,7 @@ var lines = fs
 lines.map(function(line, i) {
   output += `
   } else if (
-    state === "S${i+1}" &&
+    state === "S${i + 1}" &&
     ${
       i === 0
         ? `inputD.type === "HumanSpeechbubbleAction" &&
@@ -64,7 +64,7 @@ lines.map(function(line, i) {
     }
   ) {
     return {
-      state: "S${i+2}",
+      state: "S${i + 2}",
       outputs: {
         RobotSpeechbubbleAction: ${JSON.stringify(line)},
         HumanSpeechbubbleAction: ["Pause"],
@@ -75,18 +75,18 @@ lines.map(function(line, i) {
 
 output += `
   } else if (
-    state === "S${lines.length+1}" &&
+    state === "S${lines.length + 1}" &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
     return {
-      state: "S${lines.length+2}",
+      state: "S${lines.length + 2}",
       outputs: {
         RobotSpeechbubbleAction: "The END",
         HumanSpeechbubbleAction: "",
         SpeechSynthesisAction: "The END"
       }
-    };`
+    };`;
 
 // Handle Pause
 output += `
@@ -96,13 +96,13 @@ output += `
 lines.map(function(line, i) {
   output += `
   } else if (
-    state === "S${i+2}" &&
+    state === "S${i + 2}" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
   ) {
     return {
-      state: "SP${i+2}",
+      state: "SP${i + 2}",
       outputs: {
         RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
         HumanSpeechbubbleAction: ["Resume"],
@@ -118,13 +118,13 @@ output += `
 lines.map(function(line, i) {
   output += `
   } else if (
-    state === "SP${i+2}" &&
+    state === "SP${i + 2}" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
   ) {
     return {
-      state: "S${i+2}",
+      state: "S${i + 2}",
       outputs: {
         RobotSpeechbubbleAction: ${JSON.stringify(line)},
         HumanSpeechbubbleAction: ["Pause"],
@@ -139,7 +139,7 @@ output += `
   // Proactive Pause`;
 lines.map(function(line, i) {
   output += `
-  } else if (state === "S${i+2}" && inputD.type === "Features") {
+  } else if (state === "S${i + 2}" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
@@ -149,7 +149,7 @@ lines.map(function(line, i) {
           disengagedTimeoutIntervalMs)
     ) {
       return {
-        state: "SP${i+2}",
+        state: "SP${i + 2}",
         outputs: {
           RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
           HumanSpeechbubbleAction: ["Resume"],
@@ -170,14 +170,14 @@ output += `
   // Proactive Resume`;
 lines.map(function(line, i) {
   output += `
-  } else if (state === "SP${i+2}" && inputD.type === "Features") {
+  } else if (state === "SP${i + 2}" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
         inputC.face.noseAngle > engagedMinNoseAngle)
     ) {
       return {
-        state: "S${i+2}",
+        state: "S${i + 2}",
         outputs: {
           RobotSpeechbubbleAction: ${JSON.stringify(line)},
           HumanSpeechbubbleAction: ["Pause"],

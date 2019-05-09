@@ -13,7 +13,6 @@ var defaultParams = {
   disengagedTimeoutIntervalMs: 1000
 };
 
-
 // Header
 var output = `// NOTE: might be called twice if transition and emission fncs are called separately
 function transition(state, inputD, inputC, params) {
@@ -72,7 +71,6 @@ output += `
       }
     };`;
 
-
 // Handle Go back
 output += `
 
@@ -94,7 +92,6 @@ lines.map(function(_, i) {
       }
     };`;
 });
-
 
 // Footer
 output += `

@@ -6,6 +6,8 @@ function transition(state, inputD, inputC, params) {
   var disengagedMaxNoseAngle = params.disengagedMaxNoseAngle;
   var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
 
+
+  // Happy path
   if (state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
@@ -36,11 +38,9 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S3",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Professor Archie thinks a lot. He thinks of things to make.",
+        RobotSpeechbubbleAction: "Professor Archie thinks a lot. He thinks of things to make.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Professor Archie thinks a lot. He thinks of things to make."
+        SpeechSynthesisAction: "Professor Archie thinks a lot. He thinks of things to make."
       }
     };
   } else if (
@@ -51,11 +51,9 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S4",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Archie makes bots that can help. The bots make toast for Archie.",
+        RobotSpeechbubbleAction: "He thinks as he brushes his teeth. He thinks at his desk. He even thinks in bed. Then, it clicks.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Archie makes bots that can help. The bots make toast for Archie."
+        SpeechSynthesisAction: "He thinks as he brushes his teeth. He thinks at his desk. He even thinks in bed. Then, it clicks."
       }
     };
   } else if (
@@ -66,11 +64,9 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S5",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Archie makes a pen that can do art by itself. What do you think of it?",
+        RobotSpeechbubbleAction: "Archie makes bots that can help. The bots make toast for Archie.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Archie makes a pen that can do art by itself. What do you think of it?"
+        SpeechSynthesisAction: "Archie makes bots that can help. The bots make toast for Archie."
       }
     };
   } else if (
@@ -81,11 +77,9 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S6",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Archie makes it so that his bike can run his laptop.",
+        RobotSpeechbubbleAction: "Archie makes a pen that can do art by itself.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Archie makes it so that his bike can run his laptop."
+        SpeechSynthesisAction: "Archie makes a pen that can do art by itself."
       }
     };
   } else if (
@@ -96,9 +90,9 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S7",
       outputs: {
-        RobotSpeechbubbleAction: "Archie even makes it so that cars can sail.",
+        RobotSpeechbubbleAction: "What do you think of it?",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Archie even makes it so that cars can sail."
+        SpeechSynthesisAction: "What do you think of it?"
       }
     };
   } else if (
@@ -109,11 +103,9 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S8",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Archie has a lot of plans.\nHe never stops inventing.",
+        RobotSpeechbubbleAction: "Archie makes it so that his bike can run his laptop.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Archie has a lot of plans.\nHe never stops inventing."
+        SpeechSynthesisAction: "Archie makes it so that his bike can run his laptop."
       }
     };
   } else if (
@@ -124,9 +116,9 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S9",
       outputs: {
-        RobotSpeechbubbleAction: "What would you make if you were Archie?",
+        RobotSpeechbubbleAction: "Archie even makes it so that cars can sail.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "What would you make if you were Archie?"
+        SpeechSynthesisAction: "Archie even makes it so that cars can sail."
       }
     };
   } else if (
@@ -137,11 +129,40 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S10",
       outputs: {
+        RobotSpeechbubbleAction: "Archie has a lot of plans. He never stops inventing.",
+        HumanSpeechbubbleAction: ["Pause"],
+        SpeechSynthesisAction: "Archie has a lot of plans. He never stops inventing."
+      }
+    };
+  } else if (
+    state === "S10" &&
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
+  ) {
+    return {
+      state: "S11",
+      outputs: {
+        RobotSpeechbubbleAction: "What would you make if you were Archie?",
+        HumanSpeechbubbleAction: ["Pause"],
+        SpeechSynthesisAction: "What would you make if you were Archie?"
+      }
+    };
+  } else if (
+    state === "S11" &&
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
+  ) {
+    return {
+      state: "S12",
+      outputs: {
         RobotSpeechbubbleAction: "The END",
         HumanSpeechbubbleAction: "",
         SpeechSynthesisAction: "The END"
       }
     };
+
+
+  // Handle Pause
   } else if (
     state === "S2" &&
     inputD.type === "HumanSpeechbubbleAction" &&
@@ -241,6 +262,51 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
+    state === "S9" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Pause"
+  ) {
+    return {
+      state: "SP9",
+      outputs: {
+        RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+        HumanSpeechbubbleAction: ["Resume"],
+        SpeechSynthesisAction: " "
+      }
+    };
+  } else if (
+    state === "S10" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Pause"
+  ) {
+    return {
+      state: "SP10",
+      outputs: {
+        RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+        HumanSpeechbubbleAction: ["Resume"],
+        SpeechSynthesisAction: " "
+      }
+    };
+  } else if (
+    state === "S11" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Pause"
+  ) {
+    return {
+      state: "SP11",
+      outputs: {
+        RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+        HumanSpeechbubbleAction: ["Resume"],
+        SpeechSynthesisAction: " "
+      }
+    };
+
+
+  // Handle Resume
+  } else if (
     state === "SP2" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
@@ -263,11 +329,9 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S3",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Professor Archie thinks a lot. He thinks of things to make.",
+        RobotSpeechbubbleAction: "Professor Archie thinks a lot. He thinks of things to make.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Professor Archie thinks a lot. He thinks of things to make."
+        SpeechSynthesisAction: "Professor Archie thinks a lot. He thinks of things to make."
       }
     };
   } else if (
@@ -279,11 +343,9 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S4",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Archie makes bots that can help. The bots make toast for Archie.",
+        RobotSpeechbubbleAction: "He thinks as he brushes his teeth. He thinks at his desk. He even thinks in bed. Then, it clicks.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Archie makes bots that can help. The bots make toast for Archie."
+        SpeechSynthesisAction: "He thinks as he brushes his teeth. He thinks at his desk. He even thinks in bed. Then, it clicks."
       }
     };
   } else if (
@@ -295,11 +357,9 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S5",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Archie makes a pen that can do art by itself. What do you think of it?",
+        RobotSpeechbubbleAction: "Archie makes bots that can help. The bots make toast for Archie.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Archie makes a pen that can do art by itself. What do you think of it?"
+        SpeechSynthesisAction: "Archie makes bots that can help. The bots make toast for Archie."
       }
     };
   } else if (
@@ -311,11 +371,9 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S6",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Archie makes it so that his bike can run his laptop.",
+        RobotSpeechbubbleAction: "Archie makes a pen that can do art by itself.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Archie makes it so that his bike can run his laptop."
+        SpeechSynthesisAction: "Archie makes a pen that can do art by itself."
       }
     };
   } else if (
@@ -327,9 +385,9 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S7",
       outputs: {
-        RobotSpeechbubbleAction: "Archie even makes it so that cars can sail.",
+        RobotSpeechbubbleAction: "What do you think of it?",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Archie even makes it so that cars can sail."
+        SpeechSynthesisAction: "What do you think of it?"
       }
     };
   } else if (
@@ -341,13 +399,56 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S8",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Archie has a lot of plans.\nHe never stops inventing.",
+        RobotSpeechbubbleAction: "Archie makes it so that his bike can run his laptop.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Archie has a lot of plans.\nHe never stops inventing."
+        SpeechSynthesisAction: "Archie makes it so that his bike can run his laptop."
       }
     };
+  } else if (
+    state === "SP9" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Resume"
+  ) {
+    return {
+      state: "S9",
+      outputs: {
+        RobotSpeechbubbleAction: "Archie even makes it so that cars can sail.",
+        HumanSpeechbubbleAction: ["Pause"],
+        SpeechSynthesisAction: "Archie even makes it so that cars can sail."
+      }
+    };
+  } else if (
+    state === "SP10" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Resume"
+  ) {
+    return {
+      state: "S10",
+      outputs: {
+        RobotSpeechbubbleAction: "Archie has a lot of plans. He never stops inventing.",
+        HumanSpeechbubbleAction: ["Pause"],
+        SpeechSynthesisAction: "Archie has a lot of plans. He never stops inventing."
+      }
+    };
+  } else if (
+    state === "SP11" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Resume"
+  ) {
+    return {
+      state: "S11",
+      outputs: {
+        RobotSpeechbubbleAction: "What would you make if you were Archie?",
+        HumanSpeechbubbleAction: ["Pause"],
+        SpeechSynthesisAction: "What would you make if you were Archie?"
+      }
+    };
+
+
+  // Proactive Pause
   } else if (state === "S2" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
@@ -509,9 +610,8 @@ function transition(state, inputD, inputC, params) {
         outputs: null
       };
     }
-  } else if (state === "S1" && inputD.type === "Features") {
+  } else if (state === "S9" && inputD.type === "Features") {
     if (
-      // disengaged
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
           inputC.face.noseAngle < disengagedMinNoseAngle)) ||
@@ -520,10 +620,11 @@ function transition(state, inputD, inputC, params) {
           disengagedTimeoutIntervalMs)
     ) {
       return {
-        state: "S2",
+        state: "SP9",
         outputs: {
-          RobotSpeechbubbleAction: 'Tap "Resume" to resume',
-          HumanSpeechbubbleAction: ["Resume"]
+          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+          HumanSpeechbubbleAction: ["Resume"],
+          SpeechSynthesisAction: " "
         }
       };
     } else {
@@ -532,18 +633,21 @@ function transition(state, inputD, inputC, params) {
         outputs: null
       };
     }
-  } else if (state === "S2" && inputD.type === "Features") {
+  } else if (state === "S10" && inputD.type === "Features") {
     if (
-      // engaged
-      inputC.face.isVisible &&
-      (inputC.face.noseAngle < engagedMaxNoseAngle &&
-        inputC.face.noseAngle > engagedMinNoseAngle)
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
+          inputC.face.noseAngle < disengagedMinNoseAngle)) ||
+      (!inputC.face.isVisible &&
+        inputC.face.stamp - inputC.face.stampLastDetected >
+          disengagedTimeoutIntervalMs)
     ) {
       return {
-        state: "S1",
+        state: "SP10",
         outputs: {
-          RobotSpeechbubbleAction: 'Tap "Pause" to pause',
-          HumanSpeechbubbleAction: ["Pause"]
+          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+          HumanSpeechbubbleAction: ["Resume"],
+          SpeechSynthesisAction: " "
         }
       };
     } else {
@@ -552,6 +656,32 @@ function transition(state, inputD, inputC, params) {
         outputs: null
       };
     }
+  } else if (state === "S11" && inputD.type === "Features") {
+    if (
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
+          inputC.face.noseAngle < disengagedMinNoseAngle)) ||
+      (!inputC.face.isVisible &&
+        inputC.face.stamp - inputC.face.stampLastDetected >
+          disengagedTimeoutIntervalMs)
+    ) {
+      return {
+        state: "SP11",
+        outputs: {
+          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+          HumanSpeechbubbleAction: ["Resume"],
+          SpeechSynthesisAction: " "
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
+
+
+  // Proactive Resume
   } else if (state === "SP2" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
@@ -581,11 +711,9 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S3",
         outputs: {
-          RobotSpeechbubbleAction:
-            "Professor Archie thinks a lot. He thinks of things to make.",
+          RobotSpeechbubbleAction: "Professor Archie thinks a lot. He thinks of things to make.",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction:
-            "Professor Archie thinks a lot. He thinks of things to make."
+          SpeechSynthesisAction: "Professor Archie thinks a lot. He thinks of things to make."
         }
       };
     } else {
@@ -603,11 +731,9 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S4",
         outputs: {
-          RobotSpeechbubbleAction:
-            "Archie makes bots that can help. The bots make toast for Archie.",
+          RobotSpeechbubbleAction: "He thinks as he brushes his teeth. He thinks at his desk. He even thinks in bed. Then, it clicks.",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction:
-            "Archie makes bots that can help. The bots make toast for Archie."
+          SpeechSynthesisAction: "He thinks as he brushes his teeth. He thinks at his desk. He even thinks in bed. Then, it clicks."
         }
       };
     } else {
@@ -625,11 +751,9 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S5",
         outputs: {
-          RobotSpeechbubbleAction:
-            "Archie makes a pen that can do art by itself. What do you think of it?",
+          RobotSpeechbubbleAction: "Archie makes bots that can help. The bots make toast for Archie.",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction:
-            "Archie makes a pen that can do art by itself. What do you think of it?"
+          SpeechSynthesisAction: "Archie makes bots that can help. The bots make toast for Archie."
         }
       };
     } else {
@@ -647,11 +771,9 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S6",
         outputs: {
-          RobotSpeechbubbleAction:
-            "Archie makes it so that his bike can run his laptop.",
+          RobotSpeechbubbleAction: "Archie makes a pen that can do art by itself.",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction:
-            "Archie makes it so that his bike can run his laptop."
+          SpeechSynthesisAction: "Archie makes a pen that can do art by itself."
         }
       };
     } else {
@@ -669,10 +791,9 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S7",
         outputs: {
-          RobotSpeechbubbleAction:
-            "Archie even makes it so that cars can sail.",
+          RobotSpeechbubbleAction: "What do you think of it?",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: "Archie even makes it so that cars can sail."
+          SpeechSynthesisAction: "What do you think of it?"
         }
       };
     } else {
@@ -690,11 +811,9 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S8",
         outputs: {
-          RobotSpeechbubbleAction:
-            "Archie has a lot of plans.\nHe never stops inventing.",
+          RobotSpeechbubbleAction: "Archie makes it so that his bike can run his laptop.",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction:
-            "Archie has a lot of plans.\nHe never stops inventing."
+          SpeechSynthesisAction: "Archie makes it so that his bike can run his laptop."
         }
       };
     } else {
@@ -703,6 +822,68 @@ function transition(state, inputD, inputC, params) {
         outputs: null
       };
     }
+  } else if (state === "SP9" && inputD.type === "Features") {
+    if (
+      inputC.face.isVisible &&
+      (inputC.face.noseAngle < engagedMaxNoseAngle &&
+        inputC.face.noseAngle > engagedMinNoseAngle)
+    ) {
+      return {
+        state: "S9",
+        outputs: {
+          RobotSpeechbubbleAction: "Archie even makes it so that cars can sail.",
+          HumanSpeechbubbleAction: ["Pause"],
+          SpeechSynthesisAction: "Archie even makes it so that cars can sail."
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
+  } else if (state === "SP10" && inputD.type === "Features") {
+    if (
+      inputC.face.isVisible &&
+      (inputC.face.noseAngle < engagedMaxNoseAngle &&
+        inputC.face.noseAngle > engagedMinNoseAngle)
+    ) {
+      return {
+        state: "S10",
+        outputs: {
+          RobotSpeechbubbleAction: "Archie has a lot of plans. He never stops inventing.",
+          HumanSpeechbubbleAction: ["Pause"],
+          SpeechSynthesisAction: "Archie has a lot of plans. He never stops inventing."
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
+  } else if (state === "SP11" && inputD.type === "Features") {
+    if (
+      inputC.face.isVisible &&
+      (inputC.face.noseAngle < engagedMaxNoseAngle &&
+        inputC.face.noseAngle > engagedMinNoseAngle)
+    ) {
+      return {
+        state: "S11",
+        outputs: {
+          RobotSpeechbubbleAction: "What would you make if you were Archie?",
+          HumanSpeechbubbleAction: ["Pause"],
+          SpeechSynthesisAction: "What would you make if you were Archie?"
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
+
+
   } else {
     return {
       state,
@@ -711,6 +892,8 @@ function transition(state, inputD, inputC, params) {
   }
 }
 
+
+// Params for reactive behavior
 var defaultParams = {
   engagedMinNoseAngle: 90,
   engagedMaxNoseAngle: 90,
@@ -723,3 +906,4 @@ module.exports = {
   transition: transition,
   defaultParams: defaultParams
 };
+

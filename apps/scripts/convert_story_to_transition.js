@@ -5,15 +5,6 @@ if (process.argv.length < 3) {
 
 var fs = require("fs");
 
-// https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
-function uuidv4() {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-    var r = (Math.random() * 16) | 0,
-      v = c == "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
-
 var defaultParams = {
   engagedMinNoseAngle: 90,
   engagedMaxNoseAngle: 90,
@@ -22,15 +13,15 @@ var defaultParams = {
   disengagedTimeoutIntervalMs: 1000
 };
 
-// Function decl. & "Happy path"
-var output = `// NOTE: might be called twice if transition and emission fncs are called separately
-function transition(state, inputD, inputC, params) {
-  var engagedMinNoseAngle = params.engagedMinNoseAngle;
-  var engagedMaxNoseAngle = params.engagedMaxNoseAngle;
-  var disengagedMinNoseAngle = params.disengagedMinNoseAngle;
-  var disengagedMaxNoseAngle = params.disengagedMaxNoseAngle;
-  var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
 
+var output =
+  `// NOTE: might be called twice if transition and emission fncs are called separately
+function transition(state, inputD, inputC, params) {` +
+  Object.keys(defaultParams).map(function(key) {
+    return `
+  var ${key} = params.${key};`;
+  }).join('') +
+`
 
   // Happy path
   if (state === "S0" && inputD.type === "START") {
@@ -88,7 +79,7 @@ output += `
       }
     };`;
 
-// Handle Pause
+
 output += `
 
 
@@ -111,6 +102,7 @@ lines.map(function(line, i) {
     };`;
 });
 
+
 output += `
 
 
@@ -132,6 +124,7 @@ lines.map(function(line, i) {
       }
     };`;
 });
+
 
 output += `
 
@@ -164,6 +157,7 @@ lines.map(function(line, i) {
     }`;
 });
 
+
 output += `
 
 
@@ -192,6 +186,7 @@ lines.map(function(line, i) {
     }`;
 });
 
+
 output += `
 
 
@@ -205,13 +200,7 @@ output += `
 
 
 // Params for reactive behavior
-var defaultParams = {
-  engagedMinNoseAngle: 90,
-  engagedMaxNoseAngle: 90,
-  disengagedMinNoseAngle: 0,
-  disengagedMaxNoseAngle: 180,
-  disengagedTimeoutIntervalMs: 1000
-};
+var defaultParams = ${JSON.stringify(defaultParams, null, 2)};
 
 module.exports = {
   transition: transition,

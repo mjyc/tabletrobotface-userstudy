@@ -6,7 +6,6 @@ function transition(state, inputD, inputC, params) {
   var disengagedMaxNoseAngle = params.disengagedMaxNoseAngle;
   var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
 
-
   // Happy path
   if (state === "S0" && inputD.type === "START") {
     return {
@@ -51,9 +50,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S4",
       outputs: {
-        RobotSpeechbubbleAction: "Forester sees insects. This sort of bee cannot sting.",
+        RobotSpeechbubbleAction:
+          "Forester sees insects. This sort of bee cannot sting.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Forester sees insects. This sort of bee cannot sting."
+        SpeechSynthesisAction:
+          "Forester sees insects. This sort of bee cannot sting."
       }
     };
   } else if (
@@ -77,9 +78,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S6",
       outputs: {
-        RobotSpeechbubbleAction: "Hiss! A snake is looking for a rock to sit on in the sun.",
+        RobotSpeechbubbleAction:
+          "Hiss! A snake is looking for a rock to sit on in the sun.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Hiss! A snake is looking for a rock to sit on in the sun."
+        SpeechSynthesisAction:
+          "Hiss! A snake is looking for a rock to sit on in the sun."
       }
     };
   } else if (
@@ -90,7 +93,8 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S7",
       outputs: {
-        RobotSpeechbubbleAction: "The spiders need to fix the web to get insects.",
+        RobotSpeechbubbleAction:
+          "The spiders need to fix the web to get insects.",
         HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction: "The spiders need to fix the web to get insects."
       }
@@ -103,9 +107,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S8",
       outputs: {
-        RobotSpeechbubbleAction: "Here is the kangaroo family. Forester cannot see the little kangaroo.",
+        RobotSpeechbubbleAction:
+          "Here is the kangaroo family. Forester cannot see the little kangaroo.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Here is the kangaroo family. Forester cannot see the little kangaroo."
+        SpeechSynthesisAction:
+          "Here is the kangaroo family. Forester cannot see the little kangaroo."
       }
     };
   } else if (
@@ -116,9 +122,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S9",
       outputs: {
-        RobotSpeechbubbleAction: "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester.",
+        RobotSpeechbubbleAction:
+          "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester."
+        SpeechSynthesisAction:
+          "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester."
       }
     };
   } else if (
@@ -129,9 +137,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S10",
       outputs: {
-        RobotSpeechbubbleAction: "Forester keeps the trap. He is very upset. He will tell the cops.",
+        RobotSpeechbubbleAction:
+          "Forester keeps the trap. He is very upset. He will tell the cops.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Forester keeps the trap. He is very upset. He will tell the cops."
+        SpeechSynthesisAction:
+          "Forester keeps the trap. He is very upset. He will tell the cops."
       }
     };
   } else if (
@@ -142,9 +152,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S11",
       outputs: {
-        RobotSpeechbubbleAction: "The cops get the man that set the trap. The animals are safe.",
+        RobotSpeechbubbleAction:
+          "The cops get the man that set the trap. The animals are safe.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "The cops get the man that set the trap. The animals are safe."
+        SpeechSynthesisAction:
+          "The cops get the man that set the trap. The animals are safe."
       }
     };
   } else if (
@@ -161,8 +173,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
 
-
-  // Handle Pause
+    // Handle Pause
   } else if (
     state === "S2" &&
     inputD.type === "HumanSpeechbubbleAction" &&
@@ -304,8 +315,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
 
-
-  // Handle Resume
+    // Handle Resume
   } else if (
     state === "SP2" &&
     inputD.type === "HumanSpeechbubbleAction" &&
@@ -343,9 +353,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S4",
       outputs: {
-        RobotSpeechbubbleAction: "Forester sees insects. This sort of bee cannot sting.",
+        RobotSpeechbubbleAction:
+          "Forester sees insects. This sort of bee cannot sting.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Forester sees insects. This sort of bee cannot sting."
+        SpeechSynthesisAction:
+          "Forester sees insects. This sort of bee cannot sting."
       }
     };
   } else if (
@@ -371,9 +383,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S6",
       outputs: {
-        RobotSpeechbubbleAction: "Hiss! A snake is looking for a rock to sit on in the sun.",
+        RobotSpeechbubbleAction:
+          "Hiss! A snake is looking for a rock to sit on in the sun.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Hiss! A snake is looking for a rock to sit on in the sun."
+        SpeechSynthesisAction:
+          "Hiss! A snake is looking for a rock to sit on in the sun."
       }
     };
   } else if (
@@ -385,7 +399,8 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S7",
       outputs: {
-        RobotSpeechbubbleAction: "The spiders need to fix the web to get insects.",
+        RobotSpeechbubbleAction:
+          "The spiders need to fix the web to get insects.",
         HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction: "The spiders need to fix the web to get insects."
       }
@@ -399,9 +414,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S8",
       outputs: {
-        RobotSpeechbubbleAction: "Here is the kangaroo family. Forester cannot see the little kangaroo.",
+        RobotSpeechbubbleAction:
+          "Here is the kangaroo family. Forester cannot see the little kangaroo.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Here is the kangaroo family. Forester cannot see the little kangaroo."
+        SpeechSynthesisAction:
+          "Here is the kangaroo family. Forester cannot see the little kangaroo."
       }
     };
   } else if (
@@ -413,9 +430,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S9",
       outputs: {
-        RobotSpeechbubbleAction: "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester.",
+        RobotSpeechbubbleAction:
+          "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester."
+        SpeechSynthesisAction:
+          "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester."
       }
     };
   } else if (
@@ -427,9 +446,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S10",
       outputs: {
-        RobotSpeechbubbleAction: "Forester keeps the trap. He is very upset. He will tell the cops.",
+        RobotSpeechbubbleAction:
+          "Forester keeps the trap. He is very upset. He will tell the cops.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Forester keeps the trap. He is very upset. He will tell the cops."
+        SpeechSynthesisAction:
+          "Forester keeps the trap. He is very upset. He will tell the cops."
       }
     };
   } else if (
@@ -441,14 +462,15 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S11",
       outputs: {
-        RobotSpeechbubbleAction: "The cops get the man that set the trap. The animals are safe.",
+        RobotSpeechbubbleAction:
+          "The cops get the man that set the trap. The animals are safe.",
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "The cops get the man that set the trap. The animals are safe."
+        SpeechSynthesisAction:
+          "The cops get the man that set the trap. The animals are safe."
       }
     };
 
-
-  // Proactive Pause
+    // Proactive Pause
   } else if (state === "S2" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
@@ -680,8 +702,7 @@ function transition(state, inputD, inputC, params) {
       };
     }
 
-
-  // Proactive Resume
+    // Proactive Resume
   } else if (state === "SP2" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
@@ -731,9 +752,11 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S4",
         outputs: {
-          RobotSpeechbubbleAction: "Forester sees insects. This sort of bee cannot sting.",
+          RobotSpeechbubbleAction:
+            "Forester sees insects. This sort of bee cannot sting.",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: "Forester sees insects. This sort of bee cannot sting."
+          SpeechSynthesisAction:
+            "Forester sees insects. This sort of bee cannot sting."
         }
       };
     } else {
@@ -771,9 +794,11 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S6",
         outputs: {
-          RobotSpeechbubbleAction: "Hiss! A snake is looking for a rock to sit on in the sun.",
+          RobotSpeechbubbleAction:
+            "Hiss! A snake is looking for a rock to sit on in the sun.",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: "Hiss! A snake is looking for a rock to sit on in the sun."
+          SpeechSynthesisAction:
+            "Hiss! A snake is looking for a rock to sit on in the sun."
         }
       };
     } else {
@@ -791,9 +816,11 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S7",
         outputs: {
-          RobotSpeechbubbleAction: "The spiders need to fix the web to get insects.",
+          RobotSpeechbubbleAction:
+            "The spiders need to fix the web to get insects.",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: "The spiders need to fix the web to get insects."
+          SpeechSynthesisAction:
+            "The spiders need to fix the web to get insects."
         }
       };
     } else {
@@ -811,9 +838,11 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S8",
         outputs: {
-          RobotSpeechbubbleAction: "Here is the kangaroo family. Forester cannot see the little kangaroo.",
+          RobotSpeechbubbleAction:
+            "Here is the kangaroo family. Forester cannot see the little kangaroo.",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: "Here is the kangaroo family. Forester cannot see the little kangaroo."
+          SpeechSynthesisAction:
+            "Here is the kangaroo family. Forester cannot see the little kangaroo."
         }
       };
     } else {
@@ -831,9 +860,11 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S9",
         outputs: {
-          RobotSpeechbubbleAction: "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester.",
+          RobotSpeechbubbleAction:
+            "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester.",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester."
+          SpeechSynthesisAction:
+            "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester."
         }
       };
     } else {
@@ -851,9 +882,11 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S10",
         outputs: {
-          RobotSpeechbubbleAction: "Forester keeps the trap. He is very upset. He will tell the cops.",
+          RobotSpeechbubbleAction:
+            "Forester keeps the trap. He is very upset. He will tell the cops.",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: "Forester keeps the trap. He is very upset. He will tell the cops."
+          SpeechSynthesisAction:
+            "Forester keeps the trap. He is very upset. He will tell the cops."
         }
       };
     } else {
@@ -871,9 +904,11 @@ function transition(state, inputD, inputC, params) {
       return {
         state: "S11",
         outputs: {
-          RobotSpeechbubbleAction: "The cops get the man that set the trap. The animals are safe.",
+          RobotSpeechbubbleAction:
+            "The cops get the man that set the trap. The animals are safe.",
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: "The cops get the man that set the trap. The animals are safe."
+          SpeechSynthesisAction:
+            "The cops get the man that set the trap. The animals are safe."
         }
       };
     } else {
@@ -882,8 +917,6 @@ function transition(state, inputD, inputC, params) {
         outputs: null
       };
     }
-
-
   } else {
     return {
       state,
@@ -891,7 +924,6 @@ function transition(state, inputD, inputC, params) {
     };
   }
 }
-
 
 // Params for reactive behavior
 var defaultParams = {

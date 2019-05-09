@@ -1,8 +1,3 @@
-// if (process.argv.length < 2) {
-//   console.error("usage: node story_to_transition.js [num_repeats]");
-//   process.exit(1);
-// }
-
 var numRepeats = !process.argv[2] ? 2 : process.argv[2];
 
 var output = `// NOTE: might be called twice if transition and emission fncs are called separately

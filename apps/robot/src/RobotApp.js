@@ -4,18 +4,22 @@ import { initGoal } from "@cycle-robot-drivers/action";
 import {
   defaultFaceFeatures,
   extractFaceFeatures
-} from "../../scripts/features.js";
+} from "../../scripts/features";
+import { maxIndexDiff } from "./utils";
 
-function input({
-  command,
-  FacialExpressionAction,
-  RobotSpeechbubbleAction,
-  HumanSpeechbubbleAction,
-  AudioPlayerAction,
-  SpeechSynthesisAction,
-  SpeechRecognitionAction,
-  PoseDetection
-}) {
+function input(
+  {
+    command,
+    FacialExpressionAction,
+    RobotSpeechbubbleAction,
+    HumanSpeechbubbleAction,
+    AudioPlayerAction,
+    SpeechSynthesisAction,
+    SpeechRecognitionAction,
+    PoseDetection
+  },
+  bufferSize = 20
+) {
   const command$ = command.filter(cmd => cmd.type === "LOAD_FSM");
   const inputD$ = xs.merge(
     command
@@ -54,13 +58,14 @@ function input({
       result: r.result
     }))
   );
-  const inputC$ = PoseDetection.events("poses").fold(
-    (prev, poses) => {
+  const buffer$ = PoseDetection.events("poses").fold(
+    (buffer, poses) => {
+      const last = buffer[buffer.length - 1];
       const features = extractFaceFeatures(poses);
       const stampLastDetected = !!features.isVisible
         ? Date.now()
-        : prev.face.stampLastDetected;
-      return {
+        : last.face.stampLastDetected;
+      buffer.push({
         face: {
           stampLastDetected: stampLastDetected,
           faceAngle: !!features.isVisible
@@ -72,21 +77,34 @@ function input({
           ...features
         },
         poses
-      };
+      });
+      const a = buffer
+        .filter(
+          ({ poses }) =>
+            poses.length > 0 &&
+            !!poses[0].keypoints.find(kpt => kpt.part === "nose")
+        )
+        .map(
+          ({ poses }) => poses[0].keypoints.find(kpt => kpt.part === "nose")
+        );
+      // utils.maxIndexDiff()
+      // console.log(a);
+      if (buffer.length === bufferSize + 1) buffer.shift();
+      return buffer;
     },
-    { face: { stampLastDetected: 0, ...defaultFaceFeatures }, poses: [] }
+    [{ face: { stampLastDetected: 0, ...defaultFaceFeatures }, poses: [] }]
   );
   return xs.merge(
     command$,
-    inputD$.compose(sampleCombine(inputC$)).map(([inputD, inputC]) => ({
+    inputD$.compose(sampleCombine(buffer$)).map(([inputD, buffer]) => ({
       type: "FSM_INPUT",
       discrete: inputD,
-      continuous: inputC
+      continuous: buffer[buffer.length - 1]
     })),
-    inputC$.map(inputC => ({
+    buffer$.map(buffer => ({
       type: "FSM_INPUT",
       discrete: { type: "Features" },
-      continuous: inputC
+      continuous: buffer[buffer.length - 1]
     }))
   );
 }

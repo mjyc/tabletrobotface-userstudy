@@ -78,21 +78,58 @@ function input(
         },
         poses
       });
-      const a = buffer
+      if (buffer.length === bufferSize + 1) buffer.shift();
+      return buffer;
+
+      const noses = buffer
         .filter(
           ({ poses }) =>
             poses.length > 0 &&
             !!poses[0].keypoints.find(kpt => kpt.part === "nose")
         )
-        .map(
-          ({ poses }) => poses[0].keypoints.find(kpt => kpt.part === "nose")
+        .map(({ poses }) =>
+          poses[0].keypoints.find(kpt => kpt.part === "nose")
         );
-      // utils.maxIndexDiff()
-      // console.log(a);
-      if (buffer.length === bufferSize + 1) buffer.shift();
-      return buffer;
+      // const nosesHalfSec
+      // const nosesOneSec
+
+      // noses.sort((a, b) => a.position.x < b.position.x);
+      // const maxNosePosX =
+      //   noses[noses.length - 1].position.x - noses[0].position.x;
+      // noses.sort((a, b) => a.position.y < b.position.y);
+      // const maxNosePosY =
+      //   noses[noses.length - 1].position.x - noses[0].position.x;
+
+      // noses.sort((a, b) => a.position.x < b.position.x);
+      // const maxNosePosX =
+      //   noses[noses.length - 1].position.x - noses[0].position.x;
+      // noses.sort((a, b) => a.position.y < b.position.y);
+      // const maxNosePosY =
+      //   noses[noses.length - 1].position.x - noses[0].position.x;
+
+      // noses.sort((a, b) => a.position.x < b.position.x);
+      // const maxNosePosX =
+      //   noses[noses.length - 1].position.x - noses[0].position.x;
+      // noses.sort((a, b) => a.position.y < b.position.y);
+      // const maxNosePosY =
+      //   noses[noses.length - 1].position.x - noses[0].position.x;
+
     },
-    [{ face: { stampLastDetected: 0, ...defaultFaceFeatures }, poses: [] }]
+    [
+      {
+        face: {
+          stampLastDetected: 0,
+          // maxNosePosXHalfSec,
+          // maxNosePosYHalfSec,
+          // maxNosePosX1Sec,
+          // maxNosePosY1Sec,
+          // maxNosePosX2Sec,
+          // maxNosePosY2Sec,
+          ...defaultFaceFeatures
+        },
+        poses: []
+      }
+    ]
   );
   return xs.merge(
     command$,

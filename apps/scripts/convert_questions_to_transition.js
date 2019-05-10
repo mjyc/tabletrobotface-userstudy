@@ -1,5 +1,5 @@
 if (process.argv.length < 3) {
-  console.error("usage: node story_to_transition.js story.txt");
+  console.error("usage: node convert_questions_to_transition.js story.txt");
   process.exit(1);
 }
 
@@ -50,15 +50,16 @@ lines.map(function(line, i) {
         ? `inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Hello"`
-        : `inputD.type === "SpeechSynthesisAction" &&
-    inputD.status === "SUCCEEDED"`
+        : `inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Next"`
     }
   ) {
     return {
       state: "S${i + 2}",
       outputs: {
         RobotSpeechbubbleAction: ${JSON.stringify(line)},
-        HumanSpeechbubbleAction: ["Pause"],
+        HumanSpeechbubbleAction: ["Next"],
         SpeechSynthesisAction: ${JSON.stringify(line)}
       }
     };`;
@@ -67,124 +68,18 @@ lines.map(function(line, i) {
 output += `
   } else if (
     state === "S${lines.length + 1}" &&
-    inputD.type === "SpeechSynthesisAction" &&
-    inputD.status === "SUCCEEDED"
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Next"
   ) {
     return {
       state: "S${lines.length + 2}",
       outputs: {
-        RobotSpeechbubbleAction: "The END",
+        RobotSpeechbubbleAction: "We are all done!",
         HumanSpeechbubbleAction: "",
-        SpeechSynthesisAction: "The END"
+        SpeechSynthesisAction: "We are all done!"
       }
     };`;
-
-
-output += `
-
-
-  // Handle Pause`;
-lines.map(function(line, i) {
-  output += `
-  } else if (
-    state === "S${i + 2}" &&
-    inputD.type === "HumanSpeechbubbleAction" &&
-    inputD.status === "SUCCEEDED" &&
-    inputD.result === "Pause"
-  ) {
-    return {
-      state: "SP${i + 2}",
-      outputs: {
-        RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-        HumanSpeechbubbleAction: ["Resume"],
-        SpeechSynthesisAction: " "
-      }
-    };`;
-});
-
-
-output += `
-
-
-  // Handle Resume`;
-lines.map(function(line, i) {
-  output += `
-  } else if (
-    state === "SP${i + 2}" &&
-    inputD.type === "HumanSpeechbubbleAction" &&
-    inputD.status === "SUCCEEDED" &&
-    inputD.result === "Resume"
-  ) {
-    return {
-      state: "S${i + 2}",
-      outputs: {
-        RobotSpeechbubbleAction: ${JSON.stringify(line)},
-        HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: ${JSON.stringify(line)}
-      }
-    };`;
-});
-
-
-output += `
-
-
-  // Proactive Pause`;
-lines.map(function(line, i) {
-  output += `
-  } else if (state === "S${i + 2}" && inputD.type === "Features") {
-    if (
-      (inputC.face.isVisible &&
-        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
-          inputC.face.noseAngle < disengagedMinNoseAngle)) ||
-      (!inputC.face.isVisible &&
-        inputC.face.stamp - inputC.face.stampLastDetected >
-          disengagedTimeoutIntervalMs)
-    ) {
-      return {
-        state: "SP${i + 2}",
-        outputs: {
-          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-          HumanSpeechbubbleAction: ["Resume"],
-          SpeechSynthesisAction: " "
-        }
-      };
-    } else {
-      return {
-        state: state,
-        outputs: null
-      };
-    }`;
-});
-
-
-output += `
-
-
-  // Proactive Resume`;
-lines.map(function(line, i) {
-  output += `
-  } else if (state === "SP${i + 2}" && inputD.type === "Features") {
-    if (
-      inputC.face.isVisible &&
-      (inputC.face.noseAngle < engagedMaxNoseAngle &&
-        inputC.face.noseAngle > engagedMinNoseAngle)
-    ) {
-      return {
-        state: "S${i + 2}",
-        outputs: {
-          RobotSpeechbubbleAction: ${JSON.stringify(line)},
-          HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: ${JSON.stringify(line)}
-        }
-      };
-    } else {
-      return {
-        state: state,
-        outputs: null
-      };
-    }`;
-});
 
 
 output += `

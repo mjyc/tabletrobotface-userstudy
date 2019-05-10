@@ -1,5 +1,5 @@
 if (process.argv.length < 3) {
-  console.error("usage: node story_to_transition.js story.txt");
+  console.error("usage: node convert_story_to_transition.js story.txt");
   process.exit(1);
 }
 

@@ -88,8 +88,9 @@ function transition(state, inputD, inputC, params) {
     };
   } else if (
     state === "S6" &&
-    inputD.type === "SpeechSynthesisAction" &&
-    inputD.status === "SUCCEEDED"
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Next"
   ) {
     return {
       state: "S7",

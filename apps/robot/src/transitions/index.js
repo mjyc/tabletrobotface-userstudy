@@ -4,7 +4,7 @@ import * as storytelling_ranger_forester from "./storytelling_ranger_forester";
 import * as neck_exercise from "./neck_exercise";
 import * as recipeinsts_breakfast from "./recipeinsts_breakfast";
 import * as qa_set1 from "./qa_set1";
-import * as qa_set2 from "./qa_set2";
+// import * as qa_set2 from "./qa_set2";
 import * as test_transition from "./test_transition";
 
 demo.params = require("../../../data/parameters/demo.json");
@@ -13,7 +13,7 @@ storytelling_ranger_forester.params = require("../../../data/parameters/storytel
 neck_exercise.params = require("../../../data/parameters/neck_exercise.json");
 recipeinsts_breakfast.params = require("../../../data/parameters/recipeinsts_breakfast.json");
 qa_set1.params = require("../../../data/parameters/qa_set1.json");
-qa_set2.params = require("../../../data/parameters/qa_set2.json");
+// qa_set2.params = require("../../../data/parameters/qa_set2.json");
 test_transition.params = require("../../../data/parameters/test_transition.json");
 
 demo.params =
@@ -38,10 +38,10 @@ qa_set1.params =
   Object.keys(qa_set1.params).length === 0
     ? qa_set1.defaultParams
     : qa_set1.params;
-qa_set2.params =
-  Object.keys(qa_set2.params).length === 0
-    ? qa_set2.defaultParams
-    : qa_set2.params;
+// qa_set2.params =
+//   Object.keys(qa_set2.params).length === 0
+//     ? qa_set2.defaultParams
+//     : qa_set2.params;
 test_transition.params =
   Object.keys(test_transition.params).length === 0
     ? test_transition.defaultParams
@@ -54,6 +54,6 @@ export default {
   neck_exercise,
   recipeinsts_breakfast,
   qa_set1,
-  qa_set2,
+  // qa_set2,
   test_transition
 };

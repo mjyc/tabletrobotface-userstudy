@@ -199,7 +199,6 @@ output += `
 }
 
 
-// Params for reactive behavior
 var defaultParams = ${JSON.stringify(defaultParams, null, 2)};
 
 module.exports = {

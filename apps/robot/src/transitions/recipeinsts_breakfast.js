@@ -1,6 +1,12 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
 function transition(state, inputD, inputC, params) {
+  var engagedMinNoseAngle = params.engagedMinNoseAngle;
+  var engagedMaxNoseAngle = params.engagedMaxNoseAngle;
+  var disengagedMinNoseAngle = params.disengagedMinNoseAngle;
+  var disengagedMaxNoseAngle = params.disengagedMaxNoseAngle;
+  var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
 
+  // Happy path
   if (state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
@@ -19,7 +25,8 @@ function transition(state, inputD, inputC, params) {
       state: "S2",
       outputs: {
         RobotSpeechbubbleAction: "Please prepare 1 yogurt",
-        HumanSpeechbubbleAction: ["Next"]
+        HumanSpeechbubbleAction: ["Next"],
+        SpeechSynthesisAction: "Please prepare 1 yogurt"
       }
     };
   } else if (
@@ -32,7 +39,8 @@ function transition(state, inputD, inputC, params) {
       state: "S3",
       outputs: {
         RobotSpeechbubbleAction: "Please prepare 1 orange juice",
-        HumanSpeechbubbleAction: ["Go back", "Next"]
+        HumanSpeechbubbleAction: ["Go back", "Next"],
+        SpeechSynthesisAction: "Please prepare 1 orange juice"
       }
     };
   } else if (
@@ -45,7 +53,8 @@ function transition(state, inputD, inputC, params) {
       state: "S4",
       outputs: {
         RobotSpeechbubbleAction: "Please prepare 1 tomato",
-        HumanSpeechbubbleAction: ["Go back", "Next"]
+        HumanSpeechbubbleAction: ["Go back", "Next"],
+        SpeechSynthesisAction: "Please prepare 1 tomato"
       }
     };
   } else if (
@@ -62,8 +71,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
 
-
-  // Handle Go back
+    // Handle Go back
   } else if (
     state === "S3" &&
     inputD.type === "HumanSpeechbubbleAction" &&
@@ -74,7 +82,8 @@ function transition(state, inputD, inputC, params) {
       state: "S2",
       outputs: {
         RobotSpeechbubbleAction: "Please prepare 1 yogurt",
-        HumanSpeechbubbleAction: ["Go back", "Next"]
+        HumanSpeechbubbleAction: ["Go back", "Next"],
+        SpeechSynthesisAction: "Please prepare 1 yogurt"
       }
     };
   } else if (
@@ -87,7 +96,8 @@ function transition(state, inputD, inputC, params) {
       state: "S3",
       outputs: {
         RobotSpeechbubbleAction: "Please prepare 1 orange juice",
-        HumanSpeechbubbleAction: ["Next"]
+        HumanSpeechbubbleAction: ["Next"],
+        SpeechSynthesisAction: "Please prepare 1 orange juice"
       }
     };
   } else if (
@@ -100,11 +110,10 @@ function transition(state, inputD, inputC, params) {
       state: "S4",
       outputs: {
         RobotSpeechbubbleAction: "Please prepare 1 tomato",
-        HumanSpeechbubbleAction: ["Go back", "Next"]
+        HumanSpeechbubbleAction: ["Go back", "Next"],
+        SpeechSynthesisAction: "Please prepare 1 tomato"
       }
     };
-
-
   } else {
     return {
       state,
@@ -113,8 +122,6 @@ function transition(state, inputD, inputC, params) {
   }
 }
 
-
-// Params for reactive behavior
 var defaultParams = {
   engagedMinNoseAngle: 90,
   engagedMaxNoseAngle: 90,
@@ -127,4 +134,3 @@ module.exports = {
   transition: transition,
   defaultParams: defaultParams
 };
-

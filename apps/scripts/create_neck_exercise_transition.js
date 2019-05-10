@@ -1,7 +1,22 @@
 var numRepeats = !process.argv[2] ? 2 : process.argv[2];
 
+var defaultParams = {
+  engagedMinNoseAngle: 90,
+  engagedMaxNoseAngle: 90,
+  disengagedMinNoseAngle: 0,
+  disengagedMaxNoseAngle: 180,
+  disengagedTimeoutIntervalMs: 1000
+};
+
 var output = `// NOTE: might be called twice if transition and emission fncs are called separately
-function transition(state, inputD, inputC, params) {
+function transition(state, inputD, inputC, params) {` +
+  Object.keys(defaultParams)
+    .map(function(key) {
+      return `
+  var ${key} = params.${key};`;
+    })
+    .join("") +
+  `
 
   if (state === "S0" && inputD.type === "START") {
     return {
@@ -26,9 +41,15 @@ function transition(state, inputD, inputC, params) {
       }
     };`;
 
+
+output += `
+
+
+  // Rotete right and left`;
 var idx = 2;
 for (var i = 0; i < numRepeats; i++) {
-  output += `} else if (
+  output += `
+  } else if (
     state === "S${idx}" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
@@ -59,8 +80,14 @@ for (var i = 0; i < numRepeats; i++) {
   idx += 2;
 }
 
+
+output += `
+
+
+  // Touch right and left shoulders`;
 for (var i = 0; i < numRepeats; i++) {
-  output += `} else if (
+  output += `
+  } else if (
     state === "S${idx}" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
@@ -91,8 +118,14 @@ for (var i = 0; i < numRepeats; i++) {
   idx += 2;
 }
 
+
+output += `
+
+
+  // Look down and up`;
 for (var i = 0; i < numRepeats; i++) {
-  output += `} else if (
+  output += `
+  } else if (
     state === "S${idx}" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
@@ -123,6 +156,7 @@ for (var i = 0; i < numRepeats; i++) {
   idx += 2;
 }
 
+
 output += `
   } else if (
     state === "S${idx}" &&
@@ -139,6 +173,7 @@ output += `
       }
     };`;
 
+
 output += `
 
 
@@ -151,14 +186,7 @@ output += `
 }
 
 
-// Params for reactive behavior
-var defaultParams = {
-  engagedMinNoseAngle: 90,
-  engagedMaxNoseAngle: 90,
-  disengagedMinNoseAngle: 0,
-  disengagedMaxNoseAngle: 180,
-  disengagedTimeoutIntervalMs: 1000
-};
+var defaultParams = ${JSON.stringify(defaultParams, null, 2)};
 
 module.exports = {
   transition: transition,

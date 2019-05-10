@@ -13,10 +13,18 @@ var defaultParams = {
   disengagedTimeoutIntervalMs: 1000
 };
 
-// Header
-var output = `// NOTE: might be called twice if transition and emission fncs are called separately
-function transition(state, inputD, inputC, params) {
+var output =
+  `// NOTE: might be called twice if transition and emission fncs are called separately
+function transition(state, inputD, inputC, params) {` +
+  Object.keys(defaultParams)
+    .map(function(key) {
+      return `
+  var ${key} = params.${key};`;
+    })
+    .join("") +
+  `
 
+  // Happy path
   if (state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
@@ -32,7 +40,6 @@ var lines = JSON.parse(fs.readFileSync(process.argv[2])).ingredients.map(
   }
 );
 
-// Happy path
 lines.map(function(line, i) {
   output += `
   } else if (
@@ -51,7 +58,8 @@ lines.map(function(line, i) {
       state: "S${i + 2}",
       outputs: {
         RobotSpeechbubbleAction: ${JSON.stringify(line)},
-        HumanSpeechbubbleAction: ${i === 0 ? `["Next"]` : `["Go back", "Next"]`}
+        HumanSpeechbubbleAction: ${i === 0 ? `["Next"]` : `["Go back", "Next"]`},
+        SpeechSynthesisAction: ${JSON.stringify(line)}
       }
     };`;
 });
@@ -71,7 +79,6 @@ output += `
       }
     };`;
 
-// Handle Go back
 output += `
 
 
@@ -88,12 +95,12 @@ lines.map(function(_, i) {
       state: "S${i + 2}",
       outputs: {
         RobotSpeechbubbleAction: ${JSON.stringify(lines[i])},
-        HumanSpeechbubbleAction: ${i === 1 ? `["Next"]` : `["Go back", "Next"]`}
+        HumanSpeechbubbleAction: ${i === 1 ? `["Next"]` : `["Go back", "Next"]`},
+        SpeechSynthesisAction: ${JSON.stringify(lines[i])}
       }
     };`;
 });
 
-// Footer
 output += `
 
 
@@ -106,14 +113,7 @@ output += `
 }
 
 
-// Params for reactive behavior
-var defaultParams = {
-  engagedMinNoseAngle: 90,
-  engagedMaxNoseAngle: 90,
-  disengagedMinNoseAngle: 0,
-  disengagedMaxNoseAngle: 180,
-  disengagedTimeoutIntervalMs: 1000
-};
+var defaultParams = ${JSON.stringify(defaultParams, null, 2)};
 
 module.exports = {
   transition: transition,

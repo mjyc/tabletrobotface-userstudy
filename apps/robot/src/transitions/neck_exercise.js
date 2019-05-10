@@ -1,5 +1,10 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
 function transition(state, inputD, inputC, params) {
+  var engagedMinNoseAngle = params.engagedMinNoseAngle;
+  var engagedMaxNoseAngle = params.engagedMaxNoseAngle;
+  var disengagedMinNoseAngle = params.disengagedMinNoseAngle;
+  var disengagedMaxNoseAngle = params.disengagedMaxNoseAngle;
+  var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
 
   if (state === "S0" && inputD.type === "START") {
     return {
@@ -22,7 +27,8 @@ function transition(state, inputD, inputC, params) {
         HumanSpeechbubbleAction: ["Next"],
         SpeechSynthesisAction: "Let's exercise your neck! Let's start from looking forward"
       }
-    };} else if (
+    };
+  } else if (
     state === "S2" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
@@ -49,7 +55,8 @@ function transition(state, inputD, inputC, params) {
         HumanSpeechbubbleAction: ["Next"],
         SpeechSynthesisAction: "and now slowly rotate to your left"
       }
-    };} else if (
+    };
+  } else if (
     state === "S4" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
@@ -76,7 +83,8 @@ function transition(state, inputD, inputC, params) {
         HumanSpeechbubbleAction: ["Next"],
         SpeechSynthesisAction: "and now slowly rotate to your left"
       }
-    };} else if (
+    };
+  } else if (
     state === "S6" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
@@ -103,7 +111,8 @@ function transition(state, inputD, inputC, params) {
         HumanSpeechbubbleAction: ["Next"],
         SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
       }
-    };} else if (
+    };
+  } else if (
     state === "S8" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
@@ -130,7 +139,8 @@ function transition(state, inputD, inputC, params) {
         HumanSpeechbubbleAction: ["Next"],
         SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
       }
-    };} else if (
+    };
+  } else if (
     state === "S10" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
@@ -157,7 +167,8 @@ function transition(state, inputD, inputC, params) {
         HumanSpeechbubbleAction: ["Next"],
         SpeechSynthesisAction: "and now elevate your chin to the ceiling"
       }
-    };} else if (
+    };
+  } else if (
     state === "S12" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
@@ -210,13 +221,12 @@ function transition(state, inputD, inputC, params) {
 }
 
 
-// Params for reactive behavior
 var defaultParams = {
-  engagedMinNoseAngle: 90,
-  engagedMaxNoseAngle: 90,
-  disengagedMinNoseAngle: 0,
-  disengagedMaxNoseAngle: 180,
-  disengagedTimeoutIntervalMs: 1000
+  "engagedMinNoseAngle": 90,
+  "engagedMaxNoseAngle": 90,
+  "disengagedMinNoseAngle": 0,
+  "disengagedMaxNoseAngle": 180,
+  "disengagedTimeoutIntervalMs": 1000
 };
 
 module.exports = {

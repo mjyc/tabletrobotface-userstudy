@@ -87,18 +87,18 @@ function input(
       const maxNosePosXHalf = signedMaxDiff(nosesHalf.map(nose => nose.position.x));
       const maxNosePosYHalf = signedMaxDiff(nosesHalf.map(nose => nose.position.y));
 
-      const nosesQuarter = noses.slice(Math.ceil(bufferSize / 4));
+      const nosesQuarter = noses.slice(Math.ceil(bufferSize / 4) * 3);
       const maxNosePosXQuarter = signedMaxDiff(nosesQuarter.map(nose => nose.position.x));
       const maxNosePosYQuarter = signedMaxDiff(nosesQuarter.map(nose => nose.position.y));
 
-      console.log(
-        maxNosePosX,
-        // maxNosePosY,
-        // maxNosePosXHalf,
-        // maxNosePosYHalf,
-        // maxNosePosXQuarter,
-        // maxNosePosYQuarter
-      );
+      // console.log(
+      //   maxNosePosX,
+      //   // maxNosePosY,
+      //   maxNosePosXHalf,
+      //   // maxNosePosYHalf,
+      //   maxNosePosXQuarter,
+      //   // maxNosePosYQuarter
+      // );
 
       buffer.push({
         face: {
@@ -110,11 +110,11 @@ function input(
             ? (features.noseOrientation / Math.PI) * 180
             : 0,
           maxNosePosX,
-          // maxNosePosY,
-          // maxNosePosXHalf,
-          // maxNosePosYHalf,
-          // maxNosePosXQuarter,
-          // maxNosePosYQuarter,
+          maxNosePosY,
+          maxNosePosXHalf,
+          maxNosePosYHalf,
+          maxNosePosXQuarter,
+          maxNosePosYQuarter,
           ...features
         },
         poses
@@ -208,15 +208,15 @@ function transitionReducer(input$) {
           outputs: null
         };
       }
-      const prevState = prev.fsm.stateStamped.state;
+      const prevStateStamped = prev.fsm.stateStamped;
       const inputD = input.discrete;
       const inputC = input.continuous;
       const stateStamped = {
         // new state
-        state: prev.fsm.transition(prevState, inputD, inputC),
+        state: prev.fsm.transition(prevStateStamped, inputD, inputC),
         stamp: Date.now()
       };
-      const outputs = wrapOutputs(prev.fsm.emission(prevState, inputD, inputC));
+      const outputs = wrapOutputs(prev.fsm.emission(prevStateStamped, inputD, inputC));
       return {
         ...prev,
         fsm: {
@@ -225,7 +225,7 @@ function transitionReducer(input$) {
         },
         outputs,
         trace: {
-          prevStateStamped: prev.fsm.stateStamped,
+          prevStateStamped: prevStateStamped,
           input,
           stateStamped,
           outputs

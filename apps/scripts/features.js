@@ -56,7 +56,7 @@ export function extractFaceFeatures(poses) {
     faceSize: faceSize,
     faceCenterX: faceCenterX,
     faceCenterY: faceCenterY,
-    faceOrientation: faceOrientation,
-    noseOrientation: noseOrientation,
+    faceOrientation: faceOrientation - noseOrientation,
+    noseOrientation: noseOrientation - Math.PI/2,
   };
 }

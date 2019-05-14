@@ -3,6 +3,8 @@ var numRepeats = !process.argv[2] ? 2 : process.argv[2];
 var defaultParams = {
   rotateRightMaxMaxNosePose: 100,
   rotateLeftMinMaxNosePose: -100,
+  touchRightMaxMaxFaceAngle: 25,
+  touchLeftMinMaxFaceAngle: -25,
   tuckChinMaxMaxNosePoseY: 70,
   elevateChinMinMaxNosePoseY: -70
 };
@@ -93,7 +95,8 @@ for (var i = 0; i < numRepeats; i++) {
       }
     };
   ${
-    i !== numRepeats - 1 ? `} else if (stateStamped.state === "S${idx + 2}" && inputD.type === "Features") {
+    i !== numRepeats - 1 ? `
+  } else if (stateStamped.state === "S${idx + 2}" && inputD.type === "Features") {
     if (inputC.face.maxNosePosXQuarter < rotateLeftMinMaxNosePose) {
       return {
         state: "S${idx + 3}",
@@ -108,16 +111,15 @@ for (var i = 0; i < numRepeats; i++) {
         state: stateStamped.state,
         outputs: null
       };
-    }` : `} else if (stateStamped.state === "S${idx + 2}" && inputD.type === "Features") {
+    }` : `
+  } else if (stateStamped.state === "S${idx + 2}" && inputD.type === "Features") {
     if (inputC.face.maxNosePosXQuarter < rotateLeftMinMaxNosePose) {
       return {
         state: "S${idx + 3}",
         outputs: {
-          // RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
-          RobotSpeechbubbleAction: "and now tuck your chin into the chest",
+          RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
           HumanSpeechbubbleAction: ["Next"],
-          // SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
-          SpeechSynthesisAction: "and now tuck your chin into the chest"
+          SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
         }
       };
     } else {
@@ -131,42 +133,90 @@ for (var i = 0; i < numRepeats; i++) {
 }
 
 
-// output += `
+output += `
 
 
-//   // Touch right and left shoulders`;
-// for (var i = 0; i < numRepeats; i++) {
-//   output += `
-//   } else if (
-//     stateStamped.state === "S${idx}" &&
-//     inputD.type === "HumanSpeechbubbleAction" &&
-//     inputD.status === "SUCCEEDED" &&
-//     inputD.result === "Next"
-//   ) {
-//     return {
-//       state: "S${idx + 1}",
-//       outputs: {
-//         RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
-//         HumanSpeechbubbleAction: ["Next"],
-//         SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
-//       }
-//     };
-//   } else if (
-//     stateStamped.state === "S${idx + 1}" &&
-//     inputD.type === "HumanSpeechbubbleAction" &&
-//     inputD.status === "SUCCEEDED" &&
-//     inputD.result === "Next"
-//   ) {
-//     return {
-//       state: "S${idx + 2}",
-//       outputs: {
-//         RobotSpeechbubbleAction: "and now take your ear and act like trying to touch left shoulder",
-//         HumanSpeechbubbleAction: ["Next"],
-//         SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
-//       }
-//     };`;
-//   idx += 2;
-// }
+  // Touch right and left shoulders`;
+for (var i = 0; i < numRepeats; i++) {
+  output += `
+  } else if (
+    stateStamped.state === "S${idx}" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Next"
+  ) {
+    return {
+      state: "S${idx + 1}",
+      outputs: {
+        RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
+        HumanSpeechbubbleAction: ["Next"],
+        SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
+      }
+    };
+  } else if (stateStamped.state === "S${idx + 1}" && inputD.type === "Features") {
+    if (inputC.face.maxFaceAngleQuarter > touchRightMaxMaxFaceAngle) {
+      return {
+        state: "S${idx + 2}",
+        outputs: {
+          RobotSpeechbubbleAction: "and now take your ear and act like trying to touch left shoulder",
+          HumanSpeechbubbleAction: ["Next"],
+          SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
+        }
+      };
+    } else {
+      return {
+        state: stateStamped.state,
+        outputs: null
+      };
+    }
+  } else if (
+    stateStamped.state === "S${idx + 1}" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Next"
+  ) {
+    return {
+      state: "S${idx + 2}",
+      outputs: {
+        RobotSpeechbubbleAction: "and now take your ear and act like trying to touch left shoulder",
+        HumanSpeechbubbleAction: ["Next"],
+        SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
+      }
+    };${i !== numRepeats - 1 ? `
+  } else if (stateStamped.state === "S${idx + 2}" && inputD.type === "Features") {
+    if (inputC.face.maxFaceAngleQuarter < touchLeftMinMaxFaceAngle) {
+      return {
+        state: "S${idx + 3}",
+        outputs: {
+          RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
+          HumanSpeechbubbleAction: ["Next"],
+          SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
+        }
+      };
+    } else {
+      return {
+        state: stateStamped.state,
+        outputs: null
+      };
+    }` : `
+  } else if (stateStamped.state === "S${idx + 2}" && inputD.type === "Features") {
+    if (inputC.face.maxFaceAngleQuarter < touchLeftMinMaxFaceAngle) {
+      return {
+        state: "S${idx + 3}",
+        outputs: {
+          RobotSpeechbubbleAction: "and now tuck your chin into the chest",
+          HumanSpeechbubbleAction: ["Next"],
+          SpeechSynthesisAction: "and now tuck your chin into the chest"
+        }
+      };
+    } else {
+      return {
+        state: stateStamped.state,
+        outputs: null
+      };
+    }`}`;
+  idx += 2;
+}
 
 
 output += `
@@ -220,7 +270,6 @@ for (var i = 0; i < numRepeats; i++) {
       }
     };${i !== numRepeats - 1 ? `
   } else if (stateStamped.state === "S${idx + 2}" && inputD.type === "Features") {
-    console.log(inputC.face.maxNosePosYQuarter);
     if (inputC.face.maxNosePosYQuarter < elevateChinMinMaxNosePoseY) {
       return {
         state: "S${idx + 3}",
@@ -237,7 +286,6 @@ for (var i = 0; i < numRepeats; i++) {
       };
     }`: `
   } else if (stateStamped.state === "S${idx + 2}" && inputD.type === "Features") {
-    console.log(inputC.face.maxNosePosYQuarter);
     if (inputC.face.maxNosePosYQuarter < elevateChinMinMaxNosePoseY) {
       return {
         state: "S${idx + 3}",

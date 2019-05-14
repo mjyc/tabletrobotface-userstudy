@@ -75,6 +75,7 @@ function input(
         ? Date.now()
         : last.face.stampLastDetected;
 
+      // maxNosePosX & Y
       const noses = buffer
         .filter(
           ({ poses }) =>
@@ -103,14 +104,16 @@ function input(
         nosesQuarter.map(nose => nose.position.y)
       );
 
-      // console.log(
-      //   maxNosePosX,
-      //   // maxNosePosY,
-      //   maxNosePosXHalf,
-      //   // maxNosePosYHalf,
-      //   maxNosePosXQuarter,
-      //   // maxNosePosYQuarter
-      // );
+      // maxFaceAngle X & Y
+      const faceAngles = buffer.map(({ face }) => face.faceAngle);
+      const maxFaceAngle = signedMaxDiff(faceAngles);
+      console.log(maxFaceAngle);
+
+      const faceAnglesHalf = faceAngles.slice(Math.ceil(bufferSize / 2));
+      const maxFaceAngleHalf = signedMaxDiff(faceAngles);
+
+      const faceAnglesQuarter = faceAngles.slice(Math.ceil(bufferSize / 4) * 3);
+      const maxFaceAngleQuarter = signedMaxDiff(faceAngles);
 
       buffer.push({
         face: {
@@ -127,6 +130,9 @@ function input(
           maxNosePosYHalf,
           maxNosePosXQuarter,
           maxNosePosYQuarter,
+          maxFaceAngle,
+          maxFaceAngleHalf,
+          maxFaceAngleQuarter,
           ...features
         },
         poses

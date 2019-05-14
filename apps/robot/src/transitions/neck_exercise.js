@@ -1,10 +1,7 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
 function transition(state, inputD, inputC, params) {
-  var engagedMinNoseAngle = params.engagedMinNoseAngle;
-  var engagedMaxNoseAngle = params.engagedMaxNoseAngle;
-  var disengagedMinNoseAngle = params.disengagedMinNoseAngle;
-  var disengagedMaxNoseAngle = params.disengagedMaxNoseAngle;
-  var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
+  var rotateRightMaxMaxNosePose = params.rotateRightMaxMaxNosePose;
+  var rotateLeftMinMaxNosePose = params.rotateLeftMinMaxNosePose;
 
   if (state === "S0" && inputD.type === "START") {
     return {
@@ -222,11 +219,8 @@ function transition(state, inputD, inputC, params) {
 
 
 var defaultParams = {
-  "engagedMinNoseAngle": 90,
-  "engagedMaxNoseAngle": 90,
-  "disengagedMinNoseAngle": 0,
-  "disengagedMaxNoseAngle": 180,
-  "disengagedTimeoutIntervalMs": 1000
+  "rotateRightMaxMaxNosePose": 10,
+  "rotateLeftMinMaxNosePose": -10,
 };
 
 module.exports = {

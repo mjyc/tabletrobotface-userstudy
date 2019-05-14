@@ -65,21 +65,6 @@ function input(
       const stampLastDetected = !!features.isVisible
         ? Date.now()
         : last.face.stampLastDetected;
-      buffer.push({
-        face: {
-          stampLastDetected: stampLastDetected,
-          faceAngle: !!features.isVisible
-            ? (features.faceOrientation / Math.PI) * 180
-            : 0,
-          noseAngle: !!features.isVisible
-            ? (features.noseOrientation / Math.PI) * 180
-            : 0,
-          ...features
-        },
-        poses
-      });
-      if (buffer.length === bufferSize + 1) buffer.shift();
-      return buffer;
 
       const noses = buffer
         .filter(
@@ -90,41 +75,71 @@ function input(
         .map(({ poses }) =>
           poses[0].keypoints.find(kpt => kpt.part === "nose")
         );
-      // const nosesHalfSec
-      // const nosesOneSec
+      noses.sort((a, b) => a.position.x < b.position.x);
+      const maxNosePosX =
+        noses[noses.length - 1].position.x - noses[0].position.x;
+      noses.sort((a, b) => a.position.y < b.position.y);
+      const maxNosePosY =
+        noses[noses.length - 1].position.x - noses[0].position.x;
 
-      // noses.sort((a, b) => a.position.x < b.position.x);
-      // const maxNosePosX =
-      //   noses[noses.length - 1].position.x - noses[0].position.x;
-      // noses.sort((a, b) => a.position.y < b.position.y);
-      // const maxNosePosY =
-      //   noses[noses.length - 1].position.x - noses[0].position.x;
+      const nosesHalf = noses.slice(Math.ceil(bufferSize / 2));
+      nosesHalf.sort((a, b) => a.position.x < b.position.x);
+      const maxNosePosXHalf =
+        nosesHalf[nosesHalf.length - 1].position.x - nosesHalf[0].position.x;
+      nosesHalf.sort((a, b) => a.position.y < b.position.y);
+      const maxNosePosYHalf =
+        nosesHalf[nosesHalf.length - 1].position.x - nosesHalf[0].position.x;
 
-      // noses.sort((a, b) => a.position.x < b.position.x);
-      // const maxNosePosX =
-      //   noses[noses.length - 1].position.x - noses[0].position.x;
-      // noses.sort((a, b) => a.position.y < b.position.y);
-      // const maxNosePosY =
-      //   noses[noses.length - 1].position.x - noses[0].position.x;
+      const nosesQuarter = noses.slice(Math.ceil(bufferSize / 4));
+      nosesQuarter.sort((a, b) => a.position.x < b.position.x);
+      const maxNosePosXQuarter =
+        nosesQuarter[nosesQuarter.length - 1].position.x - nosesQuarter[0].position.x;
+      nosesQuarter.sort((a, b) => a.position.y < b.position.y);
+      const maxNosePosYQuarter =
+        nosesQuarter[nosesQuarter.length - 1].position.x - nosesQuarter[0].position.x;
 
-      // noses.sort((a, b) => a.position.x < b.position.x);
-      // const maxNosePosX =
-      //   noses[noses.length - 1].position.x - noses[0].position.x;
-      // noses.sort((a, b) => a.position.y < b.position.y);
-      // const maxNosePosY =
-      //   noses[noses.length - 1].position.x - noses[0].position.x;
+      console.log(
+        maxNosePosX,
+        maxNosePosY,
+        maxNosePosXHalf,
+        maxNosePosYHalf,
+        maxNosePosXQuarter,
+        maxNosePosYQuarter,);
 
+      buffer.push({
+        face: {
+          stampLastDetected: stampLastDetected,
+          faceAngle: !!features.isVisible
+            ? (features.faceOrientation / Math.PI) * 180
+            : 0,
+          noseAngle: !!features.isVisible
+            ? (features.noseOrientation / Math.PI) * 180
+            : 0,
+          maxNosePosX,
+          maxNosePosY,
+          maxNosePosXHalf,
+          maxNosePosYHalf,
+          maxNosePosXQuarter,
+          maxNosePosYQuarter,
+          ...features
+        },
+        poses
+      });
+      if (buffer.length === bufferSize + 1) buffer.shift();
+      return buffer;
     },
     [
       {
         face: {
           stampLastDetected: 0,
-          // maxNosePosXHalfSec,
-          // maxNosePosYHalfSec,
-          // maxNosePosX1Sec,
-          // maxNosePosY1Sec,
-          // maxNosePosX2Sec,
-          // maxNosePosY2Sec,
+          faceAngle: 0,
+          noseAngle: 0,
+          maxNosePosX: 0,
+          maxNosePosY: 0,
+          maxNosePosXHalf: 0,
+          maxNosePosYHalf: 0,
+          maxNosePosXQaurter: 0,
+          maxNosePosYQaurter: 0,
           ...defaultFaceFeatures
         },
         poses: []

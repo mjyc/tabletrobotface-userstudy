@@ -33,4 +33,4 @@ function maxIndexDiff(arr, n) {
 
 module.exports = {
   maxIndexDiff: maxIndexDiff
-}
+};

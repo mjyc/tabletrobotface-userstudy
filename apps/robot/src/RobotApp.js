@@ -93,10 +93,12 @@ function input(
       const nosesQuarter = noses.slice(Math.ceil(bufferSize / 4));
       nosesQuarter.sort((a, b) => a.position.x < b.position.x);
       const maxNosePosXQuarter =
-        nosesQuarter[nosesQuarter.length - 1].position.x - nosesQuarter[0].position.x;
+        nosesQuarter[nosesQuarter.length - 1].position.x -
+        nosesQuarter[0].position.x;
       nosesQuarter.sort((a, b) => a.position.y < b.position.y);
       const maxNosePosYQuarter =
-        nosesQuarter[nosesQuarter.length - 1].position.x - nosesQuarter[0].position.x;
+        nosesQuarter[nosesQuarter.length - 1].position.x -
+        nosesQuarter[0].position.x;
 
       console.log(
         maxNosePosX,
@@ -104,7 +106,8 @@ function input(
         maxNosePosXHalf,
         maxNosePosYHalf,
         maxNosePosXQuarter,
-        maxNosePosYQuarter,);
+        maxNosePosYQuarter
+      );
 
       buffer.push({
         face: {

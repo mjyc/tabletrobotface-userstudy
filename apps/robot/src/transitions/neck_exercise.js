@@ -20,9 +20,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S2",
       outputs: {
-        RobotSpeechbubbleAction: "Let's exercise your neck! Let's start from looking forward",
+        RobotSpeechbubbleAction:
+          "Let's exercise your neck! Let's start from looking forward",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "Let's exercise your neck! Let's start from looking forward"
+        SpeechSynthesisAction:
+          "Let's exercise your neck! Let's start from looking forward"
       }
     };
   } else if (
@@ -90,9 +92,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S7",
       outputs: {
-        RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
+        RobotSpeechbubbleAction:
+          "and now take your ear and act like trying to touch right shoulder",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
+        SpeechSynthesisAction:
+          "and now take your ear and act like trying to touch right shoulder"
       }
     };
   } else if (
@@ -104,9 +108,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S8",
       outputs: {
-        RobotSpeechbubbleAction: "and now take your ear and act like trying to touch left shoulder",
+        RobotSpeechbubbleAction:
+          "and now take your ear and act like trying to touch left shoulder",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
+        SpeechSynthesisAction:
+          "and now take your ear and act like trying to touch left shoulder"
       }
     };
   } else if (
@@ -118,9 +124,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S9",
       outputs: {
-        RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
+        RobotSpeechbubbleAction:
+          "and now take your ear and act like trying to touch right shoulder",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
+        SpeechSynthesisAction:
+          "and now take your ear and act like trying to touch right shoulder"
       }
     };
   } else if (
@@ -132,9 +140,11 @@ function transition(state, inputD, inputC, params) {
     return {
       state: "S10",
       outputs: {
-        RobotSpeechbubbleAction: "and now take your ear and act like trying to touch left shoulder",
+        RobotSpeechbubbleAction:
+          "and now take your ear and act like trying to touch left shoulder",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
+        SpeechSynthesisAction:
+          "and now take your ear and act like trying to touch left shoulder"
       }
     };
   } else if (
@@ -207,8 +217,6 @@ function transition(state, inputD, inputC, params) {
         SpeechSynthesisAction: "Great job!"
       }
     };
-
-
   } else {
     return {
       state,
@@ -217,14 +225,12 @@ function transition(state, inputD, inputC, params) {
   }
 }
 
-
 var defaultParams = {
-  "rotateRightMaxMaxNosePose": 10,
-  "rotateLeftMinMaxNosePose": -10,
+  rotateRightMaxMaxNosePose: 10,
+  rotateLeftMinMaxNosePose: -10
 };
 
 module.exports = {
   transition: transition,
   defaultParams: defaultParams
 };
-

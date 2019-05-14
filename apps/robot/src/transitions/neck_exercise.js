@@ -41,6 +41,30 @@ function transition(state, inputD, inputC, params) {
         SpeechSynthesisAction: "and slowly rotate to your right"
       }
     };
+
+
+  } else if (
+    state === "S2" &&
+    inputD.type === "Features"
+  ) {
+
+    if (
+      inputC.face.maxNosePosX > rotateRightMaxMaxNosePose
+    ) {
+      return {
+        state: "S2",
+        outputs: {
+          RobotSpeechbubbleAction: 'Tap "Resume" to resume',
+          HumanSpeechbubbleAction: ["Resume"]
+        }
+      };
+    } else {
+      return {
+        state: state,
+        outputs: null
+      };
+    }
+
   } else if (
     state === "S3" &&
     inputD.type === "HumanSpeechbubbleAction" &&

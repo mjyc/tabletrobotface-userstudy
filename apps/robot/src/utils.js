@@ -1,36 +1,37 @@
-// https://www.geeksforgeeks.org/given-an-array-arr-find-the-maximum-j-i-such-that-arrj-arri/
-/* For a given array arr[], returns the maximum j – i such that
-  arr[j] > arr[i] */
-function maxIndexDiff(arr, n) {
-  var maxDiff;
-  var i, j;
-
-  var LMin = [];
-  var RMax = [];
-
-  /* Construct LMin[] such that LMin[i] stores the minimum value
-     from (arr[0], arr[1], ... arr[i]) */
-  LMin[0] = arr[0];
-  for (i = 1; i < n; ++i) LMin[i] = Math.min(arr[i], LMin[i - 1]);
-
-  /* Construct RMax[] such that RMax[j] stores the maximum value
-     from (arr[j], arr[j+1], ..arr[n-1]) */
-  RMax[n - 1] = arr[n - 1];
-  for (j = n - 2; j >= 0; --j) RMax[j] = Math.max(arr[j], RMax[j + 1]);
-
-  /* Traverse both arrays from left to right to find optimum j - i
-    This process is similar to merge() of MergeSort */
-  (i = 0), (j = 0), (maxDiff = -1);
-  while (j < n && i < n) {
-    if (LMin[i] < RMax[j]) {
-      maxDiff = max(maxDiff, j - i);
-      j = j + 1;
-    } else i = i + 1;
+// https://www.geeksforgeeks.org/maximum-difference-between-two-elements/
+function maxDiff(arr) {
+  var n = arr.length;
+  var maxDiff = -1;
+  var maxRight = arr[n - 1];
+  for (var i = n - 2; i >= 0; i--) {
+    if (arr[i] > maxRight) maxRight = arr[i];
+    else {
+      var diff = maxRight - arr[i];
+      if (diff > maxDiff) {
+        maxDiff = diff;
+      }
+    }
   }
+  return maxDiff;
+}
 
+function maxDiffReverse(arr) {
+  var n = arr.length;
+  var maxDiff = -1;
+  var maxLeft = arr[0];
+  for (var i = 1; i < n; i++) {
+    if (arr[i] > maxLeft) maxLeft = arr[i];
+    else {
+      var diff = maxLeft - arr[i];
+      if (diff > maxDiff) {
+        maxDiff = diff;
+      }
+    }
+  }
   return maxDiff;
 }
 
 module.exports = {
-  maxIndexDiff: maxIndexDiff
+  maxDiff: maxDiff,
+  maxDiffReverse: maxDiffReverse
 };

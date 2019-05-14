@@ -5,7 +5,7 @@ import {
   defaultFaceFeatures,
   extractFaceFeatures
 } from "../../scripts/features";
-import { maxIndexDiff } from "./utils";
+import { maxDiff, maxDiffReverse } from "./utils";
 
 function input(
   {
@@ -58,6 +58,11 @@ function input(
       result: r.result
     }))
   );
+  const signedMaxDiff = (arr) => {
+    if (arr.length < 2) console.warn('Invalid input array length < 2: returning 0');
+    return arr.length < 2 ? 0 : maxDiff(arr) > maxDiffReverse(arr)
+      ? maxDiff(arr) : -1 * maxDiffReverse(arr);
+  }
   const buffer$ = PoseDetection.events("poses").fold(
     (buffer, poses) => {
       const last = buffer[buffer.length - 1];
@@ -75,38 +80,24 @@ function input(
         .map(({ poses }) =>
           poses[0].keypoints.find(kpt => kpt.part === "nose")
         );
-      noses.sort((a, b) => a.position.x < b.position.x);
-      const maxNosePosX =
-        noses[noses.length - 1].position.x - noses[0].position.x;
-      noses.sort((a, b) => a.position.y < b.position.y);
-      const maxNosePosY =
-        noses[noses.length - 1].position.x - noses[0].position.x;
+      const maxNosePosX = signedMaxDiff(noses.map(nose => nose.position.x));
+      const maxNosePosY = signedMaxDiff(noses.map(nose => nose.position.y));
 
       const nosesHalf = noses.slice(Math.ceil(bufferSize / 2));
-      nosesHalf.sort((a, b) => a.position.x < b.position.x);
-      const maxNosePosXHalf =
-        nosesHalf[nosesHalf.length - 1].position.x - nosesHalf[0].position.x;
-      nosesHalf.sort((a, b) => a.position.y < b.position.y);
-      const maxNosePosYHalf =
-        nosesHalf[nosesHalf.length - 1].position.x - nosesHalf[0].position.x;
+      const maxNosePosXHalf = signedMaxDiff(nosesHalf.map(nose => nose.position.x));
+      const maxNosePosYHalf = signedMaxDiff(nosesHalf.map(nose => nose.position.y));
 
       const nosesQuarter = noses.slice(Math.ceil(bufferSize / 4));
-      nosesQuarter.sort((a, b) => a.position.x < b.position.x);
-      const maxNosePosXQuarter =
-        nosesQuarter[nosesQuarter.length - 1].position.x -
-        nosesQuarter[0].position.x;
-      nosesQuarter.sort((a, b) => a.position.y < b.position.y);
-      const maxNosePosYQuarter =
-        nosesQuarter[nosesQuarter.length - 1].position.x -
-        nosesQuarter[0].position.x;
+      const maxNosePosXQuarter = signedMaxDiff(nosesQuarter.map(nose => nose.position.x));
+      const maxNosePosYQuarter = signedMaxDiff(nosesQuarter.map(nose => nose.position.y));
 
       console.log(
         maxNosePosX,
-        maxNosePosY,
-        maxNosePosXHalf,
-        maxNosePosYHalf,
-        maxNosePosXQuarter,
-        maxNosePosYQuarter
+        // maxNosePosY,
+        // maxNosePosXHalf,
+        // maxNosePosYHalf,
+        // maxNosePosXQuarter,
+        // maxNosePosYQuarter
       );
 
       buffer.push({
@@ -119,11 +110,11 @@ function input(
             ? (features.noseOrientation / Math.PI) * 180
             : 0,
           maxNosePosX,
-          maxNosePosY,
-          maxNosePosXHalf,
-          maxNosePosYHalf,
-          maxNosePosXQuarter,
-          maxNosePosYQuarter,
+          // maxNosePosY,
+          // maxNosePosXHalf,
+          // maxNosePosYHalf,
+          // maxNosePosXQuarter,
+          // maxNosePosYQuarter,
           ...features
         },
         poses

@@ -58,11 +58,15 @@ function input(
       result: r.result
     }))
   );
-  const signedMaxDiff = (arr) => {
-    if (arr.length < 2) console.warn('Invalid input array length < 2: returning 0');
-    return arr.length < 2 ? 0 : maxDiff(arr) > maxDiffReverse(arr)
-      ? maxDiff(arr) : -1 * maxDiffReverse(arr);
-  }
+  const signedMaxDiff = arr => {
+    if (arr.length < 2)
+      console.warn("Invalid input array length < 2: returning 0");
+    return arr.length < 2
+      ? 0
+      : maxDiff(arr) > maxDiffReverse(arr)
+      ? maxDiff(arr)
+      : -1 * maxDiffReverse(arr);
+  };
   const buffer$ = PoseDetection.events("poses").fold(
     (buffer, poses) => {
       const last = buffer[buffer.length - 1];
@@ -84,12 +88,20 @@ function input(
       const maxNosePosY = signedMaxDiff(noses.map(nose => nose.position.y));
 
       const nosesHalf = noses.slice(Math.ceil(bufferSize / 2));
-      const maxNosePosXHalf = signedMaxDiff(nosesHalf.map(nose => nose.position.x));
-      const maxNosePosYHalf = signedMaxDiff(nosesHalf.map(nose => nose.position.y));
+      const maxNosePosXHalf = signedMaxDiff(
+        nosesHalf.map(nose => nose.position.x)
+      );
+      const maxNosePosYHalf = signedMaxDiff(
+        nosesHalf.map(nose => nose.position.y)
+      );
 
       const nosesQuarter = noses.slice(Math.ceil(bufferSize / 4) * 3);
-      const maxNosePosXQuarter = signedMaxDiff(nosesQuarter.map(nose => nose.position.x));
-      const maxNosePosYQuarter = signedMaxDiff(nosesQuarter.map(nose => nose.position.y));
+      const maxNosePosXQuarter = signedMaxDiff(
+        nosesQuarter.map(nose => nose.position.x)
+      );
+      const maxNosePosYQuarter = signedMaxDiff(
+        nosesQuarter.map(nose => nose.position.y)
+      );
 
       // console.log(
       //   maxNosePosX,
@@ -216,7 +228,9 @@ function transitionReducer(input$) {
         state: prev.fsm.transition(prevStateStamped, inputD, inputC),
         stamp: Date.now()
       };
-      const outputs = wrapOutputs(prev.fsm.emission(prevStateStamped, inputD, inputC));
+      const outputs = wrapOutputs(
+        prev.fsm.emission(prevStateStamped, inputD, inputC)
+      );
       return {
         ...prev,
         fsm: {

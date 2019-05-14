@@ -35,7 +35,7 @@ var settings = require('../settings_helper');
 
 
 // Prepare inputs
-var transAstRaw = js2smt2.parser.parse(transitionStr);
+var transAstRaw = js2smt2.jsParser.parse(transitionStr);
 // remove "outputs" field in ReturnStatements
 var transAst = srtr.astMap(transAstRaw, function (leaf) {
   return leaf;

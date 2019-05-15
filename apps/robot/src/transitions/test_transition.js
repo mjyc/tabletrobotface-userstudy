@@ -1,12 +1,12 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
-function transition(state, inputD, inputC, params) {
+function transition(stateStamped, inputD, inputC, params) {
   var engagedMinNoseAngle = params.engagedMinNoseAngle;
   var engagedMaxNoseAngle = params.engagedMaxNoseAngle;
   var disengagedMinNoseAngle = params.disengagedMinNoseAngle;
   var disengagedMaxNoseAngle = params.disengagedMaxNoseAngle;
   var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
 
-  if (state === "S0" && inputD.type === "START") {
+  if (stateStamped.state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
       outputs: {
@@ -15,7 +15,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S1" &&
+    stateStamped.state === "S1" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
@@ -28,7 +28,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S2" &&
+    stateStamped.state === "S2" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
@@ -40,7 +40,7 @@ function transition(state, inputD, inputC, params) {
         HumanSpeechbubbleAction: ["Pause"]
       }
     };
-  } else if (state === "S1" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S1" && inputD.type === "Features") {
     if (
       // disengaged
       (inputC.face.isVisible &&
@@ -59,11 +59,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "S2" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S2" && inputD.type === "Features") {
     if (
       // engaged
       inputC.face.isVisible &&
@@ -79,23 +79,23 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
   } else {
     return {
-      state: state,
+      state: stateStamped.state,
       outputs: null
     };
   }
 }
 
 var defaultParams = {
-  engagedMinNoseAngle: 90,
-  engagedMaxNoseAngle: 90,
-  disengagedMinNoseAngle: 0,
-  disengagedMaxNoseAngle: 180,
+  engagedMinNoseAngle: -10,
+  engagedMaxNoseAngle: 10,
+  disengagedMinNoseAngle: -20,
+  disengagedMaxNoseAngle: 20,
   disengagedTimeoutIntervalMs: 1000
 };
 

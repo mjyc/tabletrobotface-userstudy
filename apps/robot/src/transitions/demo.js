@@ -1,6 +1,6 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
-function transition(state, inputD, inputC, params) {
-  if (state === "S0" && inputD.type === "START") {
+function transition(stateStamped, inputD, inputC, params) {
+  if (stateStamped.state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
       outputs: {
@@ -9,11 +9,11 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    (state === "S1" &&
+    (stateStamped.state === "S1" &&
       inputD.type === "HumanSpeechbubbleAction" &&
       inputD.status === "SUCCEEDED" &&
       inputD.result === "Hello") ||
-    (state === "S5" &&
+    (stateStamped.state === "S5" &&
       inputD.type === "HumanSpeechbubbleAction" &&
       inputD.status === "SUCCEEDED" &&
       inputD.result === "Again")
@@ -27,7 +27,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S2" &&
+    stateStamped.state === "S2" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Great!"
@@ -41,7 +41,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S2" &&
+    stateStamped.state === "S2" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Meh"
@@ -55,7 +55,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    (state === "S3" || state === "S4") &&
+    (stateStamped.state === "S3" || stateStamped.state === "S4") &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
@@ -68,7 +68,7 @@ function transition(state, inputD, inputC, params) {
     };
   } else {
     return {
-      state: state,
+      state: stateStamped.state,
       outputs: null
     };
   }

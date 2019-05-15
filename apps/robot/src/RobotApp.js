@@ -107,7 +107,6 @@ function input(
       // maxFaceAngle X & Y
       const faceAngles = buffer.map(({ face }) => face.faceAngle);
       const maxFaceAngle = signedMaxDiff(faceAngles);
-      console.log(maxFaceAngle);
 
       const faceAnglesHalf = faceAngles.slice(Math.ceil(bufferSize / 2));
       const maxFaceAngleHalf = signedMaxDiff(faceAngles);

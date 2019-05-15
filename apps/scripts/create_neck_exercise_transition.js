@@ -37,7 +37,7 @@ function transition(stateStamped, inputD, inputC, params) {` +
       state: "S2",
       outputs: {
         RobotSpeechbubbleAction: "Let's exercise your neck! Let's start from looking forward",
-        HumanSpeechbubbleAction: ["Next"],
+        HumanSpeechbubbleAction: "",
         SpeechSynthesisAction: "Let's exercise your neck! Let's start from looking forward"
       }
     };`;
@@ -49,7 +49,20 @@ output += `
   // Rotete right and left`;
 var idx = 2;
 for (var i = 0; i < numRepeats; i++) {
-  output += `
+  output += `${i === 0 ? `
+  } else if (
+    stateStamped.state === "S${idx}" &&
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
+  ) {
+    return {
+      state: "S${idx + 1}",
+      outputs: {
+        RobotSpeechbubbleAction: "and slowly rotate to your right",
+        HumanSpeechbubbleAction: ["Next"],
+        SpeechSynthesisAction: "and slowly rotate to your right"
+      }
+    };` : `
   } else if (
     stateStamped.state === "S${idx}" &&
     inputD.type === "HumanSpeechbubbleAction" &&
@@ -63,7 +76,7 @@ for (var i = 0; i < numRepeats; i++) {
         HumanSpeechbubbleAction: ["Next"],
         SpeechSynthesisAction: "and slowly rotate to your right"
       }
-    };
+    };`}
   } else if (stateStamped.state === "S${idx + 1}" && inputD.type === "Features") {
     if (inputC.face.maxNosePosXQuarter > rotateRightMaxMaxNosePose) {
       return {

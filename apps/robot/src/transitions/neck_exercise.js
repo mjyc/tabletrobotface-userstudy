@@ -26,7 +26,7 @@ function transition(stateStamped, inputD, inputC, params) {
       outputs: {
         RobotSpeechbubbleAction:
           "Let's exercise your neck! Let's start from looking forward",
-        HumanSpeechbubbleAction: ["Next"],
+        HumanSpeechbubbleAction: "",
         SpeechSynthesisAction:
           "Let's exercise your neck! Let's start from looking forward"
       }
@@ -35,9 +35,8 @@ function transition(stateStamped, inputD, inputC, params) {
     // Rotete right and left
   } else if (
     stateStamped.state === "S2" &&
-    inputD.type === "HumanSpeechbubbleAction" &&
-    inputD.status === "SUCCEEDED" &&
-    inputD.result === "Next"
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
   ) {
     return {
       state: "S3",

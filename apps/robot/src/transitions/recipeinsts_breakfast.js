@@ -1,13 +1,9 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
-function transition(state, inputD, inputC, params) {
-  var engagedMinNoseAngle = params.engagedMinNoseAngle;
-  var engagedMaxNoseAngle = params.engagedMaxNoseAngle;
-  var disengagedMinNoseAngle = params.disengagedMinNoseAngle;
-  var disengagedMaxNoseAngle = params.disengagedMaxNoseAngle;
-  var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
+function transition(stateStamped, inputD, inputC, params) {
+  var nextTimeoutIntervalMs = params.nextTimeoutIntervalMs;
 
   // Happy path
-  if (state === "S0" && inputD.type === "START") {
+  if (stateStamped.state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
       outputs: {
@@ -16,7 +12,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S1" &&
+    stateStamped.state === "S1" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Hello"
@@ -29,8 +25,34 @@ function transition(state, inputD, inputC, params) {
         SpeechSynthesisAction: "Please prepare 1 yogurt"
       }
     };
+  } else if (stateStamped.state === "S2" && inputD.type === "Features") {
+    console.log(
+      inputC.face.stamp - stateStamped.stampLastChanged,
+      inputC.face.stamp - inputC.face.stampLastDetected,
+      inputC.face.stamp - inputC.face.stampLastNotDetected
+    );
+    if (
+      inputC.face.stamp - stateStamped.stampLastChanged >
+        inputC.face.stamp - inputC.face.stampLastNotDetected &&
+      inputC.face.stamp - inputC.face.stampLastNotDetected >
+        nextTimeoutIntervalMs
+    ) {
+      return {
+        state: "S3",
+        outputs: {
+          RobotSpeechbubbleAction: "Please prepare 1 orange juice",
+          HumanSpeechbubbleAction: ["Go back", "Next"],
+          SpeechSynthesisAction: "Please prepare 1 orange juice"
+        }
+      };
+    } else {
+      return {
+        state: stateStamped.state,
+        outputs: null
+      };
+    }
   } else if (
-    state === "S2" &&
+    stateStamped.state === "S2" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Next"
@@ -43,8 +65,34 @@ function transition(state, inputD, inputC, params) {
         SpeechSynthesisAction: "Please prepare 1 orange juice"
       }
     };
+  } else if (stateStamped.state === "S3" && inputD.type === "Features") {
+    console.log(
+      inputC.face.stamp - stateStamped.stampLastChanged,
+      inputC.face.stamp - inputC.face.stampLastDetected,
+      inputC.face.stamp - inputC.face.stampLastNotDetected
+    );
+    if (
+      inputC.face.stamp - stateStamped.stampLastChanged >
+        inputC.face.stamp - inputC.face.stampLastNotDetected &&
+      inputC.face.stamp - inputC.face.stampLastNotDetected >
+        nextTimeoutIntervalMs
+    ) {
+      return {
+        state: "S4",
+        outputs: {
+          RobotSpeechbubbleAction: "Please prepare 1 tomato",
+          HumanSpeechbubbleAction: ["Go back", "Next"],
+          SpeechSynthesisAction: "Please prepare 1 tomato"
+        }
+      };
+    } else {
+      return {
+        state: stateStamped.state,
+        outputs: null
+      };
+    }
   } else if (
-    state === "S3" &&
+    stateStamped.state === "S3" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Next"
@@ -57,8 +105,34 @@ function transition(state, inputD, inputC, params) {
         SpeechSynthesisAction: "Please prepare 1 tomato"
       }
     };
+  } else if (stateStamped.state === "S4" && inputD.type === "Features") {
+    console.log(
+      inputC.face.stamp - stateStamped.stampLastChanged,
+      inputC.face.stamp - inputC.face.stampLastDetected,
+      inputC.face.stamp - inputC.face.stampLastNotDetected
+    );
+    if (
+      inputC.face.stamp - stateStamped.stampLastChanged >
+        inputC.face.stamp - inputC.face.stampLastNotDetected &&
+      inputC.face.stamp - inputC.face.stampLastNotDetected >
+        nextTimeoutIntervalMs
+    ) {
+      return {
+        state: "S5",
+        outputs: {
+          RobotSpeechbubbleAction: "You are done!",
+          HumanSpeechbubbleAction: "",
+          SpeechSynthesisAction: "You are done!"
+        }
+      };
+    } else {
+      return {
+        state: stateStamped.state,
+        outputs: null
+      };
+    }
   } else if (
-    state === "S4" &&
+    stateStamped.state === "S4" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Next"
   ) {
@@ -73,7 +147,7 @@ function transition(state, inputD, inputC, params) {
 
     // Handle Go back
   } else if (
-    state === "S3" &&
+    stateStamped.state === "S3" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Go back"
@@ -87,7 +161,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S4" &&
+    stateStamped.state === "S4" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Go back"
@@ -101,7 +175,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S5" &&
+    stateStamped.state === "S5" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Go back"
@@ -116,18 +190,14 @@ function transition(state, inputD, inputC, params) {
     };
   } else {
     return {
-      state,
+      state: stateStamped.state,
       outputs: null
     };
   }
 }
 
 var defaultParams = {
-  engagedMinNoseAngle: 90,
-  engagedMaxNoseAngle: 90,
-  disengagedMinNoseAngle: 0,
-  disengagedMaxNoseAngle: 180,
-  disengagedTimeoutIntervalMs: 1000
+  nextTimeoutIntervalMs: 500
 };
 
 module.exports = {

@@ -6,16 +6,12 @@ if (process.argv.length < 3) {
 var fs = require("fs");
 
 var defaultParams = {
-  engagedMinNoseAngle: 90,
-  engagedMaxNoseAngle: 90,
-  disengagedMinNoseAngle: 0,
-  disengagedMaxNoseAngle: 180,
-  disengagedTimeoutIntervalMs: 1000
+  nextTimeoutIntervalMs: 500,
 };
 
 var output =
   `// NOTE: might be called twice if transition and emission fncs are called separately
-function transition(state, inputD, inputC, params) {` +
+function transition(stateStamped, inputD, inputC, params) {` +
   Object.keys(defaultParams)
     .map(function(key) {
       return `
@@ -25,7 +21,7 @@ function transition(state, inputD, inputC, params) {` +
   `
 
   // Happy path
-  if (state === "S0" && inputD.type === "START") {
+  if (stateStamped.state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
       outputs: {
@@ -43,7 +39,7 @@ var lines = JSON.parse(fs.readFileSync(process.argv[2])).ingredients.map(
 lines.map(function(line, i) {
   output += `
   } else if (
-    state === "S${i + 1}" &&
+    stateStamped.state === "S${i + 1}" &&
     ${
       i === 0
         ? `inputD.type === "HumanSpeechbubbleAction" &&
@@ -61,12 +57,34 @@ lines.map(function(line, i) {
         HumanSpeechbubbleAction: ${i === 0 ? `["Next"]` : `["Go back", "Next"]`},
         SpeechSynthesisAction: ${JSON.stringify(line)}
       }
-    };`;
+    };
+  } else if (stateStamped.state === "S${i + 2}" && inputD.type === "Features") {
+    console.log((inputC.face.stamp - stateStamped.stampLastChanged), (inputC.face.stamp - inputC.face.stampLastDetected), (inputC.face.stamp - inputC.face.stampLastNotDetected));
+    if (
+      inputC.face.stamp - stateStamped.stampLastChanged >
+        inputC.face.stamp - inputC.face.stampLastNotDetected &&
+      inputC.face.stamp - inputC.face.stampLastNotDetected >
+        nextTimeoutIntervalMs
+    ) {
+      return {
+        state: "S${i + 3}",
+        outputs: {
+          RobotSpeechbubbleAction: ${i !== lines.length - 1 ? JSON.stringify(lines[i+1]) : `"You are done!"`},
+          HumanSpeechbubbleAction: ${i !== lines.length - 1 ? `["Go back", "Next"]` : `""`},
+          SpeechSynthesisAction: ${i !== lines.length - 1 ? JSON.stringify(lines[i+1]) : `"You are done!"`}
+        }
+      };
+    } else {
+      return {
+        state: stateStamped.state,
+        outputs: null,
+      }
+    }`;
 });
 
 output += `
   } else if (
-    state === "S${lines.length + 1}" &&
+    stateStamped.state === "S${lines.length + 1}" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Next"
   ) {
@@ -86,7 +104,7 @@ output += `
 lines.map(function(_, i) {
   output += `
   } else if (
-    state === "S${i + 3}" &&
+    stateStamped.state === "S${i + 3}" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Go back"
@@ -106,7 +124,7 @@ output += `
 
   } else {
     return {
-      state,
+      state: stateStamped.state,
       outputs: null
     };
   }

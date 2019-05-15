@@ -74,6 +74,9 @@ function input(
       const stampLastDetected = !!features.isVisible
         ? Date.now()
         : last.face.stampLastDetected;
+      const stampLastNotDetected = !features.isVisible
+        ? Date.now()
+        : last.face.stampLastNotDetected;
 
       // maxNosePosX & Y
       const noses = buffer
@@ -108,15 +111,20 @@ function input(
       const faceAngles = buffer.map(({ face }) => face.faceAngle);
       const maxFaceAngle = signedMaxDiff(faceAngles);
 
-      const faceAnglesHalf = faceAngles.slice(Math.ceil(bufferSize / 2));
+      const faceAnglesHalf = faceAngles.slice(
+        Math.floor(faceAngles.length / 2)
+      );
       const maxFaceAngleHalf = signedMaxDiff(faceAngles);
 
-      const faceAnglesQuarter = faceAngles.slice(Math.ceil(bufferSize / 4) * 3);
+      const faceAnglesQuarter = faceAngles.slice(
+        Math.floor(faceAngles.length / 4) * 3
+      );
       const maxFaceAngleQuarter = signedMaxDiff(faceAngles);
 
       buffer.push({
         face: {
-          stampLastDetected: stampLastDetected,
+          stampLastDetected,
+          stampLastNotDetected,
           faceAngle: !!features.isVisible
             ? (features.faceOrientation / Math.PI) * 180
             : 0,
@@ -143,6 +151,7 @@ function input(
       {
         face: {
           stampLastDetected: 0,
+          stampLastNotDetected: 0,
           faceAngle: 0,
           noseAngle: 0,
           maxNosePosX: 0,
@@ -204,11 +213,13 @@ function transitionReducer(input$) {
 
   const inputReducer$ = input$.map(input => prev => {
     if (input.type === "LOAD_FSM") {
+      const stamp = Date.now();
       return {
         ...prev,
         fsm: {
           stateStamped: {
-            stamp: Date.now(),
+            stamp,
+            stampLastChanged: stamp,
             state: input.value.S0
           },
           transition: input.value.T,
@@ -228,10 +239,16 @@ function transitionReducer(input$) {
       const prevStateStamped = prev.fsm.stateStamped;
       const inputD = input.discrete;
       const inputC = input.continuous;
+      const state = prev.fsm.transition(prevStateStamped, inputD, inputC);
+      const stamp = Date.now();
       const stateStamped = {
         // new state
-        state: prev.fsm.transition(prevStateStamped, inputD, inputC),
-        stamp: Date.now()
+        state,
+        stamp,
+        stampLastChanged:
+          prev.fsm.stateStamped.state !== state
+            ? stamp
+            : prev.fsm.stateStamped.stampLastChanged
       };
       const outputs = wrapOutputs(
         prev.fsm.emission(prevStateStamped, inputD, inputC)

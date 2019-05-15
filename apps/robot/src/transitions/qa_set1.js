@@ -2,19 +2,6 @@
 function transition(stateStamped, inputD, inputC, params) {
   var timeout = params.timeout;
 
-  console.log(
-    inputC.voice.vadState,
-    stateStamped.stampLastChanged < inputC.voice.stampLastChanged,
-    inputC.voice.vadState === 'INACTIVE',
-    stateStamped.stamp - inputC.voice.stampLastChanged > timeout,
-    (
-      stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
-      inputC.voice.vadState === 'INACTIVE' &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout
-    )
-  );
-
-
   // Happy path
   if (stateStamped.state === "S0" && inputD.type === "START") {
     return {
@@ -186,9 +173,9 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S7",
         outputs: {
-          RobotSpeechbubbleAction: undefined,
-          HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: undefined
+          RobotSpeechbubbleAction: "We are all done!",
+          HumanSpeechbubbleAction: "",
+          SpeechSynthesisAction: "We are all done!"
         }
       };
     } else {

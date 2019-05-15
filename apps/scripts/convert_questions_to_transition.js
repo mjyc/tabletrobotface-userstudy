@@ -67,13 +67,19 @@ lines.map(function(line, i) {
       inputC.voice.vadState === 'INACTIVE' &&
       stateStamped.stamp - inputC.voice.stampLastChanged > timeout
     ) {
-      return {
+      return {${i !== lines.length - 1 ? `
         state: "S${i + 3}",
         outputs: {
           RobotSpeechbubbleAction: ${JSON.stringify(lines[i+1])},
           HumanSpeechbubbleAction: ["Next"],
           SpeechSynthesisAction: ${JSON.stringify(lines[i+1])}
-        }
+        }` : `
+        state: "S${i + 3}",
+        outputs: {
+          RobotSpeechbubbleAction: "We are all done!",
+          HumanSpeechbubbleAction: "",
+          SpeechSynthesisAction: "We are all done!"
+        }`}
       };
     } else {
       return {

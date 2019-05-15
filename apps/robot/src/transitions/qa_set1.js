@@ -1,13 +1,7 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
-function transition(state, inputD, inputC, params) {
-  var engagedMinNoseAngle = params.engagedMinNoseAngle;
-  var engagedMaxNoseAngle = params.engagedMaxNoseAngle;
-  var disengagedMinNoseAngle = params.disengagedMinNoseAngle;
-  var disengagedMaxNoseAngle = params.disengagedMaxNoseAngle;
-  var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
-
+function transition(stateStamped, inputD, inputC, params) {
   // Happy path
-  if (state === "S0" && inputD.type === "START") {
+  if (stateStamped.state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
       outputs: {
@@ -16,7 +10,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S1" &&
+    stateStamped.state === "S1" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Hello"
@@ -30,7 +24,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S2" &&
+    stateStamped.state === "S2" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Next"
@@ -44,7 +38,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S3" &&
+    stateStamped.state === "S3" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Next"
@@ -58,7 +52,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S4" &&
+    stateStamped.state === "S4" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Next"
@@ -72,7 +66,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S5" &&
+    stateStamped.state === "S5" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Next"
@@ -87,7 +81,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S6" &&
+    stateStamped.state === "S6" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Next"
@@ -102,19 +96,13 @@ function transition(state, inputD, inputC, params) {
     };
   } else {
     return {
-      state,
+      state: stateStamped.state,
       outputs: null
     };
   }
 }
 
-var defaultParams = {
-  engagedMinNoseAngle: 90,
-  engagedMaxNoseAngle: 90,
-  disengagedMinNoseAngle: 0,
-  disengagedMaxNoseAngle: 180,
-  disengagedTimeoutIntervalMs: 1000
-};
+var defaultParams = {};
 
 module.exports = {
   transition: transition,

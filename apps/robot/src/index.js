@@ -60,10 +60,6 @@ function TabletRobotFaceApp(sources) {
 }
 
 function main(sources) {
-  sources.VAD.addListener({
-    next: v => console.log(v)
-  })
-
   const options = settings.robot.withTabletFaceRobotActionsOptions;
   const sinks = withState(
     withTabletFaceRobotActions(TabletRobotFaceApp, options)

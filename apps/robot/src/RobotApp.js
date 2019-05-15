@@ -16,7 +16,8 @@ function input(
     AudioPlayerAction,
     SpeechSynthesisAction,
     SpeechRecognitionAction,
-    PoseDetection
+    PoseDetection,
+    VAD,
   },
   bufferSize = 20
 ) {
@@ -166,12 +167,27 @@ function input(
       }
     ]
   );
+  const voice$ = VAD.fold((prev, {type, value}) => {
+    return {
+      vadState: type === 'START' ? 'ACTIVE' : type === 'STOP' ? 'INACTIVE' : prev.vadState,
+      vadLevel: type === 'UPDATE' ? value : prev.vadLevel,
+    };
+  }, {
+    vadState: 'INVATIVE',
+    vadLevel: 0,
+  });
+  const inputC$ = xs.combine(buffer$, voice$).map(([buffer, voice]) => {
+    return {
+      ...buffer[buffer.length - 1],
+      voice: voice,
+    };
+  });
   return xs.merge(
     command$,
-    inputD$.compose(sampleCombine(buffer$)).map(([inputD, buffer]) => ({
+    inputD$.compose(sampleCombine(inputC$)).map(([inputD, inputC]) => ({
       type: "FSM_INPUT",
       discrete: inputD,
-      continuous: buffer[buffer.length - 1]
+      continuous: inputC
     })),
     buffer$.map(buffer => ({
       type: "FSM_INPUT",

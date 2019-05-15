@@ -27,7 +27,6 @@ import transitions from "./transitions";
 import FaceFeatureChart, { config } from "./FaceFeatureChart";
 import makeVoiceActivityDetectionDriver from "./makeVoiceActivityDetectionDriver";
 
-
 function TabletRobotFaceApp(sources) {
   // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
 

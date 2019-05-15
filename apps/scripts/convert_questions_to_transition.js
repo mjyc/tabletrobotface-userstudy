@@ -5,7 +5,9 @@ if (process.argv.length < 3) {
 
 var fs = require("fs");
 
-var defaultParams = {};
+var defaultParams = {
+  timeout: 2000
+};
 
 
 var output =
@@ -56,6 +58,28 @@ lines.map(function(line, i) {
         HumanSpeechbubbleAction: ["Next"],
         SpeechSynthesisAction: ${JSON.stringify(line)}
       }
+    };
+  } else if (
+    stateStamped.state === "S${i + 2}" && inputD.type === "Features"
+  ) {
+    if (
+      stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
+      inputC.voice.vadState === 'INACTIVE' &&
+      stateStamped.stamp - inputC.voice.stampLastChanged > timeout
+    ) {
+      return {
+        state: "S${i + 3}",
+        outputs: {
+          RobotSpeechbubbleAction: ${JSON.stringify(lines[i+1])},
+          HumanSpeechbubbleAction: ["Next"],
+          SpeechSynthesisAction: ${JSON.stringify(lines[i+1])}
+        }
+      };
+    } else {
+      return {
+        state: stateStamped.state,
+        outputs: null
+      };
     };`;
 });
 

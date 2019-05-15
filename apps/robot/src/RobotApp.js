@@ -169,18 +169,23 @@ function input(
   );
   const voice$ = VAD.fold(
     (prev, { type, value }) => {
+      const stamp = Date.now();
+      const vadState = type === "START"
+        ? "ACTIVE"
+        : type === "STOP"
+        ? "INACTIVE"
+        : prev.vadState;
       return {
-        vadState:
-          type === "START"
-            ? "ACTIVE"
-            : type === "STOP"
-            ? "INACTIVE"
-            : prev.vadState,
+        stamp,
+        stampLastChanged: vadState === prev.vadState ? prev.stampLastChanged : stamp,
+        vadState,
         vadLevel: type === "UPDATE" ? value : prev.vadLevel
       };
     },
     {
-      vadState: "INVATIVE",
+      stamp: 0,
+      stampLastChanged: 0,
+      vadState: "INACTIVE",
       vadLevel: 0
     }
   );
@@ -197,10 +202,10 @@ function input(
       discrete: inputD,
       continuous: inputC
     })),
-    buffer$.map(buffer => ({
+    inputC$.map(inputC => ({
       type: "FSM_INPUT",
       discrete: { type: "Features" },
-      continuous: buffer[buffer.length - 1]
+      continuous: inputC
     }))
   );
 }

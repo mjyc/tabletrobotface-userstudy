@@ -28,7 +28,8 @@ import FaceFeatureChart, { config } from "./FaceFeatureChart";
 
 
 
-var vad = require('voice-activity-detection');
+// var vad = require('voice-activity-detection');
+
 var audioContext;
 
 var valueContainer = document.createElement('div');

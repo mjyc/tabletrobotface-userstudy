@@ -66,7 +66,7 @@ var traces = tracesJSON.map(function (t) {
   return {
     stamp: t.value.stateStamped.stamp,
     trace: {
-      state: t.value.prevStateStamped.state,
+      stateStamped: t.value.prevStateStamped,
       inputD: t.value.input.discrete,
       inputC: t.value.input.continuous,
     },
@@ -95,65 +95,65 @@ log.debug('z3Input', z3Input);
 var p = spawn('z3', ['-T:5', '-smt2', '-in'], {stdio: ['pipe', 'pipe', 'ignore']});
 p.stdout.on('data', function (data) {
   log.debug('z3output', data.toString());
-  // if (data.toString().startsWith("sat")) {
-  //   return;
-  // }
-  // var modelAst = srtr.sexpParser.parse(data.toString());
-  // var deltas = modelAst.value.slice(1).reduce(function (acc, v) {
-  //   if (
-  //     v.type === 'Expression'
-  //     && v.value[1].type === 'Atom' && v.value[1].value.type === 'Identifier'
-  //     && /^delta_./.test(v.value[1].value.name)
-  //     // && v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal'
-  //   ) {
-  //     if (v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal')
-  //       acc[v.value[1].value.name] = v.value[4].value.value;
-  //     else {
-  //       acc[v.value[1].value.name] = -1 * v.value[4].value[1].value.value;
-  //     }
-  //   }
-  //   return acc;
-  // }, {});
-  // var weights = modelAst.value.slice(1).reduce(function (acc, v) {
-  //   if (
-  //     v.type === 'Expression'
-  //     && v.value[1].type === 'Atom' && v.value[1].value.type === 'Identifier'
-  //     && /w[0-9]+/.test(v.value[1].value.name)
-  //     // && v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal'
-  //   ) {
-  //     if (v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal')
-  //       acc[v.value[1].value.name] = v.value[4].value.value;
-  //     else {
-  //       acc[v.value[1].value.name] = -1 * v.value[4].value[1].value.value;
-  //     }
-  //   }
-  //   return acc;
-  // }, {});
-  // log.debug('deltas', deltas);
-  // log.debug('weights', weights);
+  if (data.toString().startsWith("sat")) {
+    return;
+  }
+  var modelAst = srtr.sexpParser.parse(data.toString());
+  var deltas = modelAst.value.slice(1).reduce(function (acc, v) {
+    if (
+      v.type === 'Expression'
+      && v.value[1].type === 'Atom' && v.value[1].value.type === 'Identifier'
+      && /^delta_./.test(v.value[1].value.name)
+      // && v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal'
+    ) {
+      if (v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal')
+        acc[v.value[1].value.name] = v.value[4].value.value;
+      else {
+        acc[v.value[1].value.name] = -1 * v.value[4].value[1].value.value;
+      }
+    }
+    return acc;
+  }, {});
+  var weights = modelAst.value.slice(1).reduce(function (acc, v) {
+    if (
+      v.type === 'Expression'
+      && v.value[1].type === 'Atom' && v.value[1].value.type === 'Identifier'
+      && /w[0-9]+/.test(v.value[1].value.name)
+      // && v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal'
+    ) {
+      if (v.value[4].type === 'Atom' && v.value[4].value.type === 'Literal')
+        acc[v.value[1].value.name] = v.value[4].value.value;
+      else {
+        acc[v.value[1].value.name] = -1 * v.value[4].value[1].value.value;
+      }
+    }
+    return acc;
+  }, {});
+  log.debug('deltas', deltas);
+  log.debug('weights', weights);
 
-  // var inputParams = paramMap;
-  // var params = Object.keys(inputParams).reduce(function(acc, k) {
-  //   var kd = 'delta_' + k;
-  //   acc[k] = inputParams[k] + (!!deltas[kd] ? deltas[kd] : 0);
-  //   return acc;
-  // }, {});
-  // log.debug('params', params);
+  var inputParams = paramMap;
+  var params = Object.keys(inputParams).reduce(function(acc, k) {
+    var kd = 'delta_' + k;
+    acc[k] = inputParams[k] + (!!deltas[kd] ? deltas[kd] : 0);
+    return acc;
+  }, {});
+  log.debug('params', params);
 
-  // var outputs = {
-  //   inputParams: inputParams,
-  //   deltas: deltas,
-  //   weights: weights,
-  //   params: params,
-  // };
-  // studyJSON.updatedAt = Date.now();
-  // studyJSON.outputs = outputs;
-  // fs.writeFileSync(
-  //   './apps/data/studies/' + studyID + '.json',
-  //   JSON.stringify(studyJSON, null, 2)
-  // );
+  var outputs = {
+    inputParams: inputParams,
+    deltas: deltas,
+    weights: weights,
+    params: params,
+  };
+  studyJSON.updatedAt = Date.now();
+  studyJSON.outputs = outputs;
+  fs.writeFileSync(
+    './apps/data/studies/' + studyID + '.json',
+    JSON.stringify(studyJSON, null, 2)
+  );
 
-  // console.log(JSON.stringify(outputs));
+  console.log(JSON.stringify(outputs, null, 2));
 });
 p.stdin.write(z3Input);
 p.stdin.end();

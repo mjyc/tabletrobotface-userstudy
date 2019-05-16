@@ -6,17 +6,17 @@ if (process.argv.length < 3) {
 var fs = require("fs");
 
 var defaultParams = {
-  engagedMinNoseAngle: 90,
-  engagedMaxNoseAngle: 90,
-  disengagedMinNoseAngle: 0,
-  disengagedMaxNoseAngle: 180,
-  disengagedTimeoutIntervalMs: 1000
+  engagedMinNoseAngle: 0,
+  engagedMaxNoseAngle: 1,
+  disengagedMinNoseAngle: -90,
+  disengagedMaxNoseAngle: 90,
+  disengagedTimeoutIntervalMs: 10000
 };
 
 
 var output =
   `// NOTE: might be called twice if transition and emission fncs are called separately
-function transition(state, inputD, inputC, params) {` +
+function transition(stateStamped, inputD, inputC, params) {` +
   Object.keys(defaultParams).map(function(key) {
     return `
   var ${key} = params.${key};`;
@@ -24,7 +24,7 @@ function transition(state, inputD, inputC, params) {` +
 `
 
   // Happy path
-  if (state === "S0" && inputD.type === "START") {
+  if (stateStamped.state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
       outputs: {
@@ -44,7 +44,7 @@ var lines = fs
 lines.map(function(line, i) {
   output += `
   } else if (
-    state === "S${i + 1}" &&
+    stateStamped.state === "S${i + 1}" &&
     ${
       i === 0
         ? `inputD.type === "HumanSpeechbubbleAction" &&
@@ -66,7 +66,7 @@ lines.map(function(line, i) {
 
 output += `
   } else if (
-    state === "S${lines.length + 1}" &&
+    stateStamped.state === "S${lines.length + 1}" &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
@@ -87,7 +87,7 @@ output += `
 lines.map(function(line, i) {
   output += `
   } else if (
-    state === "S${i + 2}" &&
+    stateStamped.state === "S${i + 2}" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
@@ -110,7 +110,7 @@ output += `
 lines.map(function(line, i) {
   output += `
   } else if (
-    state === "SP${i + 2}" &&
+    stateStamped.state === "SP${i + 2}" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
@@ -132,7 +132,7 @@ output += `
   // Proactive Pause`;
 lines.map(function(line, i) {
   output += `
-  } else if (state === "S${i + 2}" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S${i + 2}" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
@@ -151,7 +151,7 @@ lines.map(function(line, i) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }`;
@@ -164,7 +164,7 @@ output += `
   // Proactive Resume`;
 lines.map(function(line, i) {
   output += `
-  } else if (state === "SP${i + 2}" && inputD.type === "Features") {
+  } else if (stateStamped.state === "SP${i + 2}" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
@@ -180,7 +180,7 @@ lines.map(function(line, i) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }`;
@@ -192,7 +192,7 @@ output += `
 
   } else {
     return {
-      state,
+      state: stateStamped.state,
       outputs: null
     };
   }

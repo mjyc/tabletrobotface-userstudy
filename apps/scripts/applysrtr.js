@@ -3,7 +3,7 @@
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 var log = require('loglevel-debug')('applysrtr');
-var js2smt2 = require('js2smt2');
+var js2smt2 = require('z3js');
 var srtr = require('srtr');
 
 

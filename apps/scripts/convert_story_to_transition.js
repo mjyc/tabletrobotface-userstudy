@@ -6,7 +6,7 @@ if (process.argv.length < 3) {
 var fs = require("fs");
 
 var defaultParams = {
-  engagedMinNoseAngle: 0,
+  engagedMinNoseAngle: -1,
   engagedMaxNoseAngle: 1,
   disengagedMinNoseAngle: -90,
   disengagedMaxNoseAngle: 90,

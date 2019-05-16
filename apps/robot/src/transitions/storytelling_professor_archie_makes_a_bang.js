@@ -920,8 +920,8 @@ function transition(stateStamped, inputD, inputC, params) {
 }
 
 var defaultParams = {
-  engagedMinNoseAngle: 0,
-  engagedMaxNoseAngle: 1,
+  engagedMinNoseAngle: -0.001,
+  engagedMaxNoseAngle: 0.001,
   disengagedMinNoseAngle: -90,
   disengagedMaxNoseAngle: 90,
   disengagedTimeoutIntervalMs: 10000

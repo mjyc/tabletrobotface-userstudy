@@ -3,7 +3,7 @@
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 var log = require('loglevel-debug')('applysrtr');
-var js2smt2 = require('z3js');
+var z3js = require('z3js');
 var srtr = require('srtr');
 
 
@@ -35,7 +35,7 @@ var settings = require('../settings_helper');
 
 
 // Prepare inputs
-var transAstRaw = js2smt2.jsParser.parse(transitionStr);
+var transAstRaw = z3js.jsParser.parse(transitionStr);
 // remove "outputs" field in ReturnStatements
 var transAst = srtr.astMap(transAstRaw, function (leaf) {
   return leaf;

@@ -1,0 +1,67 @@
+{
+  "stateStamped": [
+    {
+      "timestamp": 0,
+      "value": {
+        "state": "S0",
+        "stamp": 1551717970038
+      }
+    },
+    {
+      "timestamp": 4252.672,
+      "value": {
+        "state": "S1",
+        "stamp": 1551717974292
+      }
+    },
+    {
+      "timestamp": 8936.380000000001,
+      "value": {
+        "state": "S0",
+        "stamp": 1551717978963
+      }
+    },
+    {
+      "timestamp": 15020.2,
+      "value": {
+        "state": "S1",
+        "stamp": 1551717985055
+      }
+    },
+    {
+      "timestamp": 16639.435,
+      "value": {
+        "state": "S2",
+        "stamp": 1551717986676
+      }
+    },
+    {
+      "timestamp": 17056.135000000002,
+      "value": {
+        "state": "S1",
+        "stamp": 1551717987086
+      }
+    },
+    {
+      "timestamp": 17256.151,
+      "value": {
+        "state": "S2",
+        "stamp": 1551717987287
+      }
+    },
+    {
+      "timestamp": 18456.247,
+      "value": {
+        "state": "S1",
+        "stamp": 1551717988499
+      }
+    },
+    {
+      "timestamp": 21589.831000000002,
+      "value": {
+        "state": "S0",
+        "stamp": 1551717991625
+      }
+    }
+  ]
+}

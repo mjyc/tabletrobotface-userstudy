@@ -1,0 +1,36 @@
+{
+  "name": "tabletrobotface-userstudy",
+  "version": "0.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "prebuild": "rimraf lib && mkdirp lib",
+    "build": "babel src -d lib",
+    "prebrowserify": "rimraf dist && mkdirp dist",
+    "browserify": "browserify src/index.js --standalone default -t babelify --outfile dist/index.js",
+    "prepublishOnly": "npm run build && npm run browserify"
+  },
+  "author": "Michael Jae-Yoon Chung",
+  "license": "MIT",
+  "repository": "https://github.com/mjyc/tabletrobotface-userstudy.git",
+  "dependencies": {
+    "@cycle/dom": "22.3.0",
+    "@cycle/isolate": "5.0.0",
+    "@cycle/run": "5.2.0",
+    "chart.js": "2.7.3",
+    "chartjs-plugin-streaming": "1.7.1",
+    "d3": "5.7.0",
+    "dagre-d3": "0.6.3",
+    "xstream": "11.10.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^8.0.0",
+    "browserify": "^16.2.2",
+    "mkdirp": "~0.5.0",
+    "rimraf": "^2.6.3"
+  }
+}

@@ -61,7 +61,6 @@ lines.map(function(line, i) {
       }
     };
   } else if (stateStamped.state === "S${i + 2}" && inputD.type === "Features") {
-    console.log((inputC.face.stamp - stateStamped.stampLastChanged), (inputC.face.stamp - inputC.face.stampLastDetected), (inputC.face.stamp - inputC.face.stampLastNotDetected));
     if (
       inputC.face.stamp - stateStamped.stampLastChanged >
         inputC.face.stamp - inputC.face.stampLastNotDetected &&
@@ -89,8 +88,8 @@ lines.map(function(line, i) {
     } else {
       return {
         state: stateStamped.state,
-        outputs: null,
-      }
+        outputs: null
+      };
     }`;
 });
 
@@ -111,8 +110,7 @@ output += `
 
 output += `
 
-
-  // Handle Go back`;
+    // Handle Go back`;
 lines.map(function(_, i) {
   output += `
   } else if (
@@ -135,7 +133,6 @@ lines.map(function(_, i) {
 
 output += `
 
-
   } else {
     return {
       state: stateStamped.state,
@@ -144,13 +141,11 @@ output += `
   }
 }
 
-
 var defaultParams = ${JSON.stringify(defaultParams, null, 2)};
 
 module.exports = {
   transition: transition,
   defaultParams: defaultParams
-};
-`;
+};`;
 
 console.log(output);

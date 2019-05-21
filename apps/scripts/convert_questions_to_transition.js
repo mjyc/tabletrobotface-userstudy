@@ -9,15 +9,16 @@ var defaultParams = {
   timeout: 2000
 };
 
-
 var output =
   `// NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {` +
-  Object.keys(defaultParams).map(function(key) {
-    return `
+  Object.keys(defaultParams)
+    .map(function(key) {
+      return `
   var ${key} = params.${key};`;
-  }).join('') +
-`
+    })
+    .join("") +
+  `
 
   // Happy path
   if (stateStamped.state === "S0" && inputD.type === "START") {
@@ -67,19 +68,23 @@ lines.map(function(line, i) {
       inputC.voice.vadState === 'INACTIVE' &&
       stateStamped.stamp - inputC.voice.stampLastChanged > timeout
     ) {
-      return {${i !== lines.length - 1 ? `
+      return {${
+        i !== lines.length - 1
+          ? `
         state: "S${i + 3}",
         outputs: {
-          RobotSpeechbubbleAction: ${JSON.stringify(lines[i+1])},
+          RobotSpeechbubbleAction: ${JSON.stringify(lines[i + 1])},
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: ${JSON.stringify(lines[i+1])}
-        }` : `
+          SpeechSynthesisAction: ${JSON.stringify(lines[i + 1])}
+        }`
+          : `
         state: "S${i + 3}",
         outputs: {
           RobotSpeechbubbleAction: "We are all done!",
           HumanSpeechbubbleAction: "",
           SpeechSynthesisAction: "We are all done!"
-        }`}
+        }`
+      }
       };
     } else {
       return {
@@ -104,7 +109,6 @@ output += `
         SpeechSynthesisAction: "We are all done!"
       }
     };`;
-
 
 output += `
 

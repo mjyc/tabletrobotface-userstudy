@@ -170,14 +170,16 @@ function input(
   const voice$ = VAD.fold(
     (prev, { type, value }) => {
       const stamp = Date.now();
-      const vadState = type === "START"
-        ? "ACTIVE"
-        : type === "STOP"
-        ? "INACTIVE"
-        : prev.vadState;
+      const vadState =
+        type === "START"
+          ? "ACTIVE"
+          : type === "STOP"
+          ? "INACTIVE"
+          : prev.vadState;
       return {
         stamp,
-        stampLastChanged: vadState === prev.vadState ? prev.stampLastChanged : stamp,
+        stampLastChanged:
+          vadState === prev.vadState ? prev.stampLastChanged : stamp,
         vadState,
         vadLevel: type === "UPDATE" ? value : prev.vadLevel
       };

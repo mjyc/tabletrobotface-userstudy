@@ -6,7 +6,7 @@ if (process.argv.length < 3) {
 var fs = require("fs");
 
 var defaultParams = {
-  nextTimeoutIntervalMs: 500,
+  nextTimeoutIntervalMs: 500
 };
 
 var output =
@@ -54,7 +54,9 @@ lines.map(function(line, i) {
       state: "S${i + 2}",
       outputs: {
         RobotSpeechbubbleAction: ${JSON.stringify(line)},
-        HumanSpeechbubbleAction: ${i === 0 ? `["Next"]` : `["Go back", "Next"]`},
+        HumanSpeechbubbleAction: ${
+          i === 0 ? `["Next"]` : `["Go back", "Next"]`
+        },
         SpeechSynthesisAction: ${JSON.stringify(line)}
       }
     };
@@ -69,9 +71,19 @@ lines.map(function(line, i) {
       return {
         state: "S${i + 3}",
         outputs: {
-          RobotSpeechbubbleAction: ${i !== lines.length - 1 ? JSON.stringify(lines[i+1]) : `"You are done!"`},
-          HumanSpeechbubbleAction: ${i !== lines.length - 1 ? `["Go back", "Next"]` : `""`},
-          SpeechSynthesisAction: ${i !== lines.length - 1 ? JSON.stringify(lines[i+1]) : `"You are done!"`}
+          RobotSpeechbubbleAction: ${
+            i !== lines.length - 1
+              ? JSON.stringify(lines[i + 1])
+              : `"You are done!"`
+          },
+          HumanSpeechbubbleAction: ${
+            i !== lines.length - 1 ? `["Go back", "Next"]` : `""`
+          },
+          SpeechSynthesisAction: ${
+            i !== lines.length - 1
+              ? JSON.stringify(lines[i + 1])
+              : `"You are done!"`
+          }
         }
       };
     } else {
@@ -113,7 +125,9 @@ lines.map(function(_, i) {
       state: "S${i + 2}",
       outputs: {
         RobotSpeechbubbleAction: ${JSON.stringify(lines[i])},
-        HumanSpeechbubbleAction: ${i === 1 ? `["Next"]` : `["Go back", "Next"]`},
+        HumanSpeechbubbleAction: ${
+          i === 1 ? `["Next"]` : `["Go back", "Next"]`
+        },
         SpeechSynthesisAction: ${JSON.stringify(lines[i])}
       }
     };`;

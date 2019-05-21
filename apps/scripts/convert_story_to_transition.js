@@ -18,15 +18,16 @@ var defaultParams = {
   disengagedTimeoutIntervalMs: 1000
 };
 
-
 var output =
   `// NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {` +
-  Object.keys(defaultParams).map(function(key) {
-    return `
+  Object.keys(defaultParams)
+    .map(function(key) {
+      return `
   var ${key} = params.${key};`;
-  }).join('') +
-`
+    })
+    .join("") +
+  `
 
   // Happy path
   if (stateStamped.state === "S0" && inputD.type === "START") {
@@ -84,7 +85,6 @@ output += `
       }
     };`;
 
-
 output += `
 
 
@@ -107,7 +107,6 @@ lines.map(function(line, i) {
     };`;
 });
 
-
 output += `
 
 
@@ -129,7 +128,6 @@ lines.map(function(line, i) {
       }
     };`;
 });
-
 
 output += `
 
@@ -162,14 +160,14 @@ lines.map(function(line, i) {
     }`;
 });
 
-
 output += `
 
 
   // Proactive Resume`;
 lines.map(function(line, i) {
   output += `
-  } else if (stateStamped.state === "SP${i + 2}" && inputD.type === "Features") {
+  } else if (stateStamped.state === "SP${i +
+    2}" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
@@ -190,7 +188,6 @@ lines.map(function(line, i) {
       };
     }`;
 });
-
 
 output += `
 

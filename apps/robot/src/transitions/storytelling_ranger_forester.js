@@ -1,5 +1,5 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
-function transition(state, inputD, inputC, params) {
+function transition(stateStamped, inputD, inputC, params) {
   var engagedMinNoseAngle = params.engagedMinNoseAngle;
   var engagedMaxNoseAngle = params.engagedMaxNoseAngle;
   var disengagedMinNoseAngle = params.disengagedMinNoseAngle;
@@ -7,7 +7,7 @@ function transition(state, inputD, inputC, params) {
   var disengagedTimeoutIntervalMs = params.disengagedTimeoutIntervalMs;
 
   // Happy path
-  if (state === "S0" && inputD.type === "START") {
+  if (stateStamped.state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
       outputs: {
@@ -16,7 +16,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S1" &&
+    stateStamped.state === "S1" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Hello"
@@ -30,7 +30,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S2" &&
+    stateStamped.state === "S2" &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
@@ -43,7 +43,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S3" &&
+    stateStamped.state === "S3" &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
@@ -58,7 +58,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S4" &&
+    stateStamped.state === "S4" &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
@@ -71,7 +71,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S5" &&
+    stateStamped.state === "S5" &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
@@ -86,7 +86,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S6" &&
+    stateStamped.state === "S6" &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
@@ -100,7 +100,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S7" &&
+    stateStamped.state === "S7" &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
@@ -115,7 +115,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S8" &&
+    stateStamped.state === "S8" &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
@@ -130,7 +130,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S9" &&
+    stateStamped.state === "S9" &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
@@ -145,7 +145,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S10" &&
+    stateStamped.state === "S10" &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
@@ -160,7 +160,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S11" &&
+    stateStamped.state === "S11" &&
     inputD.type === "SpeechSynthesisAction" &&
     inputD.status === "SUCCEEDED"
   ) {
@@ -175,7 +175,7 @@ function transition(state, inputD, inputC, params) {
 
     // Handle Pause
   } else if (
-    state === "S2" &&
+    stateStamped.state === "S2" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
@@ -189,7 +189,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S3" &&
+    stateStamped.state === "S3" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
@@ -203,7 +203,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S4" &&
+    stateStamped.state === "S4" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
@@ -217,7 +217,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S5" &&
+    stateStamped.state === "S5" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
@@ -231,7 +231,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S6" &&
+    stateStamped.state === "S6" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
@@ -245,7 +245,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S7" &&
+    stateStamped.state === "S7" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
@@ -259,7 +259,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S8" &&
+    stateStamped.state === "S8" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
@@ -273,7 +273,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S9" &&
+    stateStamped.state === "S9" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
@@ -287,7 +287,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S10" &&
+    stateStamped.state === "S10" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
@@ -301,7 +301,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "S11" &&
+    stateStamped.state === "S11" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Pause"
@@ -317,7 +317,7 @@ function transition(state, inputD, inputC, params) {
 
     // Handle Resume
   } else if (
-    state === "SP2" &&
+    stateStamped.state === "SP2" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
@@ -331,7 +331,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "SP3" &&
+    stateStamped.state === "SP3" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
@@ -345,7 +345,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "SP4" &&
+    stateStamped.state === "SP4" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
@@ -361,7 +361,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "SP5" &&
+    stateStamped.state === "SP5" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
@@ -375,7 +375,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "SP6" &&
+    stateStamped.state === "SP6" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
@@ -391,7 +391,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "SP7" &&
+    stateStamped.state === "SP7" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
@@ -406,7 +406,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "SP8" &&
+    stateStamped.state === "SP8" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
@@ -422,7 +422,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "SP9" &&
+    stateStamped.state === "SP9" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
@@ -438,7 +438,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "SP10" &&
+    stateStamped.state === "SP10" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
@@ -454,7 +454,7 @@ function transition(state, inputD, inputC, params) {
       }
     };
   } else if (
-    state === "SP11" &&
+    stateStamped.state === "SP11" &&
     inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
     inputD.result === "Resume"
@@ -471,7 +471,7 @@ function transition(state, inputD, inputC, params) {
     };
 
     // Proactive Pause
-  } else if (state === "S2" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S2" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
@@ -490,11 +490,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "S3" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S3" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
@@ -513,11 +513,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "S4" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S4" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
@@ -536,11 +536,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "S5" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S5" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
@@ -559,11 +559,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "S6" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S6" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
@@ -582,11 +582,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "S7" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S7" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
@@ -605,11 +605,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "S8" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S8" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
@@ -628,11 +628,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "S9" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S9" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
@@ -651,11 +651,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "S10" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S10" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
@@ -674,11 +674,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "S11" && inputD.type === "Features") {
+  } else if (stateStamped.state === "S11" && inputD.type === "Features") {
     if (
       (inputC.face.isVisible &&
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
@@ -697,13 +697,13 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
 
     // Proactive Resume
-  } else if (state === "SP2" && inputD.type === "Features") {
+  } else if (stateStamped.state === "SP2" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
@@ -719,11 +719,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "SP3" && inputD.type === "Features") {
+  } else if (stateStamped.state === "SP3" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
@@ -739,11 +739,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "SP4" && inputD.type === "Features") {
+  } else if (stateStamped.state === "SP4" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
@@ -761,11 +761,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "SP5" && inputD.type === "Features") {
+  } else if (stateStamped.state === "SP5" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
@@ -781,11 +781,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "SP6" && inputD.type === "Features") {
+  } else if (stateStamped.state === "SP6" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
@@ -803,11 +803,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "SP7" && inputD.type === "Features") {
+  } else if (stateStamped.state === "SP7" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
@@ -825,11 +825,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "SP8" && inputD.type === "Features") {
+  } else if (stateStamped.state === "SP8" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
@@ -847,11 +847,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "SP9" && inputD.type === "Features") {
+  } else if (stateStamped.state === "SP9" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
@@ -869,11 +869,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "SP10" && inputD.type === "Features") {
+  } else if (stateStamped.state === "SP10" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
@@ -891,11 +891,11 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
-  } else if (state === "SP11" && inputD.type === "Features") {
+  } else if (stateStamped.state === "SP11" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
@@ -913,25 +913,24 @@ function transition(state, inputD, inputC, params) {
       };
     } else {
       return {
-        state: state,
+        state: stateStamped.state,
         outputs: null
       };
     }
   } else {
     return {
-      state,
+      state: stateStamped.state,
       outputs: null
     };
   }
 }
 
-// Params for reactive behavior
 var defaultParams = {
-  engagedMinNoseAngle: 90,
-  engagedMaxNoseAngle: 90,
-  disengagedMinNoseAngle: 0,
-  disengagedMaxNoseAngle: 180,
-  disengagedTimeoutIntervalMs: 1000
+  engagedMinNoseAngle: -1,
+  engagedMaxNoseAngle: 1,
+  disengagedMinNoseAngle: -90,
+  disengagedMaxNoseAngle: 90,
+  disengagedTimeoutIntervalMs: 10000
 };
 
 module.exports = {

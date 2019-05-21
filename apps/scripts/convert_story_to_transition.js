@@ -6,11 +6,16 @@ if (process.argv.length < 3) {
 var fs = require("fs");
 
 var defaultParams = {
-  engagedMinNoseAngle: -1,
-  engagedMaxNoseAngle: 1,
-  disengagedMinNoseAngle: -90,
-  disengagedMaxNoseAngle: 90,
-  disengagedTimeoutIntervalMs: 10000
+  // engagedMinNoseAngle: -0.001,
+  // engagedMaxNoseAngle: 0.001,
+  // disengagedMinNoseAngle: -90,
+  // disengagedMaxNoseAngle: 90,
+  // disengagedTimeoutIntervalMs: 10000
+  engagedMinNoseAngle: -10,
+  engagedMaxNoseAngle: 10,
+  disengagedMinNoseAngle: -20,
+  disengagedMaxNoseAngle: 20,
+  disengagedTimeoutIntervalMs: 1000
 };
 
 

@@ -45,8 +45,7 @@ function transition(stateStamped, inputD, inputC, params) {` +
 
 output += `
 
-
-  // Rotete right and left`;
+    // Rotete right and left`;
 var idx = 2;
 for (var i = 0; i < numRepeats; i++) {
   output += `${
@@ -111,8 +110,7 @@ for (var i = 0; i < numRepeats; i++) {
         HumanSpeechbubbleAction: ["Next"],
         SpeechSynthesisAction: "and now slowly rotate to your left"
       }
-    };
-  ${
+    };${
     i !== numRepeats - 1
       ? `
   } else if (stateStamped.state === "S${idx +
@@ -156,8 +154,7 @@ for (var i = 0; i < numRepeats; i++) {
 
 output += `
 
-
-  // Touch right and left shoulders`;
+    // Touch right and left shoulders`;
 for (var i = 0; i < numRepeats; i++) {
   output += `
   } else if (
@@ -248,8 +245,7 @@ for (var i = 0; i < numRepeats; i++) {
 
 output += `
 
-
-  // Look down and up`;
+    // Look down and up`;
 for (var i = 0; i < numRepeats; i++) {
   output += `
   } else if (
@@ -356,7 +352,6 @@ output += `
 
 output += `
 
-
   } else {
     return {
       state: stateStamped.state,
@@ -365,13 +360,11 @@ output += `
   }
 }
 
-
 var defaultParams = ${JSON.stringify(defaultParams, null, 2)};
 
 module.exports = {
   transition: transition,
   defaultParams: defaultParams
-};
-`;
+};`;
 
 console.log(output);

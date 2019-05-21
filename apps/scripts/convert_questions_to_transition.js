@@ -60,12 +60,10 @@ lines.map(function(line, i) {
         SpeechSynthesisAction: ${JSON.stringify(line)}
       }
     };
-  } else if (
-    stateStamped.state === "S${i + 2}" && inputD.type === "Features"
-  ) {
+  } else if (stateStamped.state === "S${i + 2}" && inputD.type === "Features") {
     if (
       stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
-      inputC.voice.vadState === 'INACTIVE' &&
+      inputC.voice.vadState === "INACTIVE" &&
       stateStamped.stamp - inputC.voice.stampLastChanged > timeout
     ) {
       return {${
@@ -91,7 +89,7 @@ lines.map(function(line, i) {
         state: stateStamped.state,
         outputs: null
       };
-    };`;
+    }`;
 });
 
 output += `
@@ -111,8 +109,6 @@ output += `
     };`;
 
 output += `
-
-
   } else {
     return {
       state: stateStamped.state,
@@ -121,13 +117,11 @@ output += `
   }
 }
 
-
 var defaultParams = ${JSON.stringify(defaultParams, null, 2)};
 
 module.exports = {
   transition: transition,
   defaultParams: defaultParams
-};
-`;
+};`;
 
 console.log(output);

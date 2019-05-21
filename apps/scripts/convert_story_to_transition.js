@@ -87,8 +87,7 @@ output += `
 
 output += `
 
-
-  // Handle Pause`;
+    // Handle Pause`;
 lines.map(function(line, i) {
   output += `
   } else if (
@@ -109,8 +108,7 @@ lines.map(function(line, i) {
 
 output += `
 
-
-  // Handle Resume`;
+    // Handle Resume`;
 lines.map(function(line, i) {
   output += `
   } else if (
@@ -131,8 +129,7 @@ lines.map(function(line, i) {
 
 output += `
 
-
-  // Proactive Pause`;
+    // Proactive Pause`;
 lines.map(function(line, i) {
   output += `
   } else if (stateStamped.state === "S${i + 2}" && inputD.type === "Features") {
@@ -162,8 +159,7 @@ lines.map(function(line, i) {
 
 output += `
 
-
-  // Proactive Resume`;
+    // Proactive Resume`;
 lines.map(function(line, i) {
   output += `
   } else if (stateStamped.state === "SP${i +
@@ -191,7 +187,6 @@ lines.map(function(line, i) {
 
 output += `
 
-
   } else {
     return {
       state: stateStamped.state,
@@ -200,13 +195,11 @@ output += `
   }
 }
 
-
 var defaultParams = ${JSON.stringify(defaultParams, null, 2)};
 
 module.exports = {
   transition: transition,
   defaultParams: defaultParams
-};
-`;
+};`;
 
 console.log(output);

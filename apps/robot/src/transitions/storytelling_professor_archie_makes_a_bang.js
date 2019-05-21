@@ -165,6 +165,19 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S12",
       outputs: {
+        RobotSpeechbubbleAction: "",
+        HumanSpeechbubbleAction: ["Pause"],
+        SpeechSynthesisAction: ""
+      }
+    };
+  } else if (
+    stateStamped.state === "S12" &&
+    inputD.type === "SpeechSynthesisAction" &&
+    inputD.status === "SUCCEEDED"
+  ) {
+    return {
+      state: "S13",
+      outputs: {
         RobotSpeechbubbleAction: "The END",
         HumanSpeechbubbleAction: "",
         SpeechSynthesisAction: "The END"
@@ -306,6 +319,20 @@ function transition(stateStamped, inputD, inputC, params) {
   ) {
     return {
       state: "SP11",
+      outputs: {
+        RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+        HumanSpeechbubbleAction: ["Resume"],
+        SpeechSynthesisAction: " "
+      }
+    };
+  } else if (
+    stateStamped.state === "S12" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Pause"
+  ) {
+    return {
+      state: "SP12",
       outputs: {
         RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
         HumanSpeechbubbleAction: ["Resume"],
@@ -463,6 +490,20 @@ function transition(stateStamped, inputD, inputC, params) {
         RobotSpeechbubbleAction: "What would you make if you were Archie?",
         HumanSpeechbubbleAction: ["Pause"],
         SpeechSynthesisAction: "What would you make if you were Archie?"
+      }
+    };
+  } else if (
+    stateStamped.state === "SP12" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Resume"
+  ) {
+    return {
+      state: "S12",
+      outputs: {
+        RobotSpeechbubbleAction: "",
+        HumanSpeechbubbleAction: ["Pause"],
+        SpeechSynthesisAction: ""
       }
     };
 
@@ -697,6 +738,29 @@ function transition(stateStamped, inputD, inputC, params) {
         outputs: null
       };
     }
+  } else if (stateStamped.state === "S12" && inputD.type === "Features") {
+    if (
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
+          inputC.face.noseAngle < disengagedMinNoseAngle)) ||
+      (!inputC.face.isVisible &&
+        inputC.face.stamp - inputC.face.stampLastDetected >
+          disengagedTimeoutIntervalMs)
+    ) {
+      return {
+        state: "SP12",
+        outputs: {
+          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+          HumanSpeechbubbleAction: ["Resume"],
+          SpeechSynthesisAction: " "
+        }
+      };
+    } else {
+      return {
+        state: stateStamped.state,
+        outputs: null
+      };
+    }
 
     // Proactive Resume
   } else if (stateStamped.state === "SP2" && inputD.type === "Features") {
@@ -911,6 +975,26 @@ function transition(stateStamped, inputD, inputC, params) {
         outputs: null
       };
     }
+  } else if (stateStamped.state === "SP12" && inputD.type === "Features") {
+    if (
+      inputC.face.isVisible &&
+      (inputC.face.noseAngle < engagedMaxNoseAngle &&
+        inputC.face.noseAngle > engagedMinNoseAngle)
+    ) {
+      return {
+        state: "S12",
+        outputs: {
+          RobotSpeechbubbleAction: "",
+          HumanSpeechbubbleAction: ["Pause"],
+          SpeechSynthesisAction: ""
+        }
+      };
+    } else {
+      return {
+        state: stateStamped.state,
+        outputs: null
+      };
+    }
   } else {
     return {
       state: stateStamped.state,
@@ -920,11 +1004,11 @@ function transition(stateStamped, inputD, inputC, params) {
 }
 
 var defaultParams = {
-  engagedMinNoseAngle: -0.001,
-  engagedMaxNoseAngle: 0.001,
-  disengagedMinNoseAngle: -90,
-  disengagedMaxNoseAngle: 90,
-  disengagedTimeoutIntervalMs: 10000
+  engagedMinNoseAngle: -10,
+  engagedMaxNoseAngle: 10,
+  disengagedMinNoseAngle: -20,
+  disengagedMaxNoseAngle: 20,
+  disengagedTimeoutIntervalMs: 1000
 };
 
 module.exports = {

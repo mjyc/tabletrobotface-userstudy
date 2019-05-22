@@ -64,7 +64,7 @@ function main(sources) {
     withTabletFaceRobotActions(TabletRobotFaceApp, options)
   )(sources);
   // to save the first event; it gets fired before recording starts
-  sinks.DOM = sinks.DOM.remember();
+  sinks.DOM = sinks.DOM.remember().filter(v => !!v);
 
   if (!settings.robot.recording.enabled) {
     return {
@@ -93,7 +93,23 @@ function main(sources) {
 
   const vdom$ = xs
     .combine(sinks.DOM, dataDownloader.DOM, faceFeatureChart.DOM)
-    .map(vdoms => div(vdoms));
+    .map(([face, download, chart]) => {
+      download.data.style = {margin: "5px"};
+      return div([
+        {
+          ...face,
+          children: [
+            face.children[0],
+            face.children[1],
+            download,
+            ...face.children.slice(2)
+          ]
+        },
+        chart
+      ])
+    });
+
+  // .map(vdoms => div([{...vdoms[0], children: [...vdoms[0].children]}, vdoms.slice(1)]));
 
   const videoRecorder$ = xs.merge(
     sources.VideoRecorder.filter(v => v.type === "READY").mapTo("START"),

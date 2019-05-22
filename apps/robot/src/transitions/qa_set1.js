@@ -1,6 +1,8 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {
   var timeout = params.timeout;
+  var engagedMinNoseAngle = params.engagedMinNoseAngle;
+  var engagedMaxNoseAngle = params.engagedMaxNoseAngle;
 
   // Happy path
   if (stateStamped.state === "S0" && inputD.type === "START") {
@@ -29,7 +31,10 @@ function transition(stateStamped, inputD, inputC, params) {
     if (
       stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout
+      stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle < engagedMaxNoseAngle &&
+          inputC.face.noseAngle > engagedMinNoseAngle))
     ) {
       return {
         state: "S3",
@@ -63,7 +68,10 @@ function transition(stateStamped, inputD, inputC, params) {
     if (
       stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout
+      stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle < engagedMaxNoseAngle &&
+          inputC.face.noseAngle > engagedMinNoseAngle))
     ) {
       return {
         state: "S4",
@@ -97,7 +105,10 @@ function transition(stateStamped, inputD, inputC, params) {
     if (
       stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout
+      stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle < engagedMaxNoseAngle &&
+          inputC.face.noseAngle > engagedMinNoseAngle))
     ) {
       return {
         state: "S5",
@@ -131,7 +142,10 @@ function transition(stateStamped, inputD, inputC, params) {
     if (
       stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout
+      stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle < engagedMaxNoseAngle &&
+          inputC.face.noseAngle > engagedMinNoseAngle))
     ) {
       return {
         state: "S6",
@@ -168,7 +182,10 @@ function transition(stateStamped, inputD, inputC, params) {
     if (
       stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout
+      stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle < engagedMaxNoseAngle &&
+          inputC.face.noseAngle > engagedMinNoseAngle))
     ) {
       return {
         state: "S7",
@@ -207,7 +224,9 @@ function transition(stateStamped, inputD, inputC, params) {
 }
 
 var defaultParams = {
-  timeout: 2000
+  timeout: 500,
+  engagedMinNoseAngle: -10,
+  engagedMaxNoseAngle: 10
 };
 
 module.exports = {

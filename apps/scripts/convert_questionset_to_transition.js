@@ -6,7 +6,9 @@ if (process.argv.length < 3) {
 var fs = require("fs");
 
 var defaultParams = {
-  timeout: 2000
+  timeout: 500,
+  engagedMinNoseAngle: -10,
+  engagedMaxNoseAngle: 10,
 };
 
 var output =
@@ -64,7 +66,10 @@ lines.map(function(line, i) {
     if (
       stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout
+      stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
+      (inputC.face.isVisible &&
+        (inputC.face.noseAngle < engagedMaxNoseAngle &&
+          inputC.face.noseAngle > engagedMinNoseAngle))
     ) {
       return {${
         i !== lines.length - 1

@@ -6,7 +6,7 @@ if (process.argv.length < 3) {
 var fs = require("fs");
 
 var defaultParams = {
-  nextTimeoutIntervalMs: 500
+  nextTimeoutIntervalMs: 1000
 };
 
 var output =

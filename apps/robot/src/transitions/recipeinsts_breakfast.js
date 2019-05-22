@@ -182,7 +182,7 @@ function transition(stateStamped, inputD, inputC, params) {
 }
 
 var defaultParams = {
-  nextTimeoutIntervalMs: 500
+  nextTimeoutIntervalMs: 1000
 };
 
 module.exports = {

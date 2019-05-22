@@ -1,9 +1,14 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {
+  var initialRotateRightMaxMaxNosePose =
+    params.initialRotateRightMaxMaxNosePose;
   var rotateRightMaxMaxNosePose = params.rotateRightMaxMaxNosePose;
   var rotateLeftMinMaxNosePose = params.rotateLeftMinMaxNosePose;
+  var initialTouchRightMaxMaxFaceAngle =
+    params.initialTouchRightMaxMaxFaceAngle;
   var touchRightMaxMaxFaceAngle = params.touchRightMaxMaxFaceAngle;
   var touchLeftMinMaxFaceAngle = params.touchLeftMinMaxFaceAngle;
+  var initialTuckChinMaxMaxNosePoseY = params.initialTuckChinMaxMaxNosePoseY;
   var tuckChinMaxMaxNosePoseY = params.tuckChinMaxMaxNosePoseY;
   var elevateChinMinMaxNosePoseY = params.elevateChinMinMaxNosePoseY;
 
@@ -47,7 +52,7 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S3" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosXQuarter > rotateRightMaxMaxNosePose) {
+    if (inputC.face.maxNosePosXQuarter > initialRotateRightMaxMaxNosePose) {
       return {
         state: "S4",
         outputs: {
@@ -154,8 +159,6 @@ function transition(stateStamped, inputD, inputC, params) {
         outputs: null
       };
     }
-
-    // Touch right and left shoulders
   } else if (
     stateStamped.state === "S6" &&
     inputD.type === "HumanSpeechbubbleAction" &&
@@ -173,7 +176,7 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S7" && inputD.type === "Features") {
-    if (inputC.face.maxFaceAngleQuarter > touchRightMaxMaxFaceAngle) {
+    if (inputC.face.maxFaceAngleQuarter > initialTouchRightMaxMaxFaceAngle) {
       return {
         state: "S8",
         outputs: {
@@ -290,8 +293,6 @@ function transition(stateStamped, inputD, inputC, params) {
         outputs: null
       };
     }
-
-    // Look down and up
   } else if (
     stateStamped.state === "S10" &&
     inputD.type === "HumanSpeechbubbleAction" &&
@@ -307,7 +308,7 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S11" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosYQuarter > tuckChinMaxMaxNosePoseY) {
+    if (inputC.face.maxNosePosYQuarter > initialTuckChinMaxMaxNosePoseY) {
       return {
         state: "S12",
         outputs: {
@@ -435,12 +436,15 @@ function transition(stateStamped, inputD, inputC, params) {
 }
 
 var defaultParams = {
-  rotateRightMaxMaxNosePose: 100,
-  rotateLeftMinMaxNosePose: -100,
-  touchRightMaxMaxFaceAngle: 25,
-  touchLeftMinMaxFaceAngle: -25,
-  tuckChinMaxMaxNosePoseY: 70,
-  elevateChinMinMaxNosePoseY: -70
+  initialRotateRightMaxMaxNosePose: 80,
+  rotateRightMaxMaxNosePose: 160,
+  rotateLeftMinMaxNosePose: -160,
+  initialTouchRightMaxMaxFaceAngle: 30,
+  touchRightMaxMaxFaceAngle: 60,
+  touchLeftMinMaxFaceAngle: -60,
+  initialTuckChinMaxMaxNosePoseY: 50,
+  tuckChinMaxMaxNosePoseY: 100,
+  elevateChinMinMaxNosePoseY: -100
 };
 
 module.exports = {

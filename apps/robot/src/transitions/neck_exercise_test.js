@@ -24,9 +24,11 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S2",
       outputs: {
-        RobotSpeechbubbleAction: "Let's exercise your neck! Let's start from looking forward",
+        RobotSpeechbubbleAction:
+          "Let's exercise your neck! Let's start from looking forward",
         HumanSpeechbubbleAction: "",
-        SpeechSynthesisAction: "Let's exercise your neck! Let's start from looking forward"
+        SpeechSynthesisAction:
+          "Let's exercise your neck! Let's start from looking forward"
       }
     };
 
@@ -139,9 +141,11 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S7",
         outputs: {
-          RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
+          RobotSpeechbubbleAction:
+            "and now take your ear and act like trying to touch right shoulder",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
+          SpeechSynthesisAction:
+            "and now take your ear and act like trying to touch right shoulder"
         }
       };
     } else {
@@ -161,9 +165,11 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S7",
       outputs: {
-        RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
+        RobotSpeechbubbleAction:
+          "and now take your ear and act like trying to touch right shoulder",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
+        SpeechSynthesisAction:
+          "and now take your ear and act like trying to touch right shoulder"
       }
     };
   } else if (stateStamped.state === "S7" && inputD.type === "Features") {
@@ -171,9 +177,11 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S8",
         outputs: {
-          RobotSpeechbubbleAction: "and now take your ear and act like trying to touch left shoulder",
+          RobotSpeechbubbleAction:
+            "and now take your ear and act like trying to touch left shoulder",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
+          SpeechSynthesisAction:
+            "and now take your ear and act like trying to touch left shoulder"
         }
       };
     } else {
@@ -191,9 +199,11 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S8",
       outputs: {
-        RobotSpeechbubbleAction: "and now take your ear and act like trying to touch left shoulder",
+        RobotSpeechbubbleAction:
+          "and now take your ear and act like trying to touch left shoulder",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
+        SpeechSynthesisAction:
+          "and now take your ear and act like trying to touch left shoulder"
       }
     };
   } else if (stateStamped.state === "S8" && inputD.type === "Features") {
@@ -201,9 +211,11 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S9",
         outputs: {
-          RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
+          RobotSpeechbubbleAction:
+            "and now take your ear and act like trying to touch right shoulder",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
+          SpeechSynthesisAction:
+            "and now take your ear and act like trying to touch right shoulder"
         }
       };
     } else {
@@ -221,9 +233,11 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S9",
       outputs: {
-        RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
+        RobotSpeechbubbleAction:
+          "and now take your ear and act like trying to touch right shoulder",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
+        SpeechSynthesisAction:
+          "and now take your ear and act like trying to touch right shoulder"
       }
     };
   } else if (stateStamped.state === "S9" && inputD.type === "Features") {
@@ -231,9 +245,11 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S10",
         outputs: {
-          RobotSpeechbubbleAction: "and now take your ear and act like trying to touch left shoulder",
+          RobotSpeechbubbleAction:
+            "and now take your ear and act like trying to touch left shoulder",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
+          SpeechSynthesisAction:
+            "and now take your ear and act like trying to touch left shoulder"
         }
       };
     } else {
@@ -251,9 +267,11 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S10",
       outputs: {
-        RobotSpeechbubbleAction: "and now take your ear and act like trying to touch left shoulder",
+        RobotSpeechbubbleAction:
+          "and now take your ear and act like trying to touch left shoulder",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
+        SpeechSynthesisAction:
+          "and now take your ear and act like trying to touch left shoulder"
       }
     };
   } else if (stateStamped.state === "S10" && inputD.type === "Features") {
@@ -408,7 +426,6 @@ function transition(stateStamped, inputD, inputC, params) {
         SpeechSynthesisAction: "Great job!"
       }
     };
-
   } else {
     return {
       state: stateStamped.state,
@@ -418,12 +435,12 @@ function transition(stateStamped, inputD, inputC, params) {
 }
 
 var defaultParams = {
-  "rotateRightMaxMaxNosePose": 100,
-  "rotateLeftMinMaxNosePose": -100,
-  "touchRightMaxMaxFaceAngle": 25,
-  "touchLeftMinMaxFaceAngle": -25,
-  "tuckChinMaxMaxNosePoseY": 70,
-  "elevateChinMinMaxNosePoseY": -70
+  rotateRightMaxMaxNosePose: 100,
+  rotateLeftMinMaxNosePose: -100,
+  touchRightMaxMaxFaceAngle: 25,
+  touchLeftMinMaxFaceAngle: -25,
+  tuckChinMaxMaxNosePoseY: 70,
+  elevateChinMinMaxNosePoseY: -70
 };
 
 module.exports = {

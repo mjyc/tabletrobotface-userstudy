@@ -3,12 +3,15 @@ var rotateOnly =
   process.argv[3] === "undefined" || process.argv[3] == "true" ? true : false;
 
 var defaultParams = {
-  rotateRightMaxMaxNosePose: 100,
-  rotateLeftMinMaxNosePose: -100,
-  touchRightMaxMaxFaceAngle: 25,
-  touchLeftMinMaxFaceAngle: -25,
-  tuckChinMaxMaxNosePoseY: 70,
-  elevateChinMinMaxNosePoseY: -70
+  initialRotateRightMaxMaxNosePose: 80,
+  rotateRightMaxMaxNosePose: 160,
+  rotateLeftMinMaxNosePose: -160,
+  initialTouchRightMaxMaxFaceAngle: 30,
+  touchRightMaxMaxFaceAngle: 60,
+  touchLeftMinMaxFaceAngle: -60,
+  initialTuckChinMaxMaxNosePoseY: 50,
+  tuckChinMaxMaxNosePoseY: 100,
+  elevateChinMinMaxNosePoseY: -100
 };
 
 var output =
@@ -84,7 +87,7 @@ for (var i = 0; i < numRepeats; i++) {
   }
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosXQuarter > rotateRightMaxMaxNosePose) {
+    if (inputC.face.maxNosePosXQuarter > ${i === 0 ? `initialRotateRightMaxMaxNosePose` : `rotateRightMaxMaxNosePose`}) {
       return {
         state: "S${idx + 2}",
         outputs: {
@@ -176,7 +179,7 @@ for (var i = 0; i < numRepeats; i++) {
     };
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.maxFaceAngleQuarter > touchRightMaxMaxFaceAngle) {
+    if (inputC.face.maxFaceAngleQuarter > ${i === 0 ? `initialTouchRightMaxMaxFaceAngle` : `touchRightMaxMaxFaceAngle`}) {
       return {
         state: "S${idx + 2}",
         outputs: {
@@ -268,7 +271,7 @@ for (var i = 0; i < numRepeats; i++) {
     };
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosYQuarter > tuckChinMaxMaxNosePoseY) {
+    if (inputC.face.maxNosePosYQuarter > ${i === 0 ? `initialTuckChinMaxMaxNosePoseY` : `tuckChinMaxMaxNosePoseY`}) {
       return {
         state: "S${idx + 2}",
         outputs: {

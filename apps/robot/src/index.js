@@ -38,6 +38,7 @@ import settings from "../../settings_helper";
 import transitions from "./transitions";
 import FeatureChart, { config as featureChartConfig } from "./FeatureChart";
 import StateChart, { config as stateChartConfig } from "./StateChart";
+import "chartjs-plugin-streaming"; // HACK! codesandbox need this
 
 const postDetectionFPS = 10;
 

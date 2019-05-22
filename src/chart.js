@@ -1,5 +1,5 @@
 import Chart from "chart.js";
-import _ from "chartjs-plugin-streaming";
+import "chartjs-plugin-streaming";
 import fromEvent from "xstream/extra/fromEvent";
 
 export function makeStreamingChartDriver(config) {

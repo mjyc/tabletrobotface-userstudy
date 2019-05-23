@@ -279,8 +279,10 @@ function transitionReducer(input$) {
         inputC.face.maxFaceAngleQuarter
       );
       console.log(
-        'inputC.voice.vadLevel', inputC.voice.vadLevel,
-        'inputC.voice.vadState', inputC.voice.vadState
+        "inputC.voice.vadLevel",
+        inputC.voice.vadLevel,
+        "inputC.voice.vadState",
+        inputC.voice.vadState
       );
       const state = prev.fsm.transition(prevStateStamped, inputD, inputC);
       const stamp = Date.now();

@@ -87,7 +87,9 @@ for (var i = 0; i < numRepeats; i++) {
   }
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosXQuarter > ${i === 0 ? `initialRotateRightMaxMaxNosePose` : `rotateRightMaxMaxNosePose`}) {
+    if (inputC.face.maxNosePosXQuarter > ${
+      i === 0 ? `initialRotateRightMaxMaxNosePose` : `rotateRightMaxMaxNosePose`
+    }) {
       return {
         state: "S${idx + 2}",
         outputs: {
@@ -179,7 +181,9 @@ for (var i = 0; i < numRepeats; i++) {
     };
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.maxFaceAngleQuarter > ${i === 0 ? `initialTouchRightMaxMaxFaceAngle` : `touchRightMaxMaxFaceAngle`}) {
+    if (inputC.face.maxFaceAngleQuarter > ${
+      i === 0 ? `initialTouchRightMaxMaxFaceAngle` : `touchRightMaxMaxFaceAngle`
+    }) {
       return {
         state: "S${idx + 2}",
         outputs: {
@@ -271,7 +275,9 @@ for (var i = 0; i < numRepeats; i++) {
     };
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosYQuarter > ${i === 0 ? `initialTuckChinMaxMaxNosePoseY` : `tuckChinMaxMaxNosePoseY`}) {
+    if (inputC.face.maxNosePosYQuarter > ${
+      i === 0 ? `initialTuckChinMaxMaxNosePoseY` : `tuckChinMaxMaxNosePoseY`
+    }) {
       return {
         state: "S${idx + 2}",
         outputs: {

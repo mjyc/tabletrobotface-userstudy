@@ -8,7 +8,7 @@ var fs = require("fs");
 var defaultParams = {
   timeout: 500,
   engagedMinNoseAngle: -10,
-  engagedMaxNoseAngle: 10,
+  engagedMaxNoseAngle: 10
 };
 
 var output =

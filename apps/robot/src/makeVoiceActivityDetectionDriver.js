@@ -23,6 +23,22 @@ export default function makeVoiceActivityDetectionDriver() {
             window.AudioContext =
               window.AudioContext || window.webkitAudioContext;
             audioContext = new AudioContext();
+            // https://developers.google.com/web/updates/2017/09/autoplay-policy-changes#audiovideo_elements
+            if (audioContext.state === "suspended") {
+              console.warn(
+                `audioContext.state is "suspended"; will attempt to resume every 1s`
+              );
+              const handle = setInterval(() => {
+                if (!!audioContext && audioContext.state === "suspended") {
+                  audioContext.resume();
+                } else if (audioContext.state === "running") {
+                  console.debug(
+                    `audioContext.state is "running"; stopping resuming attempts`
+                  );
+                  clearInterval(handle);
+                }
+              }, 1000);
+            }
 
             navigator.getUserMedia =
               navigator.getUserMedia ||
@@ -35,6 +51,7 @@ export default function makeVoiceActivityDetectionDriver() {
               handleMicConnectError
             );
           } catch (e) {
+            console.error("hel!");
             handleUserMediaError();
           }
         }

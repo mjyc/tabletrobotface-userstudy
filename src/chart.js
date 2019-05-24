@@ -1,6 +1,11 @@
+import xs from "xstream";
 import Chart from "chart.js";
 import "chartjs-plugin-streaming";
 import fromEvent from "xstream/extra/fromEvent";
+
+export function mockStreamingChartSource() {
+  return xs.never();
+}
 
 export function makeStreamingChartDriver(config) {
   let instance = null; // lazy initialize chart on first stream event

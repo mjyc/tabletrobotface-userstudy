@@ -3,6 +3,14 @@ import delay from "xstream/extra/delay";
 import sampleCombine from "xstream/extra/sampleCombine";
 import { button } from "@cycle/dom";
 
+export function mockDownloadDataSource() {
+  return {
+    DOM: xs.never(),
+    DownloadData: xs.never(),
+    VideoRecorder: xs.never()
+  };
+}
+
 export function makeDownloadDataDriver({
   filenamePrefix = "Data",
   recordVideo = true

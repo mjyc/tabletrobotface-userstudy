@@ -1,3 +1,3 @@
-export { makeMediaRecorderDriver } from "./mediaRecorder";
-export { makeStreamingChartDriver } from "./chart";
-export { makeDownloadDataDriver, DataDownloader } from "./recorder_helpers";
+export { mockMediaRecorderSource, makeMediaRecorderDriver } from "./mediaRecorder";
+export { mockStreamingChartSource, makeStreamingChartDriver } from "./chart";
+export { mockDownloadDataSource, makeDownloadDataDriver , DataDownloader } from "./recorder_helpers";

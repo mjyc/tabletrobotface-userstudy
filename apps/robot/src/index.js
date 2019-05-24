@@ -17,8 +17,11 @@ import {
   withTabletFaceRobotActions
 } from "@cycle-robot-drivers/run";
 import {
+  mockMediaRecorderSource,
   makeMediaRecorderDriver,
+  mockDownloadDataSource,
   makeDownloadDataDriver,
+  mockStreamingChartSource,
   makeStreamingChartDriver,
   DataDownloader
 } from "tabletrobotface-userstudy";
@@ -166,10 +169,10 @@ const drivers = {
   PoseDetection: makePoseDetectionDriver({ fps: 10 }),
   VAD: makeVoiceActivityDetectionDriver(),
   Time: timeDriver,
-  VideoRecorder: makeMediaRecorderDriver(),
-  DownloadData: makeDownloadDataDriver()
+  VideoRecorder: settings.robot.recording.enabled ? makeMediaRecorderDriver() : mockMediaRecorderSource,
+  DownloadData: settings.robot.recording.enabled ? makeDownloadDataDriver() : mockDownloadDataSource,
+  Chart: settings.robot.charts.enabled ? makeStreamingChartDriver(config) : mockStreamingChartSource,
 };
-if (settings.robot.charts) drivers.Chart = makeStreamingChartDriver(config);
 
 run(main, {
   ...initializeTabletFaceRobotDrivers(),

@@ -11,6 +11,7 @@ import { withState } from "@cycle/state";
 import { timeDriver } from "@cycle/time";
 import { makeTime$, recordStreams } from "@mjyc/cycle-time-travel";
 import { makeTabletFaceDriver } from "@cycle-robot-drivers/screen";
+import { makePoseDetectionDriver } from "cycle-posenet-driver";
 import {
   initializeTabletFaceRobotDrivers,
   withTabletFaceRobotActions
@@ -153,6 +154,7 @@ function main(sources) {
 
 const drivers = {
   TabletFace: makeTabletFaceDriver(),
+  PoseDetection: makePoseDetectionDriver({fps: 5}),
   VAD: makeVoiceActivityDetectionDriver(),
   Time: timeDriver,
   VideoRecorder: makeMediaRecorderDriver(),

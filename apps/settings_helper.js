@@ -9,6 +9,9 @@ var defaultVal = {
     withTabletFaceRobotActionsOptions: {},
     recording: {
       enabled: true
+    },
+    charts: {
+      enabled: true
     }
   },
   applysrtr: {

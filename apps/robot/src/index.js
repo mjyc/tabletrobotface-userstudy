@@ -67,16 +67,6 @@ function main(sources) {
   // to save the first event; it gets fired before recording starts
   sinks.DOM = sinks.DOM.remember();
 
-  if (!settings.robot.recording.enabled) {
-    return {
-      ...sinks,
-      DOM: sinks.DOM
-    };
-  }
-
-  const dataProxy$ = xs.create();
-  const dataDownloader = DataDownloader(sources, dataProxy$);
-
   const lens = {
     get: rs => {
       if (
@@ -90,7 +80,23 @@ function main(sources) {
       }
     }
   };
-  const faceFeatureChart = isolate(FaceFeatureChart, { state: lens })(sources);
+  const faceFeatureChart = settings.robot.charts.enabled
+    ? isolate(FaceFeatureChart, { state: lens })(sources)
+    : {
+        DOM: xs.of(""),
+        Chart: xs.never()
+      };
+
+  if (!settings.robot.recording.enabled) {
+    return {
+      ...sinks,
+      DOM: xs.combine(sinks.DOM, faceFeatureChart.DOM).map(vdoms => div(vdoms)),
+      Chart: faceFeatureChart.Chart
+    };
+  }
+
+  const dataProxy$ = xs.create();
+  const dataDownloader = DataDownloader(sources, dataProxy$);
 
   const vdom$ = xs
     .combine(sinks.DOM, faceFeatureChart.DOM, dataDownloader.DOM)
@@ -122,7 +128,10 @@ function main(sources) {
       { stream: sinks.DOM || xs.never(), label: "DOM" },
       { stream: sinks.TabletFace || xs.never(), label: "TabletFace" },
       { stream: sinks.AudioPlayer || xs.never(), label: "AudioPlayer" },
-      { stream: sinks.SpeechSynthesis || xs.never(), label: "SpeechSynthesis" },
+      {
+        stream: sinks.SpeechSynthesis || xs.never(),
+        label: "SpeechSynthesis"
+      },
       {
         stream: sinks.SpeechRecognition || xs.never(),
         label: "SpeechRecognition"
@@ -154,13 +163,13 @@ function main(sources) {
 
 const drivers = {
   TabletFace: makeTabletFaceDriver(),
-  PoseDetection: makePoseDetectionDriver({fps: 5}),
+  PoseDetection: makePoseDetectionDriver({ fps: 10 }),
   VAD: makeVoiceActivityDetectionDriver(),
   Time: timeDriver,
   VideoRecorder: makeMediaRecorderDriver(),
-  DownloadData: makeDownloadDataDriver(),
-  Chart: makeStreamingChartDriver(config)
+  DownloadData: makeDownloadDataDriver()
 };
+if (settings.robot.charts) drivers.Chart = makeStreamingChartDriver(config);
 
 run(main, {
   ...initializeTabletFaceRobotDrivers(),

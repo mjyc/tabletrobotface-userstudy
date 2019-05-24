@@ -270,20 +270,20 @@ function transitionReducer(input$) {
       const prevStateStamped = prev.fsm.stateStamped;
       const inputD = input.discrete;
       const inputC = input.continuous;
-      console.log(
-        "inputC.face.maxNosePosXQuarter",
-        inputC.face.maxNosePosXQuarter,
-        "inputC.face.maxNosePosYQuarter",
-        inputC.face.maxNosePosYQuarter,
-        "inputC.face.maxFaceAngleQuarter",
-        inputC.face.maxFaceAngleQuarter
-      );
-      console.log(
-        "inputC.voice.vadLevel",
-        inputC.voice.vadLevel,
-        "inputC.voice.vadState",
-        inputC.voice.vadState
-      );
+      // console.log(
+      //   "inputC.face.maxNosePosXQuarter",
+      //   inputC.face.maxNosePosXQuarter,
+      //   "inputC.face.maxNosePosYQuarter",
+      //   inputC.face.maxNosePosYQuarter,
+      //   "inputC.face.maxFaceAngleQuarter",
+      //   inputC.face.maxFaceAngleQuarter
+      // );
+      // console.log(
+      //   "inputC.voice.vadLevel",
+      //   inputC.voice.vadLevel,
+      //   "inputC.voice.vadState",
+      //   inputC.voice.vadState
+      // );
       const state = prev.fsm.transition(prevStateStamped, inputD, inputC);
       const stamp = Date.now();
       const stateStamped = {

@@ -51,7 +51,6 @@ export default function makeVoiceActivityDetectionDriver() {
               handleMicConnectError
             );
           } catch (e) {
-            console.error("hel!");
             handleUserMediaError();
           }
         }

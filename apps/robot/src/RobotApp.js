@@ -195,24 +195,24 @@ function input(
       vadLevel: 0
     }
   );
-  const stateStamped$ = state.stream
+  const dummyStateStamped = { state: "", stamp: 0 };
+  const stateStampedHistory$ = state.stream
     .filter(s => !!s.fsm && !!s.fsm.stateStamped)
-    .map(s => s.fsm.stateStamped);
-  const stateStampedBuffered$ = stateStamped$
+    .map(s => s.fsm.stateStamped)
     .compose(dropRepeats((x, y) => x.state === y.state))
     .compose(pairwise)
-    .startWith([])
-  stateStamped$.shamefullySendNext({state: "", stamp: 0});
-  // stateStampedBuffered$.compose(pairwise).addListener({next: v => console.log})
+    .compose(pairwise)
+    .map(([[x, y], [_, z]]) => [z, y, x])
+    .startWith([...Array(3)].map(_ => dummyStateStamped));
   const inputC$ = xs
-    .combine(buffer$, voice$, stateStampedBuffered$)
-    .map(([buffer, voice, stateStampedBuffered]) => {
+    .combine(buffer$, voice$, stateStampedHistory$)
+    .map(([buffer, voice, stateStampedHistory]) => {
       return {
         ...buffer[buffer.length - 1],
         voice: voice,
         history: {
           fsm: {
-            stateStamped: stateStampedBuffered
+            stateStamped: stateStampedHistory
           }
         }
       };

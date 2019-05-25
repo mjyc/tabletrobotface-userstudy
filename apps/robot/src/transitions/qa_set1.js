@@ -29,7 +29,8 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S2" && inputD.type === "Features") {
     if (
-      stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
+      inputC.history.fsm.stateStamped[0].stamp <
+        inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
       stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
       (inputC.face.isVisible &&
@@ -66,7 +67,8 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S3" && inputD.type === "Features") {
     if (
-      stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
+      inputC.history.fsm.stateStamped[0].stamp <
+        inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
       stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
       (inputC.face.isVisible &&
@@ -103,7 +105,8 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S4" && inputD.type === "Features") {
     if (
-      stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
+      inputC.history.fsm.stateStamped[0].stamp <
+        inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
       stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
       (inputC.face.isVisible &&
@@ -140,7 +143,8 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S5" && inputD.type === "Features") {
     if (
-      stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
+      inputC.history.fsm.stateStamped[0].stamp <
+        inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
       stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
       (inputC.face.isVisible &&
@@ -180,7 +184,8 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S6" && inputD.type === "Features") {
     if (
-      stateStamped.stampLastChanged < inputC.voice.stampLastChanged &&
+      inputC.history.fsm.stateStamped[0].stamp <
+        inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
       stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
       (inputC.face.isVisible &&

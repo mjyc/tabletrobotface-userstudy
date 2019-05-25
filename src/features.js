@@ -94,16 +94,14 @@ function extractFaceFeatures(poses) {
   };
   const faceRotation = Math.atan2(vbl.y, vbl.x);
 
-  const dbwre = Math.sqrt(
-    Math.pow(bw.x - re.x, 2) + Math.pow(bw.y - re.y, 2)
-  );
-  const dbwns = Math.sqrt(
-    Math.pow(ns.x - bw.x, 2) + Math.pow(ns.y - bw.y, 2)
-  );
-  const noseRotation = Math.acos(
-    (Math.pow(dbwre, 2) + Math.pow(dbwns, 2) - Math.pow(dnsre, 2)) /
-      (2 * dbwre * dbwns)
-  );
+  const vbn = {
+    x: ns.x - bw.x,
+    y: ns.y - bw.y
+  };
+  const dvbl = Math.sqrt(Math.pow(vbl.x, 2) + Math.pow(vbl.y, 2));
+  const dvbn = Math.sqrt(Math.pow(vbn.x, 2) + Math.pow(vbn.y, 2));
+  let noseRotation =
+    Math.acos((vbl.x * vbn.x + vbl.y * vbn.y) / (dvbl * dvbn)) - Math.PI / 2;
 
   return {
     stamp: Date.now(),

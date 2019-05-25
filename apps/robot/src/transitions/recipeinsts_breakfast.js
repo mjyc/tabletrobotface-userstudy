@@ -27,7 +27,7 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S2" && inputD.type === "Features") {
     if (
-      inputC.face.stamp - stateStamped.stampLastChanged >
+      inputC.face.stamp - inputC.history.fsm.stateStamped[1].stamp >
         inputC.face.stamp - inputC.face.stampLastNotDetected &&
       inputC.face.stamp - inputC.face.stampLastNotDetected >
         nextTimeoutIntervalMs
@@ -62,7 +62,7 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S3" && inputD.type === "Features") {
     if (
-      inputC.face.stamp - stateStamped.stampLastChanged >
+      inputC.face.stamp - inputC.history.fsm.stateStamped[1].stamp >
         inputC.face.stamp - inputC.face.stampLastNotDetected &&
       inputC.face.stamp - inputC.face.stampLastNotDetected >
         nextTimeoutIntervalMs
@@ -97,7 +97,7 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S4" && inputD.type === "Features") {
     if (
-      inputC.face.stamp - stateStamped.stampLastChanged >
+      inputC.face.stamp - inputC.history.fsm.stateStamped[1].stamp >
         inputC.face.stamp - inputC.face.stampLastNotDetected &&
       inputC.face.stamp - inputC.face.stampLastNotDetected >
         nextTimeoutIntervalMs

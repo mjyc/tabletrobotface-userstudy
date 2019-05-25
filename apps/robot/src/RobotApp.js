@@ -1,5 +1,7 @@
 import xs from "xstream";
 import sampleCombine from "xstream/extra/sampleCombine";
+import pairwise from "xstream/extra/pairwise";
+import dropRepeats from "xstream/extra/dropRepeats";
 import { initGoal } from "@cycle-robot-drivers/action";
 import {
   maxDiff,
@@ -11,6 +13,7 @@ import {
 function input(
   {
     command,
+    state,
     FacialExpressionAction,
     RobotSpeechbubbleAction,
     HumanSpeechbubbleAction,
@@ -192,12 +195,28 @@ function input(
       vadLevel: 0
     }
   );
-  const inputC$ = xs.combine(buffer$, voice$).map(([buffer, voice]) => {
-    return {
-      ...buffer[buffer.length - 1],
-      voice: voice
-    };
-  });
+  const stateStamped$ = state.stream
+    .filter(s => !!s.fsm && !!s.fsm.stateStamped)
+    .map(s => s.fsm.stateStamped);
+  const stateStampedBuffered$ = stateStamped$
+    .compose(dropRepeats((x, y) => x.state === y.state))
+    .compose(pairwise)
+    .startWith([])
+  stateStamped$.shamefullySendNext({state: "", stamp: 0});
+  // stateStampedBuffered$.compose(pairwise).addListener({next: v => console.log})
+  const inputC$ = xs
+    .combine(buffer$, voice$, stateStampedBuffered$)
+    .map(([buffer, voice, stateStampedBuffered]) => {
+      return {
+        ...buffer[buffer.length - 1],
+        voice: voice,
+        history: {
+          fsm: {
+            stateStamped: stateStampedBuffered
+          }
+        }
+      };
+    });
   return xs.merge(
     command$,
     inputD$.compose(sampleCombine(inputC$)).map(([inputD, inputC]) => ({
@@ -251,7 +270,6 @@ function transitionReducer(input$) {
         fsm: {
           stateStamped: {
             stamp,
-            stampLastChanged: stamp,
             state: input.value.S0
           },
           transition: input.value.T,
@@ -290,11 +308,7 @@ function transitionReducer(input$) {
       const stateStamped = {
         // new state
         state,
-        stamp,
-        stampLastChanged:
-          prev.fsm.stateStamped.state !== state
-            ? stamp
-            : prev.fsm.stateStamped.stampLastChanged
+        stamp
       };
       const outputs = wrapOutputs(
         prev.fsm.emission(prevStateStamped, inputD, inputC)
@@ -307,7 +321,7 @@ function transitionReducer(input$) {
         },
         outputs,
         trace: {
-          prevStateStamped: prevStateStamped,
+          prevStateStamped,
           input,
           stateStamped,
           outputs

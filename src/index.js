@@ -8,3 +8,9 @@ export {
   makeDownloadDataDriver,
   DataDownloader
 } from "./recorder_helpers";
+export {
+  maxDiff,
+  maxDiffReverse,
+  defaultFaceFeatures,
+  extractFaceFeatures
+} from "./features";

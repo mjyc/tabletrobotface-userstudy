@@ -2,10 +2,11 @@ import xs from "xstream";
 import sampleCombine from "xstream/extra/sampleCombine";
 import { initGoal } from "@cycle-robot-drivers/action";
 import {
+  maxDiff,
+  maxDiffReverse,
   defaultFaceFeatures,
   extractFaceFeatures
-} from "../../scripts/features";
-import { maxDiff, maxDiffReverse } from "./utils";
+} from "tabletrobotface-userstudy";
 
 function input(
   {

@@ -37,8 +37,8 @@ const defaultFaceFeatures = {
   faceSize: 0,
   faceCenterX: 0,
   faceCenterY: 0,
-  faceOrientation: 0,
-  noseOrientation: 0
+  faceRotation: 0,
+  noseRotation: 0
 };
 
 function extractFaceFeatures(poses) {
@@ -60,8 +60,8 @@ function extractFaceFeatures(poses) {
       faceSize: defaultFaceFeatures.faceSize,
       faceCenterX: defaultFaceFeatures.faceCenterX,
       faceCenterY: defaultFaceFeatures.faceCenterY,
-      faceOrientation: defaultFaceFeatures.faceOrientation,
-      noseOrientation: defaultFaceFeatures.noseOrientation
+      faceRotation: defaultFaceFeatures.faceRotation,
+      noseRotation: defaultFaceFeatures.noseRotation
     };
   }
 
@@ -82,26 +82,27 @@ function extractFaceFeatures(poses) {
   const faceCenterX = (ns.x + le.x + re.x) / 3;
   const faceCenterY = (ns.y + le.y + re.y) / 3;
 
-  const btnEyesPt = {
+  // a point between two eyes
+  const bw = {
     x: (le.x + re.x) * 0.5,
     y: (le.y + re.y) * 0.5
   };
-  const v = {
-    // a vector from the point between two eyes to the nose
-    x: ns.x - btnEyesPt.x,
-    y: ns.y - btnEyesPt.y
+  // a vector from the point between two eyes to the right eye
+  const vbl = {
+    x: le.x - bw.x,
+    y: le.y - bw.y
   };
-  const faceOrientation = Math.atan2(v.y, v.x);
+  const faceRotation = Math.atan2(vbl.y, vbl.x);
 
-  const dbere = Math.sqrt(
-    Math.pow(btnEyesPt.x - re.x, 2) + Math.pow(btnEyesPt.y - re.y, 2)
+  const dbwre = Math.sqrt(
+    Math.pow(bw.x - re.x, 2) + Math.pow(bw.y - re.y, 2)
   );
-  const dbens = Math.sqrt(
-    Math.pow(ns.x - btnEyesPt.x, 2) + Math.pow(ns.y - btnEyesPt.y, 2)
+  const dbwns = Math.sqrt(
+    Math.pow(ns.x - bw.x, 2) + Math.pow(ns.y - bw.y, 2)
   );
-  const noseOrientation = Math.acos(
-    (Math.pow(dbere, 2) + Math.pow(dbens, 2) - Math.pow(dnsre, 2)) /
-      (2 * dbere * dbens)
+  const noseRotation = Math.acos(
+    (Math.pow(dbwre, 2) + Math.pow(dbwns, 2) - Math.pow(dnsre, 2)) /
+      (2 * dbwre * dbwns)
   );
 
   return {
@@ -110,8 +111,8 @@ function extractFaceFeatures(poses) {
     faceSize: faceSize,
     faceCenterX: faceCenterX,
     faceCenterY: faceCenterY,
-    faceOrientation: faceOrientation - noseOrientation,
-    noseOrientation: noseOrientation - Math.PI / 2
+    faceRotation: faceRotation,
+    noseRotation: noseRotation
   };
 }
 

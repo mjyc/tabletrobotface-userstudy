@@ -131,10 +131,10 @@ function input(
           stampLastDetected,
           stampLastNotDetected,
           faceAngle: !!features.isVisible
-            ? (features.faceOrientation / Math.PI) * 180
+            ? (features.faceRotation / Math.PI) * 180
             : 0,
           noseAngle: !!features.isVisible
-            ? (features.noseOrientation / Math.PI) * 180
+            ? (features.noseRotation / Math.PI) * 180
             : 0,
           maxNosePosX,
           maxNosePosY,

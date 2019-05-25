@@ -16,7 +16,7 @@ export const isMobile = () => {
 
 export const mockMediaRecorderSource = () => {
   return xs.never();
-}
+};
 
 export const makeMediaRecorderDriver = options => {
   if (!options) {

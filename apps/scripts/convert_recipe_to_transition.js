@@ -31,7 +31,7 @@ function transition(stateStamped, inputD, inputC, params) {` +
     };`;
 
 const lines = JSON.parse(fs.readFileSync(process.argv[2])).ingredients.map(
-  (line) => {
+  line => {
     return line.trim();
   }
 );

@@ -15,21 +15,26 @@ const data = JSON.parse(fs.readFileSync(filename));
 
 // restore streams
 const Time = mockTimeSource();
-const {schedule, currentTime} = Time.createOperator();
-const sources = Object.keys(data).reduce((prev, label) => ({
-  ...prev,
-  label: xs.create({
-    start: listener => {
-      data[label].map(event => {
-        schedule.next(listener, currentTime() + event.time, event.value);
-      });
-    },
-    stop: () => {}
+const { schedule, currentTime } = Time.createOperator();
+const sources = Object.keys(data).reduce(
+  (prev, label) => ({
+    ...prev,
+    label: xs.create({
+      start: listener => {
+        data[label].map(event => {
+          schedule.next(listener, currentTime() + event.time, event.value);
+        });
+      },
+      stop: () => {}
+    })
   }),
-}), {});
+  {}
+);
 
 // test
-Object.keys(sources).map(label => sources[label].addListener({
-  next: v => console.log(label, v)
-}));
+Object.keys(sources).map(label =>
+  sources[label].addListener({
+    next: v => console.log(label, v)
+  })
+);
 Time.run();

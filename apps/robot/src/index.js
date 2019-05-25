@@ -169,9 +169,15 @@ const drivers = {
   PoseDetection: makePoseDetectionDriver({ fps: 10 }),
   VAD: makeVoiceActivityDetectionDriver(),
   Time: timeDriver,
-  VideoRecorder: settings.robot.recording.enabled ? makeMediaRecorderDriver() : mockMediaRecorderSource,
-  DownloadData: settings.robot.recording.enabled ? makeDownloadDataDriver() : mockDownloadDataSource,
-  Chart: settings.robot.charts.enabled ? makeStreamingChartDriver(config) : mockStreamingChartSource,
+  VideoRecorder: settings.robot.recording.enabled
+    ? makeMediaRecorderDriver()
+    : mockMediaRecorderSource,
+  DownloadData: settings.robot.recording.enabled
+    ? makeDownloadDataDriver()
+    : mockDownloadDataSource,
+  Chart: settings.robot.charts.enabled
+    ? makeStreamingChartDriver(config)
+    : mockStreamingChartSource
 };
 
 run(main, {

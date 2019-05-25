@@ -15,7 +15,7 @@ let output =
   `// NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {` +
   Object.keys(defaultParams)
-    .map((key) => {
+    .map(key => {
       return `
   var ${key} = params.${key};`;
     })
@@ -36,7 +36,7 @@ const lines = fs
   .readFileSync(process.argv[2])
   .toString()
   .split("\n")
-  .map((line) => {
+  .map(line => {
     return line.trim();
   });
 

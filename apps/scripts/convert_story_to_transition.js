@@ -3,9 +3,9 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 
-var fs = require("fs");
+const fs = require("fs");
 
-var defaultParams = {
+const defaultParams = {
   // engagedMinNoseAngle: -0.001,
   // engagedMaxNoseAngle: 0.001,
   // disengagedMinNoseAngle: -90,
@@ -18,11 +18,11 @@ var defaultParams = {
   disengagedTimeoutIntervalMs: 1000
 };
 
-var output =
+let output =
   `// NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {` +
   Object.keys(defaultParams)
-    .map(function(key) {
+    .map(key => {
       return `
   var ${key} = params.${key};`;
     })
@@ -39,15 +39,15 @@ function transition(stateStamped, inputD, inputC, params) {` +
       }
     };`;
 
-var lines = fs
+const lines = fs
   .readFileSync(process.argv[2])
   .toString()
   .split("\n")
-  .map(function(line) {
+  .map(line => {
     return line.trim();
   });
 
-lines.map(function(line, i) {
+lines.map((line, i) => {
   output += `
   } else if (
     stateStamped.state === "S${i + 1}" &&
@@ -88,7 +88,7 @@ output += `
 output += `
 
     // Handle Pause`;
-lines.map(function(line, i) {
+lines.map((line, i) => {
   output += `
   } else if (
     stateStamped.state === "S${i + 2}" &&
@@ -109,7 +109,7 @@ lines.map(function(line, i) {
 output += `
 
     // Handle Resume`;
-lines.map(function(line, i) {
+lines.map((line, i) => {
   output += `
   } else if (
     stateStamped.state === "SP${i + 2}" &&
@@ -130,7 +130,7 @@ lines.map(function(line, i) {
 output += `
 
     // Proactive Pause`;
-lines.map(function(line, i) {
+lines.map((line, i) => {
   output += `
   } else if (stateStamped.state === "S${i + 2}" && inputD.type === "Features") {
     if (
@@ -160,7 +160,7 @@ lines.map(function(line, i) {
 output += `
 
     // Proactive Resume`;
-lines.map(function(line, i) {
+lines.map((line, i) => {
   output += `
   } else if (stateStamped.state === "SP${i +
     2}" && inputD.type === "Features") {

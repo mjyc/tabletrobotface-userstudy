@@ -3,17 +3,17 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 
-var fs = require("fs");
+const fs = require("fs");
 
-var defaultParams = {
+const defaultParams = {
   nextTimeoutIntervalMs: 1000
 };
 
-var output =
+let output =
   `// NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {` +
   Object.keys(defaultParams)
-    .map(function(key) {
+    .map(key => {
       return `
   var ${key} = params.${key};`;
     })
@@ -30,13 +30,13 @@ function transition(stateStamped, inputD, inputC, params) {` +
       }
     };`;
 
-var lines = JSON.parse(fs.readFileSync(process.argv[2])).ingredients.map(
-  function(line) {
+const lines = JSON.parse(fs.readFileSync(process.argv[2])).ingredients.map(
+  (line) => {
     return line.trim();
   }
 );
 
-lines.map(function(line, i) {
+lines.map((line, i) => {
   output += `
   } else if (
     stateStamped.state === "S${i + 1}" &&
@@ -111,7 +111,7 @@ output += `
 output += `
 
     // Handle Go back`;
-lines.map(function(_, i) {
+lines.map((_, i) => {
   output += `
   } else if (
     stateStamped.state === "S${i + 3}" &&

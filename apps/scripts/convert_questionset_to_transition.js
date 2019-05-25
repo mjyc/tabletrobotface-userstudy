@@ -3,19 +3,19 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 
-var fs = require("fs");
+const fs = require("fs");
 
-var defaultParams = {
+const defaultParams = {
   timeout: 500,
   engagedMinNoseAngle: -10,
   engagedMaxNoseAngle: 10
 };
 
-var output =
+let output =
   `// NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {` +
   Object.keys(defaultParams)
-    .map(function(key) {
+    .map((key) => {
       return `
   var ${key} = params.${key};`;
     })
@@ -32,15 +32,15 @@ function transition(stateStamped, inputD, inputC, params) {` +
       }
     };`;
 
-var lines = fs
+const lines = fs
   .readFileSync(process.argv[2])
   .toString()
   .split("\n")
-  .map(function(line) {
+  .map((line) => {
     return line.trim();
   });
 
-lines.map(function(line, i) {
+lines.map((line, i) => {
   output += `
   } else if (
     stateStamped.state === "S${i + 1}" &&

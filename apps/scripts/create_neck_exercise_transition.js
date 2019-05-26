@@ -3,15 +3,12 @@ var rotateOnly =
   process.argv[3] === "undefined" || process.argv[3] == "true" ? true : false;
 
 var defaultParams = {
-  initialRotateRightMaxMaxNosePose: 80,
-  rotateRightMaxMaxNosePose: 160,
-  rotateLeftMinMaxNosePose: -160,
-  initialTouchRightMaxMaxFaceAngle: 30,
-  touchRightMaxMaxFaceAngle: 60,
-  touchLeftMinMaxFaceAngle: -60,
-  initialTuckChinMaxMaxNosePoseY: 50,
-  tuckChinMaxMaxNosePoseY: 100,
-  elevateChinMinMaxNosePoseY: -100
+  rotateRightNoseAngle: -20,
+  rotateLeftNoseAngle: 20,
+  touchRighFaceAngle: 30,
+  touchLeftFaceAngle: -30,
+  tuckChinTimeout: 3000,
+  elevateChinTimeout: 3000
 };
 
 var output =
@@ -87,9 +84,7 @@ for (var i = 0; i < numRepeats; i++) {
   }
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosXQuarter > ${
-      i === 0 ? `initialRotateRightMaxMaxNosePose` : `rotateRightMaxMaxNosePose`
-    }) {
+    if (inputC.face.noseAngle > rotateRightNoseAngle) {
       return {
         state: "S${idx + 2}",
         outputs: {
@@ -122,7 +117,7 @@ for (var i = 0; i < numRepeats; i++) {
         ? `
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosXQuarter < rotateLeftMinMaxNosePose) {
+    if (inputC.face.noseAngle < rotateLeftNoseAngle) {
       return {
         state: "S${idx + 3}",
         outputs: {
@@ -140,7 +135,7 @@ for (var i = 0; i < numRepeats; i++) {
         : `
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosXQuarter < rotateLeftMinMaxNosePose) {
+    if (inputC.face.noseAngle < rotateLeftNoseAngle) {
       return {
         state: "S${idx + 3}",
         outputs: {
@@ -181,9 +176,7 @@ for (var i = 0; i < numRepeats; i++) {
     };
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.maxFaceAngleQuarter > ${
-      i === 0 ? `initialTouchRightMaxMaxFaceAngle` : `touchRightMaxMaxFaceAngle`
-    }) {
+    if (inputC.face.faceAngle > touchRighFaceAngle) {
       return {
         state: "S${idx + 2}",
         outputs: {
@@ -216,7 +209,7 @@ for (var i = 0; i < numRepeats; i++) {
         ? `
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.maxFaceAngleQuarter < touchLeftMinMaxFaceAngle) {
+    if (inputC.face.faceAngle < touchLeftFaceAngle) {
       return {
         state: "S${idx + 3}",
         outputs: {
@@ -234,7 +227,7 @@ for (var i = 0; i < numRepeats; i++) {
         : `
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.maxFaceAngleQuarter < touchLeftMinMaxFaceAngle) {
+    if (inputC.face.faceAngle < touchLeftFaceAngle) {
       return {
         state: "S${idx + 3}",
         outputs: {
@@ -275,9 +268,9 @@ for (var i = 0; i < numRepeats; i++) {
     };
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosYQuarter > ${
-      i === 0 ? `initialTuckChinMaxMaxNosePoseY` : `tuckChinMaxMaxNosePoseY`
-    }) {
+    if (
+      stateStamped.stamp - inputC.history.stateStamped[0].stamp > tuckChinTimeout
+    ) {
       return {
         state: "S${idx + 2}",
         outputs: {
@@ -310,7 +303,10 @@ for (var i = 0; i < numRepeats; i++) {
         ? `
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosYQuarter < elevateChinMinMaxNosePoseY) {
+    if (
+      stateStamped.stamp - inputC.history.stateStamped[0].stamp >
+      elevateChinTimeout
+    ) {
       return {
         state: "S${idx + 3}",
         outputs: {
@@ -328,7 +324,10 @@ for (var i = 0; i < numRepeats; i++) {
         : `
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosYQuarter < elevateChinMinMaxNosePoseY) {
+    if (
+      stateStamped.stamp - inputC.history.stateStamped[0].stamp >
+      elevateChinTimeout
+    ) {
       return {
         state: "S${idx + 3}",
         outputs: {

@@ -1,17 +1,16 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {
-  var initialRotateRightMaxMaxNosePose =
-    params.initialRotateRightMaxMaxNosePose;
-  var rotateRightMaxMaxNosePose = params.rotateRightMaxMaxNosePose;
-  var rotateLeftMinMaxNosePose = params.rotateLeftMinMaxNosePose;
-  var initialTouchRightMaxMaxFaceAngle =
-    params.initialTouchRightMaxMaxFaceAngle;
-  var touchRightMaxMaxFaceAngle = params.touchRightMaxMaxFaceAngle;
-  var touchLeftMinMaxFaceAngle = params.touchLeftMinMaxFaceAngle;
-  var initialTuckChinMaxMaxNosePoseY = params.initialTuckChinMaxMaxNosePoseY;
-  var tuckChinMaxMaxNosePoseY = params.tuckChinMaxMaxNosePoseY;
-  var elevateChinMinMaxNosePoseY = params.elevateChinMinMaxNosePoseY;
-
+  var rotateRightNoseAngle = params.rotateRightNoseAngle;
+  var rotateLeftNoseAngle = params.rotateLeftNoseAngle;
+  var touchRighFaceAngle = params.touchRighFaceAngle;
+  var touchLeftFaceAngle = params.touchLeftFaceAngle;
+  var tuckChinTimeout = params.tuckChinTimeout;
+  var elevateChinTimeout = params.elevateChinTimeout;
+  console.log(
+    stateStamped.stamp,
+    inputC.history.stateStamped[0].stamp,
+    stateStamped.stamp - inputC.history.stateStamped[0].stamp
+  );
   if (stateStamped.state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
@@ -52,7 +51,7 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S3" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosXQuarter > initialRotateRightMaxMaxNosePose) {
+    if (inputC.face.noseAngle > rotateRightNoseAngle) {
       return {
         state: "S4",
         outputs: {
@@ -82,7 +81,7 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S4" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosXQuarter < rotateLeftMinMaxNosePose) {
+    if (inputC.face.noseAngle < rotateLeftNoseAngle) {
       return {
         state: "S5",
         outputs: {
@@ -112,7 +111,7 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S5" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosXQuarter > rotateRightMaxMaxNosePose) {
+    if (inputC.face.noseAngle > rotateRightNoseAngle) {
       return {
         state: "S6",
         outputs: {
@@ -142,7 +141,7 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S6" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosXQuarter < rotateLeftMinMaxNosePose) {
+    if (inputC.face.noseAngle < rotateLeftNoseAngle) {
       return {
         state: "S7",
         outputs: {
@@ -176,7 +175,7 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S7" && inputD.type === "Features") {
-    if (inputC.face.maxFaceAngleQuarter > initialTouchRightMaxMaxFaceAngle) {
+    if (inputC.face.faceAngle > touchRighFaceAngle) {
       return {
         state: "S8",
         outputs: {
@@ -210,7 +209,7 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S8" && inputD.type === "Features") {
-    if (inputC.face.maxFaceAngleQuarter < touchLeftMinMaxFaceAngle) {
+    if (inputC.face.faceAngle < touchLeftFaceAngle) {
       return {
         state: "S9",
         outputs: {
@@ -244,7 +243,7 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S9" && inputD.type === "Features") {
-    if (inputC.face.maxFaceAngleQuarter > touchRightMaxMaxFaceAngle) {
+    if (inputC.face.faceAngle > touchRighFaceAngle) {
       return {
         state: "S10",
         outputs: {
@@ -278,7 +277,7 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S10" && inputD.type === "Features") {
-    if (inputC.face.maxFaceAngleQuarter < touchLeftMinMaxFaceAngle) {
+    if (inputC.face.faceAngle < touchLeftFaceAngle) {
       return {
         state: "S11",
         outputs: {
@@ -308,7 +307,10 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S11" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosYQuarter > initialTuckChinMaxMaxNosePoseY) {
+    if (
+      stateStamped.stamp - inputC.history.stateStamped[0].stamp >
+      tuckChinTimeout
+    ) {
       return {
         state: "S12",
         outputs: {
@@ -338,7 +340,10 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S12" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosYQuarter < elevateChinMinMaxNosePoseY) {
+    if (
+      stateStamped.stamp - inputC.history.stateStamped[0].stamp >
+      elevateChinTimeout
+    ) {
       return {
         state: "S13",
         outputs: {
@@ -368,7 +373,10 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S13" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosYQuarter > tuckChinMaxMaxNosePoseY) {
+    if (
+      stateStamped.stamp - inputC.history.stateStamped[0].stamp >
+      tuckChinTimeout
+    ) {
       return {
         state: "S14",
         outputs: {
@@ -398,7 +406,10 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (stateStamped.state === "S14" && inputD.type === "Features") {
-    if (inputC.face.maxNosePosYQuarter < elevateChinMinMaxNosePoseY) {
+    if (
+      stateStamped.stamp - inputC.history.stateStamped[0].stamp >
+      elevateChinTimeout
+    ) {
       return {
         state: "S15",
         outputs: {
@@ -436,15 +447,12 @@ function transition(stateStamped, inputD, inputC, params) {
 }
 
 var defaultParams = {
-  initialRotateRightMaxMaxNosePose: 80,
-  rotateRightMaxMaxNosePose: 160,
-  rotateLeftMinMaxNosePose: -160,
-  initialTouchRightMaxMaxFaceAngle: 30,
-  touchRightMaxMaxFaceAngle: 60,
-  touchLeftMinMaxFaceAngle: -60,
-  initialTuckChinMaxMaxNosePoseY: 50,
-  tuckChinMaxMaxNosePoseY: 100,
-  elevateChinMinMaxNosePoseY: -100
+  rotateRightNoseAngle: -20,
+  rotateLeftNoseAngle: 20,
+  touchRighFaceAngle: 30,
+  touchLeftFaceAngle: -30,
+  tuckChinTimeout: 3000,
+  elevateChinTimeout: 3000
 };
 
 module.exports = {

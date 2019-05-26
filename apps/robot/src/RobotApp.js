@@ -67,9 +67,9 @@ function input(
   );
 
   // extract face features
-  const faceFeatures$ = PoseDetection.events("poses").map(poses =>
-    extractFaceFeatures(poses)
-  );
+  const faceFeatures$ = PoseDetection.events("poses")
+    .map(poses => extractFaceFeatures(poses))
+    .startWith(defaultFaceFeatures);
   // extract voice features
   const voiceFeatures$ = VAD.fold(
     (prev, { type, value }) => {

@@ -28,6 +28,17 @@ export const config = {
         hidden: true
       },
       {
+        label: "faceHeight",
+        backgroundColor: color(chartColors.orange)
+          .alpha(0.5)
+          .rgbString(),
+        borderColor: chartColors.orange,
+        fill: false,
+        lineTension: 0,
+        data: [],
+        hidden: true
+      },
+      {
         label: "faceCenterX",
         backgroundColor: color(chartColors.blue)
           .alpha(0.5)
@@ -120,6 +131,10 @@ export default function FaceFeatureChart(sources) {
       div({ style: { textAlign: "center" } }, [
         span([input(".faceSize", { attrs: { type: "checkbox" } }), "faceSize"]),
         span([
+          input(".faceHeight", { attrs: { type: "checkbox" } }),
+          "faceHeight"
+        ]),
+        span([
           input(".faceCenterX", { attrs: { type: "checkbox" } }),
           "faceCenterX"
         ]),
@@ -146,6 +161,7 @@ export default function FaceFeatureChart(sources) {
     .filter(s => !!s.features)
     .map(s => [
       s.features.faceSize,
+      s.features.faceHeight,
       s.features.faceCenterX,
       s.features.faceCenterY,
       s.features.faceAngle,
@@ -158,22 +174,29 @@ export default function FaceFeatureChart(sources) {
       .events("change")
       .map(ev => ev.target.checked)
       .map(v => ({ type: "UPDATE", value: [{ hidden: !v }] })),
-    sources.DOM.select(".faceCenterX")
+    sources.DOM.select(".faceHeight")
       .events("change")
       .map(ev => ev.target.checked)
       .map(v => ({ type: "UPDATE", value: [{}, { hidden: !v }] })),
-    sources.DOM.select(".faceCenterY")
+    sources.DOM.select(".faceCenterX")
       .events("change")
       .map(ev => ev.target.checked)
       .map(v => ({ type: "UPDATE", value: [{}, {}, { hidden: !v }] })),
-    sources.DOM.select(".faceAngle")
+    sources.DOM.select(".faceCenterY")
       .events("change")
       .map(ev => ev.target.checked)
       .map(v => ({ type: "UPDATE", value: [{}, {}, {}, { hidden: !v }] })),
+    sources.DOM.select(".faceAngle")
+      .events("change")
+      .map(ev => ev.target.checked)
+      .map(v => ({ type: "UPDATE", value: [{}, {}, {}, {}, { hidden: !v }] })),
     sources.DOM.select(".noseAngle")
       .events("change")
       .map(ev => ev.target.checked)
-      .map(v => ({ type: "UPDATE", value: [{}, {}, {}, {}, { hidden: !v }] }))
+      .map(v => ({
+        type: "UPDATE",
+        value: [{}, {}, {}, {}, {}, { hidden: !v }]
+      }))
   );
 
   return {

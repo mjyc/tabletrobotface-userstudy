@@ -107,6 +107,7 @@ function extractFaceFeatures(poses) {
     stamp: Date.now(),
     isVisible: true,
     faceSize: faceSize,
+    faceHeight: ns.y - bw.y,
     faceCenterX: faceCenterX,
     faceCenterY: faceCenterY,
     faceAngle: (faceRotation / Math.PI) * 180,

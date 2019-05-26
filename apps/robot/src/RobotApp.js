@@ -67,27 +67,9 @@ function input(
   );
 
   // extract face features
-  // const signedMaxDiff = arr => {
-  //   if (arr.length < 2)
-  //     console.warn("Invalid input array length < 2: returning 0");
-  //   return arr.length < 2
-  //     ? 0
-  //     : maxDiff(arr) > maxDiffReverse(arr)
-  //     ? maxDiff(arr)
-  //     : -1 * maxDiffReverse(arr);
-  // };
-  const rawFaceFeaturesBuffer$ = PoseDetection.events("poses").fold(
-    (prev, poses) => {
-      const features = extractFaceFeatures(poses);
-      prev.unshift(features);
-      if (prev.length === bufferSize + 1) prev.pop();
-      return prev;
-    },
-    [...Array(bufferSize)].map(_ => defaultFaceFeatures)
+  const faceFeatures$ = PoseDetection.events("poses").map(poses =>
+    extractFaceFeatures(poses)
   );
-  const faceFeatures$ = rawFaceFeaturesBuffer$.map(buffer => {
-    return buffer[0];
-  });
   // extract voice features
   const voiceFeatures$ = VAD.fold(
     (prev, { type, value }) => {
@@ -109,7 +91,7 @@ function input(
       vadState: "INACTIVE",
       vadLevel: 0
     }
-  ).compose(throttle(100));  // 10hz
+  ).compose(throttle(100)); // 10hz
   // extract history features
   const stateStampedHistory$ = state.stream
     .filter(s => !!s.fsm && !!s.fsm.stateStamped)
@@ -168,11 +150,13 @@ function input(
       discrete: inputD,
       continuous: inputC
     })),
-    inputC$.map(inputC => ({
-      type: "FSM_INPUT",
-      discrete: { type: "Features" },
-      continuous: inputC
-    })).compose(throttle(100))  // 10hz
+    inputC$
+      .map(inputC => ({
+        type: "FSM_INPUT",
+        discrete: { type: "Features" },
+        continuous: inputC
+      }))
+      .compose(throttle(100)) // 10hz
   );
 }
 

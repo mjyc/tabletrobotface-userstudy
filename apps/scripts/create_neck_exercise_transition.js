@@ -7,8 +7,8 @@ var defaultParams = {
   rotateLeftNoseAngle: 20,
   touchRighFaceAngle: 30,
   touchLeftFaceAngle: -30,
-  tuckChinTimeout: 3000,
-  elevateChinTimeout: 3000
+  tuckChinFaceHeight: 60,
+  elevateChinFaceHeight: 30
 };
 
 var output =
@@ -84,7 +84,7 @@ for (var i = 0; i < numRepeats; i++) {
   }
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.noseAngle > rotateRightNoseAngle) {
+    if (inputC.face.noseAngle < rotateRightNoseAngle) {
       return {
         state: "S${idx + 2}",
         outputs: {
@@ -117,7 +117,7 @@ for (var i = 0; i < numRepeats; i++) {
         ? `
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.noseAngle < rotateLeftNoseAngle) {
+    if (inputC.face.noseAngle > rotateLeftNoseAngle) {
       return {
         state: "S${idx + 3}",
         outputs: {
@@ -135,7 +135,7 @@ for (var i = 0; i < numRepeats; i++) {
         : `
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.noseAngle < rotateLeftNoseAngle) {
+    if (inputC.face.noseAngle > rotateLeftNoseAngle) {
       return {
         state: "S${idx + 3}",
         outputs: {
@@ -269,7 +269,8 @@ for (var i = 0; i < numRepeats; i++) {
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
     if (
-      stateStamped.stamp - inputC.history.stateStamped[0].stamp > tuckChinTimeout
+      stateStamped.stamp - inputC.history.stateStamped[0].stamp <
+      tuckChinFaceHeight
     ) {
       return {
         state: "S${idx + 2}",
@@ -304,8 +305,8 @@ for (var i = 0; i < numRepeats; i++) {
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
     if (
-      stateStamped.stamp - inputC.history.stateStamped[0].stamp >
-      elevateChinTimeout
+      stateStamped.stamp - inputC.history.stateStamped[0].stamp <
+      elevateChinFaceHeight
     ) {
       return {
         state: "S${idx + 3}",
@@ -325,8 +326,8 @@ for (var i = 0; i < numRepeats; i++) {
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
     if (
-      stateStamped.stamp - inputC.history.stateStamped[0].stamp >
-      elevateChinTimeout
+      stateStamped.stamp - inputC.history.stateStamped[0].stamp <
+      elevateChinFaceHeight
     ) {
       return {
         state: "S${idx + 3}",

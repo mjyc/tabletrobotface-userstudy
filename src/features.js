@@ -48,7 +48,7 @@ function norm(pt) {
 function rotate(pt, theta) {
   return {
     x: pt.x * Math.cos(theta) - pt.y * Math.sin(theta),
-    y: pt.x * Math.sin(theta) + pt.y * Math.cos(theta),
+    y: pt.x * Math.sin(theta) + pt.y * Math.cos(theta)
   };
 }
 
@@ -111,8 +111,7 @@ function extractFaceFeatures(poses) {
   };
   const dvbl = Math.sqrt(Math.pow(vbl.x, 2) + Math.pow(vbl.y, 2));
   const dvbn = Math.sqrt(Math.pow(vbn.x, 2) + Math.pow(vbn.y, 2));
-  let noseRotation =
-    Math.acos((vbl.x * vbn.x + vbl.y * vbn.y) / (dvbl * dvbn));
+  let noseRotation = Math.acos((vbl.x * vbn.x + vbl.y * vbn.y) / (dvbl * dvbn));
 
   return {
     stamp: Date.now(),
@@ -121,8 +120,8 @@ function extractFaceFeatures(poses) {
     faceHeight: norm(vbn),
     faceCenterX: faceCenterX,
     faceCenterY: faceCenterY,
-    faceAngle: faceRotation / Math.PI * 180,
-    noseAngle: (noseRotation - Math.PI / 2) / Math.PI * 180
+    faceAngle: (faceRotation / Math.PI) * 180,
+    noseAngle: ((noseRotation - Math.PI / 2) / Math.PI) * 180
   };
 }
 

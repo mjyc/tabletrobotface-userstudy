@@ -261,23 +261,20 @@ for (var i = 0; i < numRepeats; i++) {
     return {
       state: "S${idx + 1}",
       outputs: {
-        RobotSpeechbubbleAction: "and now tuck your chin into the chest",
+        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now tuck your chin into the chest"
+        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
       }
     };
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (
-      stateStamped.stamp - inputC.history.stateStamped[0].stamp <
-      tuckChinFaceHeight
-    ) {
+    if (inputC.face.faceHeight < tuckChinFaceHeight) {
       return {
         state: "S${idx + 2}",
         outputs: {
-          RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
+          RobotSpeechbubbleAction: "and now tuck your chin into the chest",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+          SpeechSynthesisAction: "and now tuck your chin into the chest"
         }
       };
     } else {
@@ -295,25 +292,22 @@ for (var i = 0; i < numRepeats; i++) {
     return {
       state: "S${idx + 2}",
       outputs: {
-        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
+        RobotSpeechbubbleAction: "and now tuck your chin into the chest",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+        SpeechSynthesisAction: "and now tuck your chin into the chest"
       }
     };${
       i !== numRepeats - 1
         ? `
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (
-      stateStamped.stamp - inputC.history.stateStamped[0].stamp <
-      elevateChinFaceHeight
-    ) {
+    if (inputC.face.faceHeight > elevateChinFaceHeight) {
       return {
         state: "S${idx + 3}",
         outputs: {
-          RobotSpeechbubbleAction: "and now tuck your chin to the chest",
+          RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now tuck your chin to the chest"
+          SpeechSynthesisAction: "and now elevate your chin to the ceiling"
         }
       };
     } else {
@@ -325,10 +319,7 @@ for (var i = 0; i < numRepeats; i++) {
         : `
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (
-      stateStamped.stamp - inputC.history.stateStamped[0].stamp <
-      elevateChinFaceHeight
-    ) {
+    if (inputC.face.faceHeight > elevateChinFaceHeight) {
       return {
         state: "S${idx + 3}",
         outputs: {

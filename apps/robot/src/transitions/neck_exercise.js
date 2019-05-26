@@ -297,22 +297,19 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S11",
       outputs: {
-        RobotSpeechbubbleAction: "and now tuck your chin into the chest",
+        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now tuck your chin into the chest"
+        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
       }
     };
   } else if (stateStamped.state === "S11" && inputD.type === "Features") {
-    if (
-      stateStamped.stamp - inputC.history.stateStamped[0].stamp <
-      tuckChinFaceHeight
-    ) {
+    if (inputC.face.faceHeight < tuckChinFaceHeight) {
       return {
         state: "S12",
         outputs: {
-          RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
+          RobotSpeechbubbleAction: "and now tuck your chin into the chest",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+          SpeechSynthesisAction: "and now tuck your chin into the chest"
         }
       };
     } else {
@@ -330,22 +327,19 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S12",
       outputs: {
-        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
+        RobotSpeechbubbleAction: "and now tuck your chin into the chest",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+        SpeechSynthesisAction: "and now tuck your chin into the chest"
       }
     };
   } else if (stateStamped.state === "S12" && inputD.type === "Features") {
-    if (
-      stateStamped.stamp - inputC.history.stateStamped[0].stamp <
-      elevateChinFaceHeight
-    ) {
+    if (inputC.face.faceHeight > elevateChinFaceHeight) {
       return {
         state: "S13",
         outputs: {
-          RobotSpeechbubbleAction: "and now tuck your chin to the chest",
+          RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now tuck your chin to the chest"
+          SpeechSynthesisAction: "and now elevate your chin to the ceiling"
         }
       };
     } else {
@@ -363,22 +357,19 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S13",
       outputs: {
-        RobotSpeechbubbleAction: "and now tuck your chin into the chest",
+        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now tuck your chin into the chest"
+        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
       }
     };
   } else if (stateStamped.state === "S13" && inputD.type === "Features") {
-    if (
-      stateStamped.stamp - inputC.history.stateStamped[0].stamp <
-      tuckChinFaceHeight
-    ) {
+    if (inputC.face.faceHeight < tuckChinFaceHeight) {
       return {
         state: "S14",
         outputs: {
-          RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
+          RobotSpeechbubbleAction: "and now tuck your chin into the chest",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+          SpeechSynthesisAction: "and now tuck your chin into the chest"
         }
       };
     } else {
@@ -396,16 +387,13 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S14",
       outputs: {
-        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
+        RobotSpeechbubbleAction: "and now tuck your chin into the chest",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+        SpeechSynthesisAction: "and now tuck your chin into the chest"
       }
     };
   } else if (stateStamped.state === "S14" && inputD.type === "Features") {
-    if (
-      stateStamped.stamp - inputC.history.stateStamped[0].stamp <
-      elevateChinFaceHeight
-    ) {
+    if (inputC.face.faceHeight > elevateChinFaceHeight) {
       return {
         state: "S15",
         outputs: {

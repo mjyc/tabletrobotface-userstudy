@@ -109,8 +109,8 @@ function extractFaceFeatures(poses) {
     faceSize: faceSize,
     faceCenterX: faceCenterX,
     faceCenterY: faceCenterY,
-    faceRotation: faceRotation,
-    noseRotation: noseRotation
+    faceAngle: (faceRotation / Math.PI) * 180,
+    noseAngle: (noseRotation / Math.PI) * 180
   };
 }
 

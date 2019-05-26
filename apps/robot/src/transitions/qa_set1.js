@@ -29,10 +29,10 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S2" && inputD.type === "Features") {
     if (
-      inputC.history.fsm.stateStamped[0].stamp <
-        inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
+      inputC.history.stateStamped[1].stamp <
+        inputC.history.vadStateStamped[1].stamp &&
+      stateStamped.stamp - inputC.history.vadStateStamped[1].stamp > timeout &&
       (inputC.face.isVisible &&
         (inputC.face.noseAngle < engagedMaxNoseAngle &&
           inputC.face.noseAngle > engagedMinNoseAngle))
@@ -67,10 +67,10 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S3" && inputD.type === "Features") {
     if (
-      inputC.history.fsm.stateStamped[0].stamp <
-        inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
+      inputC.history.stateStamped[1].stamp <
+        inputC.history.vadStateStamped[1].stamp &&
+      stateStamped.stamp - inputC.history.vadStateStamped[1].stamp > timeout &&
       (inputC.face.isVisible &&
         (inputC.face.noseAngle < engagedMaxNoseAngle &&
           inputC.face.noseAngle > engagedMinNoseAngle))
@@ -105,10 +105,10 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S4" && inputD.type === "Features") {
     if (
-      inputC.history.fsm.stateStamped[0].stamp <
-        inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
+      inputC.history.stateStamped[1].stamp <
+        inputC.history.vadStateStamped[1].stamp &&
+      stateStamped.stamp - inputC.history.vadStateStamped[1].stamp > timeout &&
       (inputC.face.isVisible &&
         (inputC.face.noseAngle < engagedMaxNoseAngle &&
           inputC.face.noseAngle > engagedMinNoseAngle))
@@ -143,10 +143,10 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S5" && inputD.type === "Features") {
     if (
-      inputC.history.fsm.stateStamped[0].stamp <
-        inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
+      inputC.history.stateStamped[1].stamp <
+        inputC.history.vadStateStamped[1].stamp &&
+      stateStamped.stamp - inputC.history.vadStateStamped[1].stamp > timeout &&
       (inputC.face.isVisible &&
         (inputC.face.noseAngle < engagedMaxNoseAngle &&
           inputC.face.noseAngle > engagedMinNoseAngle))
@@ -184,10 +184,10 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S6" && inputD.type === "Features") {
     if (
-      inputC.history.fsm.stateStamped[0].stamp <
-        inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
+      inputC.history.stateStamped[1].stamp <
+        inputC.history.vadStateStamped[1].stamp &&
+      stateStamped.stamp - inputC.history.vadStateStamped[1].stamp > timeout &&
       (inputC.face.isVisible &&
         (inputC.face.noseAngle < engagedMaxNoseAngle &&
           inputC.face.noseAngle > engagedMinNoseAngle))

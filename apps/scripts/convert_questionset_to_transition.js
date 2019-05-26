@@ -64,9 +64,9 @@ lines.map((line, i) => {
     };
   } else if (stateStamped.state === "S${i + 2}" && inputD.type === "Features") {
     if (
-      inputC.history.fsm.stateStamped[0].stamp < inputC.voice.stampLastChanged &&
       inputC.voice.vadState === "INACTIVE" &&
-      stateStamped.stamp - inputC.voice.stampLastChanged > timeout &&
+      inputC.history.stateStamped[1].stamp < inputC.history.vadStateStamped[1].stamp &&
+      stateStamped.stamp - inputC.history.vadStateStamped[1].stamp > timeout &&
       (inputC.face.isVisible &&
         (inputC.face.noseAngle < engagedMaxNoseAngle &&
           inputC.face.noseAngle > engagedMinNoseAngle))

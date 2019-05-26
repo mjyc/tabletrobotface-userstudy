@@ -1,6 +1,7 @@
 import xs from "xstream";
 import sampleCombine from "xstream/extra/sampleCombine";
 import pairwise from "xstream/extra/pairwise";
+import throttle from "xstream/extra/throttle";
 import dropRepeats from "xstream/extra/dropRepeats";
 import { initGoal } from "@cycle-robot-drivers/action";
 import {
@@ -23,7 +24,7 @@ function input(
     PoseDetection,
     VAD
   },
-  bufferSize = 20
+  bufferSize = 10
 ) {
   const command$ = command.filter(cmd => cmd.type === "LOAD_FSM");
   const inputD$ = xs.merge(
@@ -72,105 +73,18 @@ function input(
       ? maxDiff(arr)
       : -1 * maxDiffReverse(arr);
   };
-  const buffer$ = PoseDetection.events("poses").fold(
-    (buffer, poses) => {
-      const last = buffer[buffer.length - 1];
+  const rawFaceFeaturesBuffer$ = PoseDetection.events("poses").fold(
+    (prev, poses) => {
       const features = extractFaceFeatures(poses);
-      const stampLastDetected = !!features.isVisible
-        ? Date.now()
-        : last.face.stampLastDetected;
-      const stampLastNotDetected = !features.isVisible
-        ? Date.now()
-        : last.face.stampLastNotDetected;
-
-      // maxNosePosX & Y
-      const noses = buffer
-        .filter(
-          ({ poses }) =>
-            poses.length > 0 &&
-            !!poses[0].keypoints.find(kpt => kpt.part === "nose")
-        )
-        .map(({ poses }) =>
-          poses[0].keypoints.find(kpt => kpt.part === "nose")
-        );
-      const maxNosePosX = signedMaxDiff(noses.map(nose => nose.position.x));
-      const maxNosePosY = signedMaxDiff(noses.map(nose => nose.position.y));
-
-      const nosesHalf = noses.slice(Math.ceil(bufferSize / 2));
-      const maxNosePosXHalf = signedMaxDiff(
-        nosesHalf.map(nose => nose.position.x)
-      );
-      const maxNosePosYHalf = signedMaxDiff(
-        nosesHalf.map(nose => nose.position.y)
-      );
-
-      const nosesQuarter = noses.slice(Math.ceil(bufferSize / 4) * 3);
-      const maxNosePosXQuarter = signedMaxDiff(
-        nosesQuarter.map(nose => nose.position.x)
-      );
-      const maxNosePosYQuarter = signedMaxDiff(
-        nosesQuarter.map(nose => nose.position.y)
-      );
-
-      // maxFaceAngle X & Y
-      const faceAngles = buffer.map(({ face }) => face.faceAngle);
-      const maxFaceAngle = signedMaxDiff(faceAngles);
-
-      const faceAnglesHalf = faceAngles.slice(
-        Math.floor(faceAngles.length / 2)
-      );
-      const maxFaceAngleHalf = signedMaxDiff(faceAngles);
-
-      const faceAnglesQuarter = faceAngles.slice(
-        Math.floor(faceAngles.length / 4) * 3
-      );
-      const maxFaceAngleQuarter = signedMaxDiff(faceAngles);
-
-      buffer.push({
-        face: {
-          stampLastDetected,
-          stampLastNotDetected,
-          faceAngle: !!features.isVisible
-            ? (features.faceRotation / Math.PI) * 180
-            : 0,
-          noseAngle: !!features.isVisible
-            ? (features.noseRotation / Math.PI) * 180
-            : 0,
-          maxNosePosX,
-          maxNosePosY,
-          maxNosePosXHalf,
-          maxNosePosYHalf,
-          maxNosePosXQuarter,
-          maxNosePosYQuarter,
-          maxFaceAngle,
-          maxFaceAngleHalf,
-          maxFaceAngleQuarter,
-          ...features
-        },
-        poses
-      });
-      if (buffer.length === bufferSize + 1) buffer.shift();
-      return buffer;
+      prev.unshift(features);
+      if (prev.length === bufferSize + 1) prev.pop();
+      return prev;
     },
-    [
-      {
-        face: {
-          stampLastDetected: 0,
-          stampLastNotDetected: 0,
-          faceAngle: 0,
-          noseAngle: 0,
-          maxNosePosX: 0,
-          maxNosePosY: 0,
-          maxNosePosXHalf: 0,
-          maxNosePosYHalf: 0,
-          maxNosePosXQaurter: 0,
-          maxNosePosYQaurter: 0,
-          ...defaultFaceFeatures
-        },
-        poses: []
-      }
-    ]
+    [...Array(bufferSize)].map(_ => defaultFaceFeatures)
   );
+  const faceFeatures$ = rawFaceFeaturesBuffer$.map(buffer => {
+    return buffer[0];
+  });
   const voice$ = VAD.fold(
     (prev, { type, value }) => {
       const stamp = Date.now();
@@ -182,20 +96,17 @@ function input(
           : prev.vadState;
       return {
         stamp,
-        stampLastChanged:
-          vadState === prev.vadState ? prev.stampLastChanged : stamp,
         vadState,
         vadLevel: type === "UPDATE" ? value : prev.vadLevel
       };
     },
     {
       stamp: 0,
-      stampLastChanged: 0,
       vadState: "INACTIVE",
       vadLevel: 0
     }
-  );
-  const dummyStateStamped = { state: "", stamp: 0 };
+  ).debug();
+  // .compose(throttle(100)).debug();
   const stateStampedHistory$ = state.stream
     .filter(s => !!s.fsm && !!s.fsm.stateStamped)
     .map(s => s.fsm.stateStamped)
@@ -203,20 +114,42 @@ function input(
     .compose(pairwise)
     .compose(pairwise)
     .map(([[x, y], [_, z]]) => [z, y, x])
-    .startWith([...Array(3)].map(_ => dummyStateStamped));
+    .startWith([...Array(3)].map(_ => ({ state: "", stamp: 0 })));
+  const isVisibleStampedHistory$ = faceFeatures$
+    .map(ff => ({ isVisible: ff.isVisible, stamp: ff.stamp }))
+    .compose(dropRepeats((x, y) => x.isVisible === y.isVisible))
+    .compose(pairwise)
+    .compose(pairwise)
+    .map(([[x, y], [_, z]]) => [z, y, x])
+    .startWith([...Array(3)].map(_ => ({ isVisible: "", stamp: 0 })));
+  const vadStateStampedHistory$ = voice$
+    .map(vf => ({ vadState: vf.vadState, stamp: vf.stamp }))
+    .compose(dropRepeats((x, y) => x.vadState === y.vadState))
+    .compose(pairwise)
+    .compose(pairwise)
+    .map(([[x, y], [_, z]]) => [z, y, x])
+    .startWith([...Array(3)].map(_ => ({ vadState: "", stamp: 0 })));
   const inputC$ = xs
-    .combine(buffer$, voice$, stateStampedHistory$)
-    .map(([buffer, voice, stateStampedHistory]) => {
-      return {
-        ...buffer[buffer.length - 1],
-        voice: voice,
-        history: {
-          fsm: {
-            stateStamped: stateStampedHistory
+    .combine(
+      faceFeatures$,
+      voice$,
+      stateStampedHistory$,
+      isVisibleStampedHistory$,
+      vadStateStampedHistory$
+    )
+    .map(
+      ([faceFeatures, voice, stateStampedHistory, isVisibleStampedHistory, vadStateStampedHistory]) => {
+        return {
+          face: faceFeatures,
+          voice: voice,
+          history: {
+            stateStamped: stateStampedHistory,
+            isVisibleStamped: isVisibleStampedHistory,
+            vadStateStamped: vadStateStampedHistory,
           }
-        }
-      };
-    });
+        };
+      }
+    );
   return xs.merge(
     command$,
     inputD$.compose(sampleCombine(inputC$)).map(([inputD, inputC]) => ({

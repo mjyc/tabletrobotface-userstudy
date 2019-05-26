@@ -62,9 +62,10 @@ lines.map((line, i) => {
     };
   } else if (stateStamped.state === "S${i + 2}" && inputD.type === "Features") {
     if (
-      inputC.face.stamp - inputC.history.fsm.stateStamped[0].stamp >
-        inputC.face.stamp - inputC.face.stampLastNotDetected &&
-      inputC.face.stamp - inputC.face.stampLastNotDetected >
+      inputC.face.isVisible &&
+      inputC.face.stamp - inputC.history.stateStamped[0].stamp >
+        inputC.face.stamp - inputC.history.isVisibleStamped[1].stamp &&
+      inputC.face.stamp - inputC.history.isVisibleStamped[1].stamp >
         nextTimeoutIntervalMs
     ) {
       return {

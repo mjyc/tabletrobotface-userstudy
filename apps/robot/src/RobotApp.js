@@ -27,6 +27,7 @@ function input(
   bufferSize = 10
 ) {
   const command$ = command.filter(cmd => cmd.type === "LOAD_FSM");
+
   const inputD$ = xs.merge(
     command
       .filter(cmd => cmd.type === "START_FSM")
@@ -64,15 +65,17 @@ function input(
       result: r.result
     }))
   );
-  const signedMaxDiff = arr => {
-    if (arr.length < 2)
-      console.warn("Invalid input array length < 2: returning 0");
-    return arr.length < 2
-      ? 0
-      : maxDiff(arr) > maxDiffReverse(arr)
-      ? maxDiff(arr)
-      : -1 * maxDiffReverse(arr);
-  };
+
+  // extract face features
+  // const signedMaxDiff = arr => {
+  //   if (arr.length < 2)
+  //     console.warn("Invalid input array length < 2: returning 0");
+  //   return arr.length < 2
+  //     ? 0
+  //     : maxDiff(arr) > maxDiffReverse(arr)
+  //     ? maxDiff(arr)
+  //     : -1 * maxDiffReverse(arr);
+  // };
   const rawFaceFeaturesBuffer$ = PoseDetection.events("poses").fold(
     (prev, poses) => {
       const features = extractFaceFeatures(poses);
@@ -85,7 +88,8 @@ function input(
   const faceFeatures$ = rawFaceFeaturesBuffer$.map(buffer => {
     return buffer[0];
   });
-  const voice$ = VAD.fold(
+  // extract voice features
+  const voiceFeatures$ = VAD.fold(
     (prev, { type, value }) => {
       const stamp = Date.now();
       const vadState =
@@ -105,8 +109,8 @@ function input(
       vadState: "INACTIVE",
       vadLevel: 0
     }
-  ).debug();
-  // .compose(throttle(100)).debug();
+  ).compose(throttle(100));
+  // extract history features
   const stateStampedHistory$ = state.stream
     .filter(s => !!s.fsm && !!s.fsm.stateStamped)
     .map(s => s.fsm.stateStamped)
@@ -122,30 +126,37 @@ function input(
     .compose(pairwise)
     .map(([[x, y], [_, z]]) => [z, y, x])
     .startWith([...Array(3)].map(_ => ({ isVisible: "", stamp: 0 })));
-  const vadStateStampedHistory$ = voice$
+  const vadStateStampedHistory$ = voiceFeatures$
     .map(vf => ({ vadState: vf.vadState, stamp: vf.stamp }))
     .compose(dropRepeats((x, y) => x.vadState === y.vadState))
     .compose(pairwise)
     .compose(pairwise)
     .map(([[x, y], [_, z]]) => [z, y, x])
     .startWith([...Array(3)].map(_ => ({ vadState: "", stamp: 0 })));
+
   const inputC$ = xs
     .combine(
       faceFeatures$,
-      voice$,
+      voiceFeatures$,
       stateStampedHistory$,
       isVisibleStampedHistory$,
       vadStateStampedHistory$
     )
     .map(
-      ([faceFeatures, voice, stateStampedHistory, isVisibleStampedHistory, vadStateStampedHistory]) => {
+      ([
+        faceFeatures,
+        voiceFeatures,
+        stateStampedHistory,
+        isVisibleStampedHistory,
+        vadStateStampedHistory
+      ]) => {
         return {
           face: faceFeatures,
-          voice: voice,
+          voice: voiceFeatures,
           history: {
             stateStamped: stateStampedHistory,
             isVisibleStamped: isVisibleStampedHistory,
-            vadStateStamped: vadStateStampedHistory,
+            vadStateStamped: vadStateStampedHistory
           }
         };
       }

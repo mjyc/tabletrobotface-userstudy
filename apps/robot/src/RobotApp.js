@@ -109,7 +109,7 @@ function input(
       vadState: "INACTIVE",
       vadLevel: 0
     }
-  ).compose(throttle(100));
+  ).compose(throttle(100));  // 10hz
   // extract history features
   const stateStampedHistory$ = state.stream
     .filter(s => !!s.fsm && !!s.fsm.stateStamped)
@@ -172,7 +172,7 @@ function input(
       type: "FSM_INPUT",
       discrete: { type: "Features" },
       continuous: inputC
-    }))
+    })).compose(throttle(100))  // 10hz
   );
 }
 

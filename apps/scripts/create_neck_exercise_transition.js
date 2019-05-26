@@ -112,18 +112,16 @@ for (var i = 0; i < numRepeats; i++) {
         HumanSpeechbubbleAction: ["Next"],
         SpeechSynthesisAction: "and now slowly rotate to your left"
       }
-    };${
-      i !== numRepeats - 1
-        ? `
+    };
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
     if (inputC.face.noseAngle > rotateLeftNoseAngle) {
       return {
         state: "S${idx + 3}",
         outputs: {
-          RobotSpeechbubbleAction: "and now slowly rotate to your right",
+          RobotSpeechbubbleAction: "${i !== numRepeats - 1 ? `and now slowly rotate to your right` : `and now take your ear and act like trying to touch right shoulder`}",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now slowly rotate to your right"
+          SpeechSynthesisAction: "${i !== numRepeats - 1 ? `and now slowly rotate to your right` : `and now take your ear and act like trying to touch right shoulder`}"
         }
       };
     } else {
@@ -131,25 +129,6 @@ for (var i = 0; i < numRepeats; i++) {
         state: stateStamped.state,
         outputs: null
       };
-    }`
-        : `
-  } else if (stateStamped.state === "S${idx +
-    2}" && inputD.type === "Features") {
-    if (inputC.face.noseAngle > rotateLeftNoseAngle) {
-      return {
-        state: "S${idx + 3}",
-        outputs: {
-          RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
-          HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
-        }
-      };
-    } else {
-      return {
-        state: stateStamped.state,
-        outputs: null
-      };
-    }`
     }`;
   idx += 2;
 }
@@ -204,18 +183,16 @@ for (var i = 0; i < numRepeats; i++) {
         HumanSpeechbubbleAction: ["Next"],
         SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
       }
-    };${
-      i !== numRepeats - 1
-        ? `
+    };
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
     if (inputC.face.faceAngle < touchLeftFaceAngle) {
       return {
         state: "S${idx + 3}",
         outputs: {
-          RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
+          RobotSpeechbubbleAction: "${i !== numRepeats - 1 ? `and now take your ear and act like trying to touch right shoulder` : `and now elevate your chin to the ceiling`}",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
+          SpeechSynthesisAction: "${i !== numRepeats - 1 ? `and now take your ear and act like trying to touch right shoulder` : `and now elevate your chin to the ceiling`}"
         }
       };
     } else {
@@ -223,25 +200,6 @@ for (var i = 0; i < numRepeats; i++) {
         state: stateStamped.state,
         outputs: null
       };
-    }`
-        : `
-  } else if (stateStamped.state === "S${idx +
-    2}" && inputD.type === "Features") {
-    if (inputC.face.faceAngle < touchLeftFaceAngle) {
-      return {
-        state: "S${idx + 3}",
-        outputs: {
-          RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
-          HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now elevate your chin to the ceiling"
-        }
-      };
-    } else {
-      return {
-        state: stateStamped.state,
-        outputs: null
-      };
-    }`
     }`;
   idx += 2;
 }
@@ -261,20 +219,20 @@ for (var i = 0; i < numRepeats; i++) {
     return {
       state: "S${idx + 1}",
       outputs: {
-        RobotSpeechbubbleAction: "and now bring your chin back to the normal position",
+        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now bring your chin back to the normal position"
+        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
       }
     };
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.faceHeight > tuckChinFaceHeight) {
+    if (inputC.face.faceHeight < elevateChinFaceHeight) {
       return {
         state: "S${idx + 2}",
         outputs: {
-          RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
+          RobotSpeechbubbleAction: "and now bring your chin back to the normal position",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+          SpeechSynthesisAction: "and now bring your chin back to the normal position"
         }
       };
     } else {
@@ -292,22 +250,20 @@ for (var i = 0; i < numRepeats; i++) {
     return {
       state: "S${idx + 2}",
       outputs: {
-        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
+        RobotSpeechbubbleAction: "and now bring your chin back to the normal position",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+        SpeechSynthesisAction: "and now bring your chin back to the normal position"
       }
-    };${
-      i !== numRepeats - 1
-        ? `
+    };
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.faceHeight < elevateChinFaceHeight) {
+    if (inputC.face.faceHeight > tuckChinFaceHeight) {
       return {
         state: "S${idx + 3}",
         outputs: {
-          RobotSpeechbubbleAction: "and now bring your chin back to the normal position",
+          RobotSpeechbubbleAction: "${i !== numRepeats - 1 ? `and now elevate your chin to the ceiling` : `Great job!`}",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now bring your chin back to the normal position"
+          SpeechSynthesisAction: "${i !== numRepeats - 1 ? `and now elevate your chin to the ceiling` : `Great job!`}"
         }
       };
     } else {
@@ -315,25 +271,6 @@ for (var i = 0; i < numRepeats; i++) {
         state: stateStamped.state,
         outputs: null
       };
-    }`
-        : `
-  } else if (stateStamped.state === "S${idx +
-    2}" && inputD.type === "Features") {
-    if (inputC.face.faceHeight < elevateChinFaceHeight) {
-      return {
-        state: "S${idx + 3}",
-        outputs: {
-          RobotSpeechbubbleAction: "Great job!",
-          HumanSpeechbubbleAction: "",
-          SpeechSynthesisAction: "Great job!"
-        }
-      };
-    } else {
-      return {
-        state: stateStamped.state,
-        outputs: null
-      };
-    }`
     }`;
   idx += 2;
 }

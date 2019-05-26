@@ -297,21 +297,21 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S11",
       outputs: {
-        RobotSpeechbubbleAction:
-          "and now bring your chin back to the normal position",
+        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction:
-          "and now bring your chin back to the normal position"
+        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
       }
     };
   } else if (stateStamped.state === "S11" && inputD.type === "Features") {
-    if (inputC.face.faceHeight > tuckChinFaceHeight) {
+    if (inputC.face.faceHeight < elevateChinFaceHeight) {
       return {
         state: "S12",
         outputs: {
-          RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
+          RobotSpeechbubbleAction:
+            "and now bring your chin back to the normal position",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+          SpeechSynthesisAction:
+            "and now bring your chin back to the normal position"
         }
       };
     } else {
@@ -329,21 +329,21 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S12",
       outputs: {
-        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
+        RobotSpeechbubbleAction:
+          "and now bring your chin back to the normal position",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+        SpeechSynthesisAction:
+          "and now bring your chin back to the normal position"
       }
     };
   } else if (stateStamped.state === "S12" && inputD.type === "Features") {
-    if (inputC.face.faceHeight < elevateChinFaceHeight) {
+    if (inputC.face.faceHeight > tuckChinFaceHeight) {
       return {
         state: "S13",
         outputs: {
-          RobotSpeechbubbleAction:
-            "and now bring your chin back to the normal position",
+          RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction:
-            "and now bring your chin back to the normal position"
+          SpeechSynthesisAction: "and now elevate your chin to the ceiling"
         }
       };
     } else {
@@ -361,21 +361,21 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S13",
       outputs: {
-        RobotSpeechbubbleAction:
-          "and now bring your chin back to the normal position",
+        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction:
-          "and now bring your chin back to the normal position"
+        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
       }
     };
   } else if (stateStamped.state === "S13" && inputD.type === "Features") {
-    if (inputC.face.faceHeight > tuckChinFaceHeight) {
+    if (inputC.face.faceHeight < elevateChinFaceHeight) {
       return {
         state: "S14",
         outputs: {
-          RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
+          RobotSpeechbubbleAction:
+            "and now bring your chin back to the normal position",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+          SpeechSynthesisAction:
+            "and now bring your chin back to the normal position"
         }
       };
     } else {
@@ -393,18 +393,20 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S14",
       outputs: {
-        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
+        RobotSpeechbubbleAction:
+          "and now bring your chin back to the normal position",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+        SpeechSynthesisAction:
+          "and now bring your chin back to the normal position"
       }
     };
   } else if (stateStamped.state === "S14" && inputD.type === "Features") {
-    if (inputC.face.faceHeight < elevateChinFaceHeight) {
+    if (inputC.face.faceHeight > tuckChinFaceHeight) {
       return {
         state: "S15",
         outputs: {
           RobotSpeechbubbleAction: "Great job!",
-          HumanSpeechbubbleAction: "",
+          HumanSpeechbubbleAction: ["Next"],
           SpeechSynthesisAction: "Great job!"
         }
       };

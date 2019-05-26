@@ -231,9 +231,9 @@ for (var i = 0; i < numRepeats; i++) {
       return {
         state: "S${idx + 3}",
         outputs: {
-          RobotSpeechbubbleAction: "and now tuck your chin into the chest",
+          RobotSpeechbubbleAction: "and now bring your chin back to the normal position",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now tuck your chin into the chest"
+          SpeechSynthesisAction: "and now bring your chin back to the normal position"
         }
       };
     } else {
@@ -268,13 +268,13 @@ for (var i = 0; i < numRepeats; i++) {
     };
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.faceHeight < tuckChinFaceHeight) {
+    if (inputC.face.faceHeight < elevateChinFaceHeight) {
       return {
         state: "S${idx + 2}",
         outputs: {
-          RobotSpeechbubbleAction: "and now tuck your chin into the chest",
+          RobotSpeechbubbleAction: "and now bring your chin back to the normal position",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now tuck your chin into the chest"
+          SpeechSynthesisAction: "and now bring your chin back to the normal position"
         }
       };
     } else {
@@ -292,16 +292,16 @@ for (var i = 0; i < numRepeats; i++) {
     return {
       state: "S${idx + 2}",
       outputs: {
-        RobotSpeechbubbleAction: "and now tuck your chin into the chest",
+        RobotSpeechbubbleAction: "and now bring your chin back to the normal position",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now tuck your chin into the chest"
+        SpeechSynthesisAction: "and now bring your chin back to the normal position"
       }
     };${
       i !== numRepeats - 1
         ? `
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.faceHeight > elevateChinFaceHeight) {
+    if (inputC.face.faceHeight > tuckChinFaceHeight) {
       return {
         state: "S${idx + 3}",
         outputs: {
@@ -319,7 +319,7 @@ for (var i = 0; i < numRepeats; i++) {
         : `
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.faceHeight > elevateChinFaceHeight) {
+    if (inputC.face.faceHeight > tuckChinFaceHeight) {
       return {
         state: "S${idx + 3}",
         outputs: {

@@ -9,8 +9,9 @@ export {
   makeDownloadDataDriver,
   DataDownloader
 } from "./cycle-media";
-// import makeVoiceActivityDetectionDriver from "./makeVoiceActivityDetectionDriver";
-// export { makeVoiceActivityDetectionDriver };
+export {
+  default as makeVoiceActivityDetectionDriver
+} from "./makeVoiceActivityDetectionDriver";
 export {
   maxDiff,
   maxDiffReverse,

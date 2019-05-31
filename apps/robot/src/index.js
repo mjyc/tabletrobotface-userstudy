@@ -4,6 +4,7 @@ document.body.style.margin = "0px";
 import xs from "xstream";
 import delay from "xstream/extra/delay";
 import dropRepeats from "xstream/extra/dropRepeats";
+import throttle from "xstream/extra/throttle";
 import { div } from "@cycle/dom";
 import isolate from "@cycle/isolate";
 import { run } from "@cycle/run";
@@ -25,6 +26,10 @@ import {
   makeStreamingChartDriver,
   DataDownloader,
   makeVoiceActivityDetectionDriver,
+  defaultFaceFeatures,
+  extractFaceFeatures,
+  defaultVoiceFeatures,
+  extractVoiceFeatures,
   RobotApp
 } from "tabletrobotface-userstudy";
 import settings from "../../settings_helper";
@@ -55,31 +60,20 @@ function TabletRobotFaceApp(sources) {
       })
   );
 
-  // const voiceFeatures$ = VAD.fold(
-  //   (prev, { type, value }) => {
-  //     const stamp = Date.now();
-  //     const vadState =
-  //       type === "START"
-  //         ? "ACTIVE"
-  //         : type === "STOP"
-  //         ? "INACTIVE"
-  //         : prev.vadState;
-  //     return {
-  //       stamp,
-  //       vadState,
-  //       vadLevel: type === "UPDATE" ? value : prev.vadLevel
-  //     };
-  //   },
-  //   {
-  //     stamp: 0,
-  //     vadState: "INACTIVE",
-  //     vadLevel: 0
-  //   }
-  // ).compose(throttle(100)); // 10hz
-
+  // extract face features
+  const faceFeatures$ = sources.PoseDetection.events("poses")
+    .map(poses => extractFaceFeatures(poses))
+    .startWith(defaultFaceFeatures);
+  // extract voice features
+  const voiceFeatures$ = sources.VAD.fold(
+    (prev, { type, value }) => extractVoiceFeatures(prev, type, value),
+    defaultVoiceFeatures
+  ).compose(throttle(100)); // 10hz
   const robotSinks = isolate(RobotApp, "RobotApp")({
     command: command$,
-    ...sources
+    ...sources,
+    faceFeatures: faceFeatures$,
+    voiceFeatures: voiceFeatures$
   });
   return robotSinks;
 }

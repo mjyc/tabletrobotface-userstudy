@@ -1,7 +1,7 @@
 // adapted from https://github.com/Jam3/voice-activity-detection/blob/master/test/test.js
 
 import xs from "xstream";
-var vad = require("voice-activity-detection");
+import vad from "voice-activity-detection";
 
 export default function makeVoiceActivityDetectionDriver() {
   var audioContext;

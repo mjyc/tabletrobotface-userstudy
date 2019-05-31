@@ -125,24 +125,28 @@ function extractFaceFeatures(poses) {
   };
 }
 
-// const defaultVoiceFeatures = {};
+const defaultVoiceFeatures = {
+  stamp: 0,
+  vadLevel: 0,
+  vadState: "INACTIVE"
+};
 
-// function extractVoiceFeatures(vad) {
-//   const stamp = Date.now();
-//   const vadState =
-//     type === "START" ? "ACTIVE" : type === "STOP" ? "INACTIVE" : prev.vadState;
-//   return {
-//     stamp,
-//     vadState,
-//     vadLevel: type === "UPDATE" ? value : prev.vadLevel
-//   };
-// }
+function extractVoiceFeatures(prev, type, value) {
+  const stamp = Date.now();
+  const vadState =
+    type === "START" ? "ACTIVE" : type === "STOP" ? "INACTIVE" : prev.vadState;
+  return {
+    stamp,
+    vadState,
+    vadLevel: type === "UPDATE" ? value : prev.vadLevel
+  };
+}
 
 export {
   maxDiff,
   maxDiffReverse,
   defaultFaceFeatures,
-  extractFaceFeatures
-  // defaultVoiceFeatures,
-  // extractVoiceFeatures
+  extractFaceFeatures,
+  defaultVoiceFeatures,
+  extractVoiceFeatures
 };

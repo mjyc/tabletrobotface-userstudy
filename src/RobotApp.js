@@ -1,31 +1,22 @@
 import xs from "xstream";
-import sampleCombine from "xstream/extra/sampleCombine";
-import pairwise from "xstream/extra/pairwise";
-import throttle from "xstream/extra/throttle";
 import dropRepeats from "xstream/extra/dropRepeats";
+import pairwise from "xstream/extra/pairwise";
+import sampleCombine from "xstream/extra/sampleCombine";
+import throttle from "xstream/extra/throttle";
 import { initGoal } from "@cycle-robot-drivers/action";
-import {
-  maxDiff,
-  maxDiffReverse,
-  defaultFaceFeatures,
-  extractFaceFeatures
-} from "./features";
 
-export function input(
-  {
-    command,
-    state,
-    FacialExpressionAction,
-    RobotSpeechbubbleAction,
-    HumanSpeechbubbleAction,
-    AudioPlayerAction,
-    SpeechSynthesisAction,
-    SpeechRecognitionAction,
-    PoseDetection,
-    VAD
-  },
-  bufferSize = 10
-) {
+export function input({
+  command,
+  state,
+  FacialExpressionAction,
+  RobotSpeechbubbleAction,
+  HumanSpeechbubbleAction,
+  AudioPlayerAction,
+  SpeechSynthesisAction,
+  SpeechRecognitionAction,
+  faceFeatures,
+  voiceFeatures
+}) {
   const command$ = command.filter(cmd => cmd.type === "LOAD_FSM");
 
   const inputD$ = xs.merge(
@@ -66,32 +57,6 @@ export function input(
     }))
   );
 
-  // extract face features
-  const faceFeatures$ = PoseDetection.events("poses")
-    .map(poses => extractFaceFeatures(poses))
-    .startWith(defaultFaceFeatures);
-  // extract voice features
-  const voiceFeatures$ = VAD.fold(
-    (prev, { type, value }) => {
-      const stamp = Date.now();
-      const vadState =
-        type === "START"
-          ? "ACTIVE"
-          : type === "STOP"
-          ? "INACTIVE"
-          : prev.vadState;
-      return {
-        stamp,
-        vadState,
-        vadLevel: type === "UPDATE" ? value : prev.vadLevel
-      };
-    },
-    {
-      stamp: 0,
-      vadState: "INACTIVE",
-      vadLevel: 0
-    }
-  ).compose(throttle(100)); // 10hz
   // extract history features
   const stateStampedHistory$ = state.stream
     .filter(s => !!s.fsm && !!s.fsm.stateStamped)
@@ -101,14 +66,14 @@ export function input(
     .compose(pairwise)
     .map(([[x, y], [_, z]]) => [z, y, x])
     .startWith([...Array(3)].map(_ => ({ state: "", stamp: 0 })));
-  const isVisibleStampedHistory$ = faceFeatures$
+  const isVisibleStampedHistory$ = faceFeatures
     .map(ff => ({ isVisible: ff.isVisible, stamp: ff.stamp }))
     .compose(dropRepeats((x, y) => x.isVisible === y.isVisible))
     .compose(pairwise)
     .compose(pairwise)
     .map(([[x, y], [_, z]]) => [z, y, x])
     .startWith([...Array(3)].map(_ => ({ isVisible: "", stamp: 0 })));
-  const vadStateStampedHistory$ = voiceFeatures$
+  const vadStateStampedHistory$ = voiceFeatures
     .map(vf => ({ vadState: vf.vadState, stamp: vf.stamp }))
     .compose(dropRepeats((x, y) => x.vadState === y.vadState))
     .compose(pairwise)
@@ -118,8 +83,8 @@ export function input(
 
   const inputC$ = xs
     .combine(
-      faceFeatures$,
-      voiceFeatures$,
+      faceFeatures,
+      voiceFeatures,
       stateStampedHistory$,
       isVisibleStampedHistory$,
       vadStateStampedHistory$

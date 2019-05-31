@@ -16,6 +16,8 @@ export {
   maxDiff,
   maxDiffReverse,
   defaultFaceFeatures,
-  extractFaceFeatures
+  extractFaceFeatures,
+  defaultVoiceFeatures,
+  extractVoiceFeatures
 } from "./features";
 export { input, transitionReducer, output, RobotApp } from "./RobotApp";

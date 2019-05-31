@@ -111,20 +111,6 @@ function main(sources) {
   );
 
   const videoStart$ = sources.VideoRecorder.filter(v => v.type === "START");
-  const trace$ = sources.state.stream
-    .filter(
-      s => !!s.RobotApp && !!s.RobotApp.fsm && !!s.RobotApp.fsm.stateStamped
-    )
-    .compose(
-      dropRepeats(
-        (rs1, rs2) =>
-          rs1.RobotApp.fsm.stateStamped.stamp ===
-          rs2.RobotApp.fsm.stateStamped.stamp
-      )
-    )
-    .filter(s => !!s.RobotApp.trace) // trace value on LOAD_FSM is null; skip that
-    .map(s => s.RobotApp.trace)
-    .remember(); // to save the first event; it gets fired before recording starts
   const time$ = makeTime$(sources.Time, xs.of(true), xs.of(0));
   const recordedStreams = recordStreams(
     [
@@ -141,7 +127,7 @@ function main(sources) {
       },
       { stream: sinks.PoseDetection || xs.never(), label: "PoseDetection" },
       { stream: videoStart$, label: "videoStart" },
-      { stream: trace$, label: "trace" }
+      { stream: sources.PoseDetection.events("poses"), label: "poses" }
     ],
     time$
   );

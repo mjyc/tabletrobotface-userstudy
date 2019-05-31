@@ -11,7 +11,7 @@ import {
   extractFaceFeatures
 } from "tabletrobotface-userstudy";
 
-function input(
+export function input(
   {
     command,
     state,

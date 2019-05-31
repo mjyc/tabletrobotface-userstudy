@@ -1,13 +1,14 @@
 export {
-  mockMediaRecorderSource,
-  makeMediaRecorderDriver
-} from "./mediaRecorder";
-export { mockStreamingChartSource, makeStreamingChartDriver } from "./chart";
+  mockStreamingChartSource,
+  makeStreamingChartDriver
+} from "./cycle-chartjs";
 export {
+  mockMediaRecorderSource,
+  makeMediaRecorderDriver,
   mockDownloadDataSource,
   makeDownloadDataDriver,
   DataDownloader
-} from "./recorder_helpers";
+} from "./cycle-media";
 export {
   maxDiff,
   maxDiffReverse,

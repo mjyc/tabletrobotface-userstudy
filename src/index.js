@@ -15,4 +15,4 @@ export {
   defaultFaceFeatures,
   extractFaceFeatures
 } from "./features";
-export { RobotApp } from "./RobotApp";
+export { input, transitionReducer, output, RobotApp } from "./RobotApp";

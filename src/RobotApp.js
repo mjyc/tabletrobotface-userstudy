@@ -160,7 +160,7 @@ export function input(
   );
 }
 
-function transitionReducer(input$) {
+export function transitionReducer(input$) {
   const initReducer$ = xs.of(prev => {
     return {
       fsm: null,
@@ -253,7 +253,7 @@ function transitionReducer(input$) {
   return xs.merge(initReducer$, inputReducer$);
 }
 
-function output(reducerState$) {
+export function output(reducerState$) {
   const outputs$ = reducerState$
     .filter(rs => !!rs.outputs)
     .map(rs => rs.outputs);

@@ -15,3 +15,4 @@ export {
   defaultFaceFeatures,
   extractFaceFeatures
 } from "./features";
+export { RobotApp } from "./RobotApp";

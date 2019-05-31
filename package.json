@@ -2,7 +2,7 @@
   "name": "tabletrobotface-userstudy",
   "version": "0.0.3",
   "description": "",
-  "main": "lib/index.js",
+  "main": "lib/tabletrobotface-userstudy.js",
   "scripts": {
     "prebuild": "rimraf lib && mkdirp lib",
     "build": "babel src -d lib",
@@ -27,6 +27,7 @@
   "license": "MIT",
   "repository": "https://github.com/mjyc/tabletrobotface-userstudy",
   "dependencies": {
+    "@cycle-robot-drivers/action": "^1.0.1",
     "@cycle/dom": "22.3.0",
     "@cycle/isolate": "5.0.0",
     "@cycle/run": "5.2.0",

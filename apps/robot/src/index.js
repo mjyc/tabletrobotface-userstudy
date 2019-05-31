@@ -23,10 +23,10 @@ import {
   makeDownloadDataDriver,
   mockStreamingChartSource,
   makeStreamingChartDriver,
-  DataDownloader
+  DataDownloader,
+  RobotApp
 } from "tabletrobotface-userstudy";
 import settings from "../../settings_helper";
-import { RobotApp } from "./RobotApp";
 import transitions from "./transitions";
 import FaceFeatureChart, { config } from "./FaceFeatureChart";
 import makeVoiceActivityDetectionDriver from "./makeVoiceActivityDetectionDriver";

@@ -125,4 +125,24 @@ function extractFaceFeatures(poses) {
   };
 }
 
-export { maxDiff, maxDiffReverse, defaultFaceFeatures, extractFaceFeatures };
+// const defaultVoiceFeatures = {};
+
+// function extractVoiceFeatures(vad) {
+//   const stamp = Date.now();
+//   const vadState =
+//     type === "START" ? "ACTIVE" : type === "STOP" ? "INACTIVE" : prev.vadState;
+//   return {
+//     stamp,
+//     vadState,
+//     vadLevel: type === "UPDATE" ? value : prev.vadLevel
+//   };
+// }
+
+export {
+  maxDiff,
+  maxDiffReverse,
+  defaultFaceFeatures,
+  extractFaceFeatures
+  // defaultVoiceFeatures,
+  // extractVoiceFeatures
+};

@@ -24,6 +24,7 @@ import {
   mockStreamingChartSource,
   makeStreamingChartDriver,
   DataDownloader,
+  makeVoiceActivityDetectionDriver,
   RobotApp
 } from "tabletrobotface-userstudy";
 import settings from "../../settings_helper";

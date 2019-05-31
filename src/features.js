@@ -125,9 +125,4 @@ function extractFaceFeatures(poses) {
   };
 }
 
-module.exports = {
-  maxDiff: maxDiff,
-  maxDiffReverse: maxDiffReverse,
-  defaultFaceFeatures: defaultFaceFeatures,
-  extractFaceFeatures: extractFaceFeatures
-};
+export { maxDiff, maxDiffReverse, defaultFaceFeatures, extractFaceFeatures };

@@ -9,7 +9,7 @@ import {
   maxDiffReverse,
   defaultFaceFeatures,
   extractFaceFeatures
-} from "tabletrobotface-userstudy";
+} from "./features";
 
 export function input(
   {

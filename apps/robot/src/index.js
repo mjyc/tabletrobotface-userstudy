@@ -55,6 +55,28 @@ function TabletRobotFaceApp(sources) {
       })
   );
 
+  const voiceFeatures$ = VAD.fold(
+    (prev, { type, value }) => {
+      const stamp = Date.now();
+      const vadState =
+        type === "START"
+          ? "ACTIVE"
+          : type === "STOP"
+          ? "INACTIVE"
+          : prev.vadState;
+      return {
+        stamp,
+        vadState,
+        vadLevel: type === "UPDATE" ? value : prev.vadLevel
+      };
+    },
+    {
+      stamp: 0,
+      vadState: "INACTIVE",
+      vadLevel: 0
+    }
+  ).compose(throttle(100)); // 10hz
+
   const robotSinks = isolate(RobotApp, "RobotApp")({
     command: command$,
     ...sources

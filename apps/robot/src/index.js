@@ -145,7 +145,8 @@ function main(sources) {
       },
       { stream: sinks.PoseDetection || xs.never(), label: "PoseDetection" },
       { stream: videoStart$, label: "videoStart" },
-      { stream: sources.PoseDetection.events("poses"), label: "poses" }
+      { stream: poses$, label: "poses" },
+      { stream: vadState$, label: "vadState" }
     ],
     time$
   );
@@ -174,8 +175,7 @@ const drivers = {
   VAD: makeVoiceActivityDetectionDriver({
     useNoiseCapture: false,
     activityCounterThresh: 10,
-    activityCounterMax: 30,
-    logger: console
+    activityCounterMax: 30
   }),
   Time: timeDriver,
   VideoRecorder: settings.robot.recording.enabled

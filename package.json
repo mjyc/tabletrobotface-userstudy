@@ -30,7 +30,7 @@
   "license": "MIT",
   "repository": "https://github.com/mjyc/tabletrobotface-userstudy",
   "dependencies": {
-    "@cycle-robot-drivers/action": "^1.0.1",
+    "@cycle-robot-drivers/action": "1.0.1",
     "@cycle/dom": "22.3.0",
     "@cycle/isolate": "5.0.0",
     "@cycle/run": "5.2.0",

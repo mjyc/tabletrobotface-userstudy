@@ -26,6 +26,7 @@ import {
   makeStreamingChartDriver,
   DataDownloader,
   makeVoiceActivityDetectionDriver,
+  vadAdapter,
   defaultFaceFeatures,
   extractFaceFeatures,
   defaultVoiceFeatures,
@@ -61,14 +62,15 @@ function TabletRobotFaceApp(sources) {
   );
 
   // extract face features
-  const faceFeatures$ = sources.PoseDetection.events("poses")
+  const poses$ = sources.PoseDetection.events("poses");
+  const faceFeatures$ = poses$
     .map(poses => extractFaceFeatures(poses))
     .startWith(defaultFaceFeatures);
   // extract voice features
-  const voiceFeatures$ = sources.VAD.fold(
-    (prev, { type, value }) => extractVoiceFeatures(prev, type, value),
-    defaultVoiceFeatures
-  ).compose(throttle(100)); // 10hz
+  const vadState$ = sources.VAD.events("state").compose(throttle(100)); // 10hz
+  const voiceFeatures$ = vadState$
+    .map(state => extractVoiceFeatures(state))
+    .startWith(defaultVoiceFeatures);
   const robotSinks = isolate(RobotApp, "RobotApp")({
     command: command$,
     ...sources,
@@ -169,7 +171,12 @@ function main(sources) {
 const drivers = {
   TabletFace: makeTabletFaceDriver(),
   PoseDetection: makePoseDetectionDriver({ fps: 10 }),
-  VAD: makeVoiceActivityDetectionDriver(),
+  VAD: makeVoiceActivityDetectionDriver({
+    useNoiseCapture: false,
+    activityCounterThresh: 10,
+    activityCounterMax: 30,
+    logger: console
+  }),
   Time: timeDriver,
   VideoRecorder: settings.robot.recording.enabled
     ? makeMediaRecorderDriver()
@@ -182,7 +189,19 @@ const drivers = {
     : mockStreamingChartSource
 };
 
-run(main, {
+function withAdapters(main, adapters) {
+  return sources =>
+    main(
+      Object.keys(sources).reduce((prev, key) => {
+        prev[key] = !!adapters[key]
+          ? adapters[key](sources[key])
+          : sources[key];
+        return prev;
+      }, {})
+    );
+}
+
+run(withAdapters(main, { VAD: vadAdapter }), {
   ...initializeTabletFaceRobotDrivers(),
   ...drivers
 });

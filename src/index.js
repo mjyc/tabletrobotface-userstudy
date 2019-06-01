@@ -10,7 +10,8 @@ export {
   DataDownloader
 } from "./cycle-media";
 export {
-  default as makeVoiceActivityDetectionDriver
+  default as makeVoiceActivityDetectionDriver,
+  adapter as vadAdapter
 } from "./makeVoiceActivityDetectionDriver";
 export {
   maxDiff,

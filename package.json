@@ -34,12 +34,12 @@
     "@cycle/dom": "22.3.0",
     "@cycle/isolate": "5.0.0",
     "@cycle/run": "5.2.0",
+    "@mjyc/voice-activity-detection": "0.0.3",
     "chart.js": "2.8.0",
     "chartjs-plugin-streaming": "1.8.0",
     "d3": "5.7.0",
     "dagre-d3": "0.6.3",
     "json": "^9.0.6",
-    "voice-activity-detection": "0.0.5",
     "xstream": "11.10.0"
   },
   "devDependencies": {

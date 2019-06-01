@@ -1,13 +1,13 @@
 // adapted from https://github.com/Jam3/voice-activity-detection/blob/master/test/test.js
 
 import xs from "xstream";
-import vad from "voice-activity-detection";
+import vad from "@mjyc/voice-activity-detection";
 
-export default function makeVoiceActivityDetectionDriver() {
+export default function makeVoiceActivityDetectionDriver(options) {
   var audioContext;
 
   return function voiceActivityDetectionDriver() {
-    return xs.create({
+    const output$ = xs.create({
       start: listener => {
         function handleUserMediaError() {
           listener.error("Mic input is not supported by the browser.");
@@ -55,7 +55,8 @@ export default function makeVoiceActivityDetectionDriver() {
           }
         }
         function startUserMedia(stream) {
-          var options = {
+          var opts = {
+            ...options,
             onVoiceStart: function() {
               listener.next({
                 type: "START"
@@ -73,11 +74,30 @@ export default function makeVoiceActivityDetectionDriver() {
               });
             }
           };
-          vad(audioContext, stream, options);
+          vad(audioContext, stream, opts);
         }
         requestMic();
       },
       stop: () => {}
     });
+
+    return output$;
+  };
+}
+
+export function adapter(output$) {
+  const state$ = output$
+    .filter(({ type }) => type === "START" || type === "STOP")
+    .fold(
+      (prev, { type }) =>
+        type === "START" ? "ACTIVE" : type === "STOP" ? "INACTIVE" : prev,
+      "INACTIVE"
+    );
+  const level$ = output$
+    .filter(({ type }) => type === "UPDATE")
+    .map(({ value }) => value);
+  return {
+    events: name =>
+      name === "state" ? state$ : name === "level" ? level$ : xs.never()
   };
 }

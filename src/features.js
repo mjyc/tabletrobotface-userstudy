@@ -131,14 +131,10 @@ const defaultVoiceFeatures = {
   vadState: "INACTIVE"
 };
 
-function extractVoiceFeatures(prev, type, value) {
-  const stamp = Date.now();
-  const vadState =
-    type === "START" ? "ACTIVE" : type === "STOP" ? "INACTIVE" : prev.vadState;
+function extractVoiceFeatures(state) {
   return {
-    stamp,
-    vadState,
-    vadLevel: type === "UPDATE" ? value : prev.vadLevel
+    stamp: Date.now(),
+    vadState: state
   };
 }
 

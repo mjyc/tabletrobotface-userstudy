@@ -8,12 +8,7 @@ import { initGoal } from "@cycle-robot-drivers/action";
 export function input({
   command,
   state,
-  FacialExpressionAction,
-  RobotSpeechbubbleAction,
-  HumanSpeechbubbleAction,
-  AudioPlayerAction,
-  SpeechSynthesisAction,
-  SpeechRecognitionAction,
+  actionResults,
   faceFeatures,
   voiceFeatures
 }) {
@@ -25,36 +20,7 @@ export function input({
       .mapTo({
         type: "START"
       }),
-    FacialExpressionAction.result.map(r => ({
-      type: "FacialExpressionAction",
-      status: r.status.status,
-      result: r.result
-    })),
-    RobotSpeechbubbleAction.result.map(r => ({
-      type: "RobotSpeechbubbleAction",
-      status: r.status.status,
-      result: r.result
-    })),
-    HumanSpeechbubbleAction.result.map(r => ({
-      type: "HumanSpeechbubbleAction",
-      status: r.status.status,
-      result: r.result
-    })),
-    AudioPlayerAction.result.map(r => ({
-      type: "AudioPlayerAction",
-      status: r.status.status,
-      result: r.result
-    })),
-    SpeechSynthesisAction.result.map(r => ({
-      type: "SpeechSynthesisAction",
-      status: r.status.status,
-      result: r.result
-    })),
-    SpeechRecognitionAction.result.map(r => ({
-      type: "SpeechRecognitionAction",
-      status: r.status.status,
-      result: r.result
-    }))
+    actionResults,
   );
 
   // extract history features

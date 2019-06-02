@@ -61,6 +61,38 @@ function TabletRobotFaceApp(sources) {
       })
   );
 
+  const actionResults$ = xs.merge(
+    sources.FacialExpressionAction.result.map(r => ({
+      type: "FacialExpressionAction",
+      status: r.status.status,
+      result: r.result
+    })),
+    sources.RobotSpeechbubbleAction.result.map(r => ({
+      type: "RobotSpeechbubbleAction",
+      status: r.status.status,
+      result: r.result
+    })),
+    sources.HumanSpeechbubbleAction.result.map(r => ({
+      type: "HumanSpeechbubbleAction",
+      status: r.status.status,
+      result: r.result
+    })),
+    sources.AudioPlayerAction.result.map(r => ({
+      type: "AudioPlayerAction",
+      status: r.status.status,
+      result: r.result
+    })),
+    sources.SpeechSynthesisAction.result.map(r => ({
+      type: "SpeechSynthesisAction",
+      status: r.status.status,
+      result: r.result
+    })),
+    sources.SpeechRecognitionAction.result.map(r => ({
+      type: "SpeechRecognitionAction",
+      status: r.status.status,
+      result: r.result
+    }))
+  );
   // extract face features
   const poses$ = sources.PoseDetection.events("poses");
   const faceFeatures$ = poses$
@@ -74,6 +106,8 @@ function TabletRobotFaceApp(sources) {
   const robotSinks = isolate(RobotApp, "RobotApp")({
     command: command$,
     ...sources,
+    state: sources.state,
+    actionResults: actionResults$,
     faceFeatures: faceFeatures$,
     voiceFeatures: voiceFeatures$
   });

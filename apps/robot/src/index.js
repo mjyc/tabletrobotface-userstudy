@@ -35,7 +35,7 @@ import {
 } from "tabletrobotface-userstudy";
 import settings from "../../settings_helper";
 import transitions from "./transitions";
-import FaceFeatureChart, { config } from "./FaceFeatureChart";
+import FeatureChart, { config } from "./FeatureChart";
 
 function TabletRobotFaceApp(sources) {
   // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
@@ -77,7 +77,11 @@ function TabletRobotFaceApp(sources) {
     faceFeatures: faceFeatures$,
     voiceFeatures: voiceFeatures$
   });
-  return robotSinks;
+  return {
+    ...robotSinks,
+    faceFeatures: faceFeatures$,
+    voiceFeatures: voiceFeatures$
+  };
 }
 
 function main(sources) {
@@ -88,21 +92,8 @@ function main(sources) {
   // to save the first event; it gets fired before recording starts
   sinks.DOM = sinks.DOM.remember();
 
-  const lens = {
-    get: rs => {
-      if (
-        !!rs.RobotApp &&
-        !!rs.RobotApp.trace &&
-        rs.RobotApp.trace.input.type === "FSM_INPUT"
-      ) {
-        return { features: rs.RobotApp.trace.input.continuous.face };
-      } else {
-        return {};
-      }
-    }
-  };
-  const faceFeatureChart = settings.robot.charts.enabled
-    ? isolate(FaceFeatureChart, { state: lens })(sources)
+  const featureChart = settings.robot.charts.enabled
+    ? isolate(FeatureChart)({DOM: sources.DOM, features: sinks.faceFeatures})
     : {
         DOM: xs.of(""),
         Chart: xs.never()
@@ -111,8 +102,8 @@ function main(sources) {
   if (!settings.robot.recording.enabled) {
     return {
       ...sinks,
-      DOM: xs.combine(sinks.DOM, faceFeatureChart.DOM).map(vdoms => div(vdoms)),
-      Chart: faceFeatureChart.Chart
+      DOM: xs.combine(sinks.DOM, featureChart.DOM).map(vdoms => div(vdoms)),
+      Chart: featureChart.Chart
     };
   }
 
@@ -120,7 +111,7 @@ function main(sources) {
   const dataDownloader = DataDownloader(sources, dataProxy$);
 
   const vdom$ = xs
-    .combine(sinks.DOM, faceFeatureChart.DOM, dataDownloader.DOM)
+    .combine(sinks.DOM, featureChart.DOM, dataDownloader.DOM)
     .map(vdoms => div(vdoms));
 
   const videoRecorder$ = xs.merge(
@@ -165,7 +156,7 @@ function main(sources) {
     DownloadData: dataDownloader.DownloadData,
     DOM: vdom$,
     VideoRecorder: videoRecorder$,
-    Chart: faceFeatureChart.Chart
+    Chart: featureChart.Chart
   };
 }
 

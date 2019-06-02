@@ -124,7 +124,7 @@ export const config = {
   }
 };
 
-export default function FaceFeatureChart(sources) {
+export default function FeatureChart(sources) {
   const vdom$ = xs.of(
     div(".chart", { style: { margin: "auto", width: "75%" } }, [
       canvas(".myChart"),
@@ -157,7 +157,7 @@ export default function FaceFeatureChart(sources) {
   const chartElem$ = sources.DOM.select(".myChart")
     .element()
     .take(1);
-  const chartData$ = sources.state.stream
+  const chartData$ = sources.features
     .filter(s => !!s.features)
     .map(s => [
       s.features.faceSize,

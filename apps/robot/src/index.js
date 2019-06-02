@@ -93,6 +93,10 @@ function TabletRobotFaceApp(sources) {
       result: r.result
     }))
   );
+  const fsmUniqueStateStamped$ = sources.state.stream
+    .filter(s => !!s.fsm && !!s.fsm.stateStamped)
+    .map(s => s.fsm.stateStamped)
+    .compose(dropRepeats((x, y) => x.state === y.state));
   // extract face features
   const poses$ = sources.PoseDetection.events("poses");
   const faceFeatures$ = poses$
@@ -104,9 +108,9 @@ function TabletRobotFaceApp(sources) {
     .map(state => extractVoiceFeatures(state))
     .startWith(defaultVoiceFeatures);
   const robotSinks = isolate(RobotApp, "RobotApp")({
-    command: command$,
-    ...sources,
     state: sources.state,
+    command: command$,
+    fsmUniqueStateStamped: fsmUniqueStateStamped$,
     actionResults: actionResults$,
     faceFeatures: faceFeatures$,
     voiceFeatures: voiceFeatures$

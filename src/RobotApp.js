@@ -7,7 +7,7 @@ import { initGoal } from "@cycle-robot-drivers/action";
 
 export function input({
   command,
-  state,
+  fsmUniqueStateStamped,
   actionResults,
   faceFeatures,
   voiceFeatures
@@ -24,10 +24,7 @@ export function input({
   );
 
   // extract history features
-  const stateStampedHistory$ = state.stream
-    .filter(s => !!s.fsm && !!s.fsm.stateStamped)
-    .map(s => s.fsm.stateStamped)
-    .compose(dropRepeats((x, y) => x.state === y.state))
+  const stateStampedHistory$ = fsmUniqueStateStamped
     .compose(pairwise)
     .compose(pairwise)
     .map(([[x, y], [_, z]]) => [z, y, x])

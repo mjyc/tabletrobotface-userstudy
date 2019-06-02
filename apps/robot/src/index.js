@@ -137,7 +137,13 @@ function main(sources) {
   sinks.DOM = sinks.DOM.remember();
 
   const featureChart = settings.robot.charts.enabled
-    ? isolate(StateChart)({ DOM: sources.DOM, features: sinks.faceFeatures })
+    ? isolate(StateChart)({
+        DOM: sources.DOM,
+        isVisible: sinks.faceFeatures
+          .map(faceFeatures => faceFeatures.isVisible)
+          .compose(dropRepeats()),
+        vadState: sinks.vadState.compose(dropRepeats())
+      })
     : {
         DOM: xs.of(""),
         Chart: xs.never()

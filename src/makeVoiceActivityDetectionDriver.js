@@ -85,12 +85,21 @@ export default function makeVoiceActivityDetectionDriver(options) {
   };
 }
 
+export let VAD_STATE = {
+  INACTIVE: 0,
+  ACTIVE: 1
+};
+
 export function adapter(output$) {
   const state$ = output$
     .filter(({ type }) => type === "START" || type === "STOP")
     .fold(
       (prev, { type }) =>
-        type === "START" ? "ACTIVE" : type === "STOP" ? "INACTIVE" : prev,
+        type === "START"
+          ? VAD_STATE["ACTIVE"]
+          : type === "STOP"
+          ? VAD_STATE["INACTIVE"]
+          : prev,
       "INACTIVE"
     );
   const level$ = output$

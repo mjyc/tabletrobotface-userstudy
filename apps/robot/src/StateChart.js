@@ -24,6 +24,19 @@ export const config = {
         borderColor: chartColors.red,
         fill: false,
         lineTension: 0,
+        steppedLine: true,
+        data: [],
+        hidden: true
+      },
+      {
+        label: "vadState",
+        backgroundColor: color(chartColors.orange)
+          .alpha(0.5)
+          .rgbString(),
+        borderColor: chartColors.orange,
+        fill: false,
+        lineTension: 0,
+        steppedLine: true,
         data: [],
         hidden: true
       }
@@ -77,7 +90,8 @@ export default function StateChart(sources) {
         span([
           input(".isVisible", { attrs: { type: "checkbox" } }),
           "isVisible"
-        ])
+        ]),
+        span([input(".vadState", { attrs: { type: "checkbox" } }), "vadState"])
       ])
     ])
   );
@@ -85,14 +99,20 @@ export default function StateChart(sources) {
   const chartElem$ = sources.DOM.select(".myStateChart")
     .element()
     .take(1);
-  const chartData$ = sources.features.map(features => [features.faceSize]);
+  const chartData$ = xs
+    .combine(sources.isVisible, sources.vadState)
+    .map(([iv, vs]) => [iv, vs]);
   const chart$ = xs.merge(
     chartElem$.map(elem => ({ type: "CREATE", value: elem })),
     chartData$.map(data => ({ type: "ADD", value: data })),
     sources.DOM.select(".isVisible")
       .events("change")
       .map(ev => ev.target.checked)
-      .map(v => ({ type: "UPDATE", value: [{ hidden: !v }] }))
+      .map(v => ({ type: "UPDATE", value: [{ hidden: !v }] })),
+    sources.DOM.select(".vadState")
+      .events("change")
+      .map(ev => ev.target.checked)
+      .map(v => ({ type: "UPDATE", value: [{}, { hidden: !v }] }))
   );
 
   return {

@@ -477,7 +477,7 @@ function transition(stateStamped, inputD, inputC, params) {
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
           inputC.face.noseAngle < disengagedMinNoseAngle)) ||
       (!inputC.face.isVisible &&
-        inputC.face.stamp - inputC.face.stampLastDetected >
+        inputC.face.stamp - inputC.history.isVisibleStamped[0].stamp >
           disengagedTimeoutIntervalMs)
     ) {
       return {
@@ -500,7 +500,7 @@ function transition(stateStamped, inputD, inputC, params) {
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
           inputC.face.noseAngle < disengagedMinNoseAngle)) ||
       (!inputC.face.isVisible &&
-        inputC.face.stamp - inputC.face.stampLastDetected >
+        inputC.face.stamp - inputC.history.isVisibleStamped[0].stamp >
           disengagedTimeoutIntervalMs)
     ) {
       return {
@@ -523,7 +523,7 @@ function transition(stateStamped, inputD, inputC, params) {
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
           inputC.face.noseAngle < disengagedMinNoseAngle)) ||
       (!inputC.face.isVisible &&
-        inputC.face.stamp - inputC.face.stampLastDetected >
+        inputC.face.stamp - inputC.history.isVisibleStamped[0].stamp >
           disengagedTimeoutIntervalMs)
     ) {
       return {
@@ -546,7 +546,7 @@ function transition(stateStamped, inputD, inputC, params) {
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
           inputC.face.noseAngle < disengagedMinNoseAngle)) ||
       (!inputC.face.isVisible &&
-        inputC.face.stamp - inputC.face.stampLastDetected >
+        inputC.face.stamp - inputC.history.isVisibleStamped[0].stamp >
           disengagedTimeoutIntervalMs)
     ) {
       return {
@@ -569,7 +569,7 @@ function transition(stateStamped, inputD, inputC, params) {
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
           inputC.face.noseAngle < disengagedMinNoseAngle)) ||
       (!inputC.face.isVisible &&
-        inputC.face.stamp - inputC.face.stampLastDetected >
+        inputC.face.stamp - inputC.history.isVisibleStamped[0].stamp >
           disengagedTimeoutIntervalMs)
     ) {
       return {
@@ -592,7 +592,7 @@ function transition(stateStamped, inputD, inputC, params) {
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
           inputC.face.noseAngle < disengagedMinNoseAngle)) ||
       (!inputC.face.isVisible &&
-        inputC.face.stamp - inputC.face.stampLastDetected >
+        inputC.face.stamp - inputC.history.isVisibleStamped[0].stamp >
           disengagedTimeoutIntervalMs)
     ) {
       return {
@@ -615,7 +615,7 @@ function transition(stateStamped, inputD, inputC, params) {
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
           inputC.face.noseAngle < disengagedMinNoseAngle)) ||
       (!inputC.face.isVisible &&
-        inputC.face.stamp - inputC.face.stampLastDetected >
+        inputC.face.stamp - inputC.history.isVisibleStamped[0].stamp >
           disengagedTimeoutIntervalMs)
     ) {
       return {
@@ -638,7 +638,7 @@ function transition(stateStamped, inputD, inputC, params) {
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
           inputC.face.noseAngle < disengagedMinNoseAngle)) ||
       (!inputC.face.isVisible &&
-        inputC.face.stamp - inputC.face.stampLastDetected >
+        inputC.face.stamp - inputC.history.isVisibleStamped[0].stamp >
           disengagedTimeoutIntervalMs)
     ) {
       return {
@@ -661,7 +661,7 @@ function transition(stateStamped, inputD, inputC, params) {
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
           inputC.face.noseAngle < disengagedMinNoseAngle)) ||
       (!inputC.face.isVisible &&
-        inputC.face.stamp - inputC.face.stampLastDetected >
+        inputC.face.stamp - inputC.history.isVisibleStamped[0].stamp >
           disengagedTimeoutIntervalMs)
     ) {
       return {
@@ -684,7 +684,7 @@ function transition(stateStamped, inputD, inputC, params) {
         (inputC.face.noseAngle > disengagedMaxNoseAngle ||
           inputC.face.noseAngle < disengagedMinNoseAngle)) ||
       (!inputC.face.isVisible &&
-        inputC.face.stamp - inputC.face.stampLastDetected >
+        inputC.face.stamp - inputC.history.isVisibleStamped[0].stamp >
           disengagedTimeoutIntervalMs)
     ) {
       return {

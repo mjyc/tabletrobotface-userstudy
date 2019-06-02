@@ -117,7 +117,12 @@ function TabletRobotFaceApp(sources) {
   });
   return {
     ...robotSinks,
+    command: command$,
+    actionResults: actionResults$,
+    fsmUniqueStateStamped: fsmUniqueStateStamped$,
+    poses: poses$,
     faceFeatures: faceFeatures$,
+    vadState: vadState$,
     voiceFeatures: voiceFeatures$
   };
 }
@@ -131,7 +136,7 @@ function main(sources) {
   sinks.DOM = sinks.DOM.remember();
 
   const featureChart = settings.robot.charts.enabled
-    ? isolate(FeatureChart)({DOM: sources.DOM, features: sinks.faceFeatures})
+    ? isolate(FeatureChart)({ DOM: sources.DOM, features: sinks.faceFeatures })
     : {
         DOM: xs.of(""),
         Chart: xs.never()
@@ -173,9 +178,11 @@ function main(sources) {
         label: "SpeechRecognition"
       },
       { stream: sinks.PoseDetection || xs.never(), label: "PoseDetection" },
-      { stream: videoStart$, label: "videoStart" },
-      { stream: poses$, label: "poses" },
-      { stream: vadState$, label: "vadState" }
+      { stream: sinks.command, label: "command" },
+      { stream: sinks.actionResults, label: "actionResults" },
+      { stream: sinks.fsmUniqueStateStamped, label: "fsmUniqueStateStamped" },
+      { stream: sinks.poses, label: "poses" },
+      { stream: sinks.vadState, label: "vadState" }
     ],
     time$
   );

@@ -36,6 +36,7 @@ import {
 import settings from "../../settings_helper";
 import transitions from "./transitions";
 import FeatureChart, { config } from "./FeatureChart";
+import StateChart, { config as stateChartConfig } from "./StateChart";
 
 function TabletRobotFaceApp(sources) {
   // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
@@ -136,7 +137,7 @@ function main(sources) {
   sinks.DOM = sinks.DOM.remember();
 
   const featureChart = settings.robot.charts.enabled
-    ? isolate(FeatureChart)({ DOM: sources.DOM, features: sinks.faceFeatures })
+    ? isolate(StateChart)({ DOM: sources.DOM, features: sinks.faceFeatures })
     : {
         DOM: xs.of(""),
         Chart: xs.never()
@@ -221,7 +222,7 @@ const drivers = {
     ? makeDownloadDataDriver()
     : mockDownloadDataSource,
   Chart: settings.robot.charts.enabled
-    ? makeStreamingChartDriver(config)
+    ? makeStreamingChartDriver(stateChartConfig)
     : mockStreamingChartSource
 };
 

@@ -35,7 +35,7 @@ import {
 } from "tabletrobotface-userstudy";
 import settings from "../../settings_helper";
 import transitions from "./transitions";
-import FeatureChart, { config } from "./FeatureChart";
+import FeatureChart, { config as featureChartConfig } from "./FeatureChart";
 import StateChart, { config as stateChartConfig } from "./StateChart";
 
 function TabletRobotFaceApp(sources) {
@@ -137,6 +137,15 @@ function main(sources) {
   sinks.DOM = sinks.DOM.remember();
 
   const featureChart = settings.robot.charts.enabled
+    ? isolate(FeatureChart)({
+        DOM: sources.DOM,
+        features: sinks.faceFeatures
+      })
+    : {
+        DOM: xs.of(""),
+        Chart: xs.never()
+      };
+  const stateChart = settings.robot.charts.enabled
     ? isolate(StateChart)({
         DOM: sources.DOM,
         isVisible: sinks.faceFeatures
@@ -152,8 +161,11 @@ function main(sources) {
   if (!settings.robot.recording.enabled) {
     return {
       ...sinks,
-      DOM: xs.combine(sinks.DOM, featureChart.DOM).map(vdoms => div(vdoms)),
-      Chart: featureChart.Chart
+      DOM: xs
+        .combine(sinks.DOM, featureChart.DOM, stateChart.DOM)
+        .map(vdoms => div(vdoms)),
+      Chart: featureChart.Chart,
+      Chart2: stateChart.Chart
     };
   }
 
@@ -161,7 +173,7 @@ function main(sources) {
   const dataDownloader = DataDownloader(sources, dataProxy$);
 
   const vdom$ = xs
-    .combine(sinks.DOM, featureChart.DOM, dataDownloader.DOM)
+    .combine(sinks.DOM, featureChart.DOM, stateChart.DOM, dataDownloader.DOM)
     .map(vdoms => div(vdoms));
 
   const videoRecorder$ = xs.merge(
@@ -208,7 +220,8 @@ function main(sources) {
     DownloadData: dataDownloader.DownloadData,
     DOM: vdom$,
     VideoRecorder: videoRecorder$,
-    Chart: featureChart.Chart
+    Chart: featureChart.Chart,
+    Chart2: stateChart.Chart
   };
 }
 
@@ -228,6 +241,9 @@ const drivers = {
     ? makeDownloadDataDriver()
     : mockDownloadDataSource,
   Chart: settings.robot.charts.enabled
+    ? makeStreamingChartDriver(featureChartConfig)
+    : mockStreamingChartSource,
+  Chart2: settings.robot.charts.enabled
     ? makeStreamingChartDriver(stateChartConfig)
     : mockStreamingChartSource
 };

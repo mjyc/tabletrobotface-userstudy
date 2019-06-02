@@ -157,16 +157,14 @@ export default function FeatureChart(sources) {
   const chartElem$ = sources.DOM.select(".myChart")
     .element()
     .take(1);
-  const chartData$ = sources.features
-    .filter(s => !!s.features)
-    .map(s => [
-      s.features.faceSize,
-      s.features.faceHeight,
-      s.features.faceCenterX,
-      s.features.faceCenterY,
-      s.features.faceAngle,
-      s.features.noseAngle
-    ]);
+  const chartData$ = sources.features.map(features => [
+    features.faceSize,
+    features.faceHeight,
+    features.faceCenterX,
+    features.faceCenterY,
+    features.faceAngle,
+    features.noseAngle
+  ]);
   const chart$ = xs.merge(
     chartElem$.map(elem => ({ type: "CREATE", value: elem })),
     chartData$.map(data => ({ type: "ADD", value: data })),

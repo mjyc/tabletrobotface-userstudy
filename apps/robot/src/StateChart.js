@@ -26,7 +26,7 @@ export const config = {
         lineTension: 0,
         steppedLine: true,
         data: [],
-        hidden: true
+        hidden: false
       },
       {
         label: "vadState",
@@ -38,7 +38,7 @@ export const config = {
         lineTension: 0,
         steppedLine: true,
         data: [],
-        hidden: true
+        hidden: false
       }
     ]
   },
@@ -88,10 +88,13 @@ export default function StateChart(sources) {
       canvas(".myStateChart"),
       div({ style: { textAlign: "center" } }, [
         span([
-          input(".isVisible", { attrs: { type: "checkbox" } }),
+          input(".isVisible", { attrs: { type: "checkbox", checked: "" } }),
           "isVisible"
         ]),
-        span([input(".vadState", { attrs: { type: "checkbox" } }), "vadState"])
+        span([
+          input(".vadState", { attrs: { type: "checkbox", checked: "" } }),
+          "vadState"
+        ])
       ])
     ])
   );

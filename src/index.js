@@ -10,6 +10,7 @@ export {
   DataDownloader
 } from "./cycle-media";
 export {
+  VADState,
   default as makeVoiceActivityDetectionDriver,
   adapter as vadAdapter
 } from "./makeVoiceActivityDetectionDriver";

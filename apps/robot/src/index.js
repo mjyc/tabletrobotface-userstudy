@@ -25,6 +25,7 @@ import {
   mockStreamingChartSource,
   makeStreamingChartDriver,
   DataDownloader,
+  VADState,
   makeVoiceActivityDetectionDriver,
   vadAdapter,
   defaultFaceFeatures,
@@ -153,7 +154,7 @@ function main(sources) {
         isVisible: sinks.faceFeatures
           .map(faceFeatures => faceFeatures.isVisible)
           .compose(dropRepeats()),
-        vadState: sinks.vadState.compose(dropRepeats())
+        vadState: sinks.vadState.compose(dropRepeats()).map(s => VADState[s])
       })
     : {
         DOM: xs.of(""),

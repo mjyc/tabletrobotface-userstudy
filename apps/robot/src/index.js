@@ -95,8 +95,10 @@ function TabletRobotFaceApp(sources) {
     }))
   );
   const fsmUniqueStateStamped$ = sources.state.stream
-    .filter(s => !!s.fsm && !!s.fsm.stateStamped)
-    .map(s => s.fsm.stateStamped)
+    .filter(
+      s => !!s.RobotApp && !!s.RobotApp.fsm && !!s.RobotApp.fsm.stateStamped
+    )
+    .map(s => s.RobotApp.fsm.stateStamped)
     .compose(dropRepeats((x, y) => x.state === y.state));
   // extract face features
   const poses$ = sources.PoseDetection.events("poses");

@@ -4,8 +4,6 @@ function transition(stateStamped, inputD, inputC, params) {
   var rotateLeftNoseAngle = params.rotateLeftNoseAngle;
   var touchRighFaceAngle = params.touchRighFaceAngle;
   var touchLeftFaceAngle = params.touchLeftFaceAngle;
-  var tuckChinFaceHeight = params.tuckChinFaceHeight;
-  var elevateChinFaceHeight = params.elevateChinFaceHeight;
 
   if (stateStamped.state === "S0" && inputD.type === "START") {
     return {
@@ -16,19 +14,20 @@ function transition(stateStamped, inputD, inputC, params) {
       }
     };
   } else if (
-    stateStamped.state === "S1" &&
-    inputD.type === "HumanSpeechbubbleAction" &&
-    inputD.status === "SUCCEEDED" &&
-    inputD.result === "Hello"
+    (stateStamped.state === "S1" &&
+      inputD.type === "HumanSpeechbubbleAction" &&
+      inputD.status === "SUCCEEDED" &&
+      inputD.result === "Hello") ||
+    (inputD.type === "HumanSpeechbubbleAction" &&
+      inputD.status === "SUCCEEDED" &&
+      inputD.result === "Repeat")
   ) {
     return {
       state: "S2",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Let's exercise your neck! Let's start from looking forward",
+        RobotSpeechbubbleAction: "Let's start from looking forward",
         HumanSpeechbubbleAction: "",
-        SpeechSynthesisAction:
-          "Let's exercise your neck! Let's start from looking forward"
+        SpeechSynthesisAction: "Let's start from looking forward"
       }
     };
 
@@ -277,9 +276,9 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S11",
         outputs: {
-          RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
-          HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now elevate your chin to the ceiling"
+          RobotSpeechbubbleAction: "Great job!",
+          HumanSpeechbubbleAction: ["Repeat"],
+          SpeechSynthesisAction: "Great job!"
         }
       };
     } else {
@@ -297,136 +296,8 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S11",
       outputs: {
-        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
-        HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
-      }
-    };
-  } else if (stateStamped.state === "S11" && inputD.type === "Features") {
-    if (inputC.face.faceHeight < elevateChinFaceHeight) {
-      return {
-        state: "S12",
-        outputs: {
-          RobotSpeechbubbleAction:
-            "and now bring your chin back to the normal position",
-          HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction:
-            "and now bring your chin back to the normal position"
-        }
-      };
-    } else {
-      return {
-        state: stateStamped.state,
-        outputs: null
-      };
-    }
-  } else if (
-    stateStamped.state === "S11" &&
-    inputD.type === "HumanSpeechbubbleAction" &&
-    inputD.status === "SUCCEEDED" &&
-    inputD.result === "Next"
-  ) {
-    return {
-      state: "S12",
-      outputs: {
-        RobotSpeechbubbleAction:
-          "and now bring your chin back to the normal position",
-        HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction:
-          "and now bring your chin back to the normal position"
-      }
-    };
-  } else if (stateStamped.state === "S12" && inputD.type === "Features") {
-    if (inputC.face.faceHeight > tuckChinFaceHeight) {
-      return {
-        state: "S13",
-        outputs: {
-          RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
-          HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now elevate your chin to the ceiling"
-        }
-      };
-    } else {
-      return {
-        state: stateStamped.state,
-        outputs: null
-      };
-    }
-  } else if (
-    stateStamped.state === "S12" &&
-    inputD.type === "HumanSpeechbubbleAction" &&
-    inputD.status === "SUCCEEDED" &&
-    inputD.result === "Next"
-  ) {
-    return {
-      state: "S13",
-      outputs: {
-        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
-        HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
-      }
-    };
-  } else if (stateStamped.state === "S13" && inputD.type === "Features") {
-    if (inputC.face.faceHeight < elevateChinFaceHeight) {
-      return {
-        state: "S14",
-        outputs: {
-          RobotSpeechbubbleAction:
-            "and now bring your chin back to the normal position",
-          HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction:
-            "and now bring your chin back to the normal position"
-        }
-      };
-    } else {
-      return {
-        state: stateStamped.state,
-        outputs: null
-      };
-    }
-  } else if (
-    stateStamped.state === "S13" &&
-    inputD.type === "HumanSpeechbubbleAction" &&
-    inputD.status === "SUCCEEDED" &&
-    inputD.result === "Next"
-  ) {
-    return {
-      state: "S14",
-      outputs: {
-        RobotSpeechbubbleAction:
-          "and now bring your chin back to the normal position",
-        HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction:
-          "and now bring your chin back to the normal position"
-      }
-    };
-  } else if (stateStamped.state === "S14" && inputD.type === "Features") {
-    if (inputC.face.faceHeight > tuckChinFaceHeight) {
-      return {
-        state: "S15",
-        outputs: {
-          RobotSpeechbubbleAction: "Great job!",
-          HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "Great job!"
-        }
-      };
-    } else {
-      return {
-        state: stateStamped.state,
-        outputs: null
-      };
-    }
-  } else if (
-    stateStamped.state === "S14" &&
-    inputD.type === "HumanSpeechbubbleAction" &&
-    inputD.status === "SUCCEEDED" &&
-    inputD.result === "Next"
-  ) {
-    return {
-      state: "S15",
-      outputs: {
         RobotSpeechbubbleAction: "Great job!",
-        HumanSpeechbubbleAction: "",
+        HumanSpeechbubbleAction: ["Repeat"],
         SpeechSynthesisAction: "Great job!"
       }
     };
@@ -443,24 +314,18 @@ var defaultParams = {
   rotateLeftNoseAngle: 20,
   touchRighFaceAngle: 30,
   touchLeftFaceAngle: -30,
-  tuckChinFaceHeight: 60,
-  elevateChinFaceHeight: 30,
   sets: {
     passive: {
       rotateRightNoseAngle: -60,
       rotateLeftNoseAngle: 60,
       touchRighFaceAngle: 90,
-      touchLeftFaceAngle: -90,
-      tuckChinFaceHeight: 480,
-      elevateChinFaceHeight: 0
+      touchLeftFaceAngle: -90
     },
     proactive: {
       rotateRightNoseAngle: -20,
       rotateLeftNoseAngle: 20,
       touchRighFaceAngle: 30,
-      touchLeftFaceAngle: -30,
-      tuckChinFaceHeight: 60,
-      elevateChinFaceHeight: 30
+      touchLeftFaceAngle: -30
     }
   }
 };

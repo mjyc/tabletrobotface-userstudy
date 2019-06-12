@@ -7,24 +7,18 @@ var defaultParams = {
   rotateLeftNoseAngle: 20,
   touchRighFaceAngle: 30,
   touchLeftFaceAngle: -30,
-  tuckChinFaceHeight: 60,
-  elevateChinFaceHeight: 30,
   sets: {
     passive: {
       rotateRightNoseAngle: -60,
       rotateLeftNoseAngle: 60,
       touchRighFaceAngle: 90,
-      touchLeftFaceAngle: -90,
-      tuckChinFaceHeight: 480,
-      elevateChinFaceHeight: 0
+      touchLeftFaceAngle: -90
     },
     proactive: {
       rotateRightNoseAngle: -20,
       rotateLeftNoseAngle: 20,
       touchRighFaceAngle: 30,
-      touchLeftFaceAngle: -30,
-      tuckChinFaceHeight: 60,
-      elevateChinFaceHeight: 30
+      touchLeftFaceAngle: -30
     }
   }
 };
@@ -50,17 +44,20 @@ function transition(stateStamped, inputD, inputC, params) {` +
       }
     };
   } else if (
-    stateStamped.state === "S1" &&
-    inputD.type === "HumanSpeechbubbleAction" &&
-    inputD.status === "SUCCEEDED" &&
-    inputD.result === "Hello"
+    (stateStamped.state === "S1" &&
+      inputD.type === "HumanSpeechbubbleAction" &&
+      inputD.status === "SUCCEEDED" &&
+      inputD.result === "Hello") ||
+    (inputD.type === "HumanSpeechbubbleAction" &&
+      inputD.status === "SUCCEEDED" &&
+      inputD.result === "Repeat")
   ) {
     return {
       state: "S2",
       outputs: {
-        RobotSpeechbubbleAction: "Let's exercise your neck! Let's start from looking forward",
+        RobotSpeechbubbleAction: "Let's start from looking forward",
         HumanSpeechbubbleAction: "",
-        SpeechSynthesisAction: "Let's exercise your neck! Let's start from looking forward"
+        SpeechSynthesisAction: "Let's start from looking forward"
       }
     };`;
 
@@ -140,13 +137,17 @@ for (var i = 0; i < numRepeats; i++) {
         outputs: {
           RobotSpeechbubbleAction: "${
             i !== numRepeats - 1
-              ? `and now slowly rotate to your right`
+              ? !rotateOnly
+                ? `and now slowly rotate to your right`
+                : `Great job!`
               : `and now take your ear and act like trying to touch right shoulder`
           }",
-          HumanSpeechbubbleAction: ["Next"],
+          HumanSpeechbubbleAction: ${!rotateOnly ? `["Next"]` : `["Repeat"]`},
           SpeechSynthesisAction: "${
             i !== numRepeats - 1
-              ? `and now slowly rotate to your right`
+              ? !rotateOnly
+                ? `and now slowly rotate to your right`
+                : `Great job!`
               : `and now take your ear and act like trying to touch right shoulder`
           }"
         }
@@ -220,91 +221,14 @@ for (var i = 0; i < numRepeats; i++) {
           RobotSpeechbubbleAction: "${
             i !== numRepeats - 1
               ? `and now take your ear and act like trying to touch right shoulder`
-              : `and now elevate your chin to the ceiling`
+              : `Great job!`
           }",
-          HumanSpeechbubbleAction: ["Next"],
+          HumanSpeechbubbleAction: ${
+            i !== numRepeats - 1 ? `["Next"]` : `["Repeat"]`
+          },
           SpeechSynthesisAction: "${
             i !== numRepeats - 1
               ? `and now take your ear and act like trying to touch right shoulder`
-              : `and now elevate your chin to the ceiling`
-          }"
-        }
-      };
-    } else {
-      return {
-        state: stateStamped.state,
-        outputs: null
-      };
-    }`;
-  idx += 2;
-}
-
-if (!!rotateOnly)
-  output += `
-
-    // Look down and up`;
-for (var i = 0; i < numRepeats; i++) {
-  output += `
-  } else if (
-    stateStamped.state === "S${idx}" &&
-    inputD.type === "HumanSpeechbubbleAction" &&
-    inputD.status === "SUCCEEDED" &&
-    inputD.result === "Next"
-  ) {
-    return {
-      state: "S${idx + 1}",
-      outputs: {
-        RobotSpeechbubbleAction: "and now elevate your chin to the ceiling",
-        HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now elevate your chin to the ceiling"
-      }
-    };
-  } else if (stateStamped.state === "S${idx +
-    1}" && inputD.type === "Features") {
-    if (inputC.face.faceHeight < elevateChinFaceHeight) {
-      return {
-        state: "S${idx + 2}",
-        outputs: {
-          RobotSpeechbubbleAction: "and now bring your chin back to the normal position",
-          HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now bring your chin back to the normal position"
-        }
-      };
-    } else {
-      return {
-        state: stateStamped.state,
-        outputs: null
-      };
-    }
-  } else if (
-    stateStamped.state === "S${idx + 1}" &&
-    inputD.type === "HumanSpeechbubbleAction" &&
-    inputD.status === "SUCCEEDED" &&
-    inputD.result === "Next"
-  ) {
-    return {
-      state: "S${idx + 2}",
-      outputs: {
-        RobotSpeechbubbleAction: "and now bring your chin back to the normal position",
-        HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now bring your chin back to the normal position"
-      }
-    };
-  } else if (stateStamped.state === "S${idx +
-    2}" && inputD.type === "Features") {
-    if (inputC.face.faceHeight > tuckChinFaceHeight) {
-      return {
-        state: "S${idx + 3}",
-        outputs: {
-          RobotSpeechbubbleAction: "${
-            i !== numRepeats - 1
-              ? `and now elevate your chin to the ceiling`
-              : `Great job!`
-          }",
-          HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "${
-            i !== numRepeats - 1
-              ? `and now elevate your chin to the ceiling`
               : `Great job!`
           }"
         }
@@ -329,7 +253,7 @@ output += `
       state: "S${idx + 1}",
       outputs: {
         RobotSpeechbubbleAction: "Great job!",
-        HumanSpeechbubbleAction: "",
+        HumanSpeechbubbleAction: ["Repeat"],
         SpeechSynthesisAction: "Great job!"
       }
     };`;

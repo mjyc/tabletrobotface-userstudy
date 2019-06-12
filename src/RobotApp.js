@@ -20,7 +20,7 @@ export function input({
       .mapTo({
         type: "START"
       }),
-    actionResults,
+    actionResults
   );
 
   // extract history features

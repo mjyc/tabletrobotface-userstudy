@@ -47,7 +47,14 @@ function TabletRobotFaceApp(sources) {
       ? settings.robot.name
       : "demo";
   const transition = transitions[appName].transition;
-  const params = transitions[appName].params;
+  const params =
+    settings.robot.parameters.setName !== "" &&
+    typeof transitions[appName].params.sets === "object" &&
+    typeof transitions[appName].params.sets[
+      settings.robot.parameters.setName
+    ] === "object"
+      ? transitions[appName].params.sets[settings.robot.parameters.setName]
+      : transitions[appName].params;
   const S0 = "S0";
   const T = (...args) => transition(...args, params).state;
   const G = (...args) => transition(...args, params).outputs;

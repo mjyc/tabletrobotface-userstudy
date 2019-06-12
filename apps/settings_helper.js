@@ -12,6 +12,9 @@ var defaultVal = {
     },
     charts: {
       enabled: true
+    },
+    parameters: {
+      setName: ""
     }
   },
   applysrtr: {

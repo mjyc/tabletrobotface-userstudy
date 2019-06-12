@@ -6,22 +6,27 @@ if (process.argv.length < 3) {
 const fs = require("fs");
 
 const defaultParams = {
-  // engagedMinNoseAngle: -0.001,
-  // engagedMaxNoseAngle: 0.001,
-  // disengagedMinNoseAngle: -90,
-  // disengagedMaxNoseAngle: 90,
-  // disengagedTimeoutIntervalMs: 10000
-  engagedMinNoseAngle: -10,
-  engagedMaxNoseAngle: 10,
-  disengagedMinNoseAngle: -20,
-  disengagedMaxNoseAngle: 20,
-  disengagedTimeoutIntervalMs: 1000
+  engagedMinNoseAngle: -0.001,
+  engagedMaxNoseAngle: 0.001,
+  disengagedMinNoseAngle: -90,
+  disengagedMaxNoseAngle: 90,
+  disengagedTimeoutIntervalMs: 10000,
+  sets: {
+    proactive: {
+      engagedMinNoseAngle: -10,
+      engagedMaxNoseAngle: 10,
+      disengagedMinNoseAngle: -20,
+      disengagedMaxNoseAngle: 20,
+      disengagedTimeoutIntervalMs: 1000
+    }
+  }
 };
 
 let output =
   `// NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {` +
   Object.keys(defaultParams)
+    .filter(key => key !== "sets")
     .map(key => {
       return `
   var ${key} = params.${key};`;

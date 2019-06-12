@@ -185,7 +185,15 @@ function transition(stateStamped, inputD, inputC, params) {
 }
 
 var defaultParams = {
-  nextTimeoutIntervalMs: 1000
+  nextTimeoutIntervalMs: 1000,
+  sets: {
+    passive: {
+      nextTimeoutIntervalMs: 60000
+    },
+    proactive: {
+      nextTimeoutIntervalMs: 1000
+    }
+  }
 };
 
 module.exports = {

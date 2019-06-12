@@ -8,13 +8,26 @@ const fs = require("fs");
 const defaultParams = {
   timeout: 500,
   engagedMinNoseAngle: -10,
-  engagedMaxNoseAngle: 10
+  engagedMaxNoseAngle: 10,
+  sets: {
+    passive: {
+      timeout: 6000,
+      engagedMinNoseAngle: -90,
+      engagedMaxNoseAngle: 90
+    },
+    proactive: {
+      timeout: 500,
+      engagedMinNoseAngle: -10,
+      engagedMaxNoseAngle: 10
+    }
+  }
 };
 
 let output =
   `// NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {` +
   Object.keys(defaultParams)
+    .filter(key => key !== "sets")
     .map(key => {
       return `
   var ${key} = params.${key};`;

@@ -6,13 +6,22 @@ if (process.argv.length < 3) {
 const fs = require("fs");
 
 const defaultParams = {
-  nextTimeoutIntervalMs: 1000
+  nextTimeoutIntervalMs: 1000,
+  sets: {
+    passive: {
+      nextTimeoutIntervalMs: 60000 // 1hr
+    },
+    proactive: {
+      nextTimeoutIntervalMs: 1000
+    }
+  }
 };
 
 let output =
   `// NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {` +
   Object.keys(defaultParams)
+    .filter(key => key !== "sets")
     .map(key => {
       return `
   var ${key} = params.${key};`;

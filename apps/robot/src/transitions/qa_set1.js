@@ -231,7 +231,19 @@ function transition(stateStamped, inputD, inputC, params) {
 var defaultParams = {
   timeout: 500,
   engagedMinNoseAngle: -10,
-  engagedMaxNoseAngle: 10
+  engagedMaxNoseAngle: 10,
+  sets: {
+    passive: {
+      timeout: 6000,
+      engagedMinNoseAngle: -90,
+      engagedMaxNoseAngle: 90
+    },
+    proactive: {
+      timeout: 500,
+      engagedMinNoseAngle: -10,
+      engagedMaxNoseAngle: 10
+    }
+  }
 };
 
 module.exports = {

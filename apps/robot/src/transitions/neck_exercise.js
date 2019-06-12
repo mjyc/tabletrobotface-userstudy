@@ -444,7 +444,25 @@ var defaultParams = {
   touchRighFaceAngle: 30,
   touchLeftFaceAngle: -30,
   tuckChinFaceHeight: 60,
-  elevateChinFaceHeight: 30
+  elevateChinFaceHeight: 30,
+  sets: {
+    passive: {
+      rotateRightNoseAngle: -60,
+      rotateLeftNoseAngle: 60,
+      touchRighFaceAngle: 90,
+      touchLeftFaceAngle: -90,
+      tuckChinFaceHeight: 480,
+      elevateChinFaceHeight: 0
+    },
+    proactive: {
+      rotateRightNoseAngle: -20,
+      rotateLeftNoseAngle: 20,
+      touchRighFaceAngle: 30,
+      touchLeftFaceAngle: -30,
+      tuckChinFaceHeight: 60,
+      elevateChinFaceHeight: 30
+    }
+  }
 };
 
 module.exports = {

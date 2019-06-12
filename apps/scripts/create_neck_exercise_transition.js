@@ -8,13 +8,32 @@ var defaultParams = {
   touchRighFaceAngle: 30,
   touchLeftFaceAngle: -30,
   tuckChinFaceHeight: 60,
-  elevateChinFaceHeight: 30
+  elevateChinFaceHeight: 30,
+  sets: {
+    passive: {
+      rotateRightNoseAngle: -60,
+      rotateLeftNoseAngle: 60,
+      touchRighFaceAngle: 90,
+      touchLeftFaceAngle: -90,
+      tuckChinFaceHeight: 480,
+      elevateChinFaceHeight: 0
+    },
+    proactive: {
+      rotateRightNoseAngle: -20,
+      rotateLeftNoseAngle: 20,
+      touchRighFaceAngle: 30,
+      touchLeftFaceAngle: -30,
+      tuckChinFaceHeight: 60,
+      elevateChinFaceHeight: 30
+    }
+  }
 };
 
 var output =
   `// NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {` +
   Object.keys(defaultParams)
+    .filter(key => key !== "sets")
     .map(key => {
       return `
   var ${key} = params.${key};`;
@@ -119,9 +138,17 @@ for (var i = 0; i < numRepeats; i++) {
       return {
         state: "S${idx + 3}",
         outputs: {
-          RobotSpeechbubbleAction: "${i !== numRepeats - 1 ? `and now slowly rotate to your right` : `and now take your ear and act like trying to touch right shoulder`}",
+          RobotSpeechbubbleAction: "${
+            i !== numRepeats - 1
+              ? `and now slowly rotate to your right`
+              : `and now take your ear and act like trying to touch right shoulder`
+          }",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "${i !== numRepeats - 1 ? `and now slowly rotate to your right` : `and now take your ear and act like trying to touch right shoulder`}"
+          SpeechSynthesisAction: "${
+            i !== numRepeats - 1
+              ? `and now slowly rotate to your right`
+              : `and now take your ear and act like trying to touch right shoulder`
+          }"
         }
       };
     } else {
@@ -190,9 +217,17 @@ for (var i = 0; i < numRepeats; i++) {
       return {
         state: "S${idx + 3}",
         outputs: {
-          RobotSpeechbubbleAction: "${i !== numRepeats - 1 ? `and now take your ear and act like trying to touch right shoulder` : `and now elevate your chin to the ceiling`}",
+          RobotSpeechbubbleAction: "${
+            i !== numRepeats - 1
+              ? `and now take your ear and act like trying to touch right shoulder`
+              : `and now elevate your chin to the ceiling`
+          }",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "${i !== numRepeats - 1 ? `and now take your ear and act like trying to touch right shoulder` : `and now elevate your chin to the ceiling`}"
+          SpeechSynthesisAction: "${
+            i !== numRepeats - 1
+              ? `and now take your ear and act like trying to touch right shoulder`
+              : `and now elevate your chin to the ceiling`
+          }"
         }
       };
     } else {
@@ -261,9 +296,17 @@ for (var i = 0; i < numRepeats; i++) {
       return {
         state: "S${idx + 3}",
         outputs: {
-          RobotSpeechbubbleAction: "${i !== numRepeats - 1 ? `and now elevate your chin to the ceiling` : `Great job!`}",
+          RobotSpeechbubbleAction: "${
+            i !== numRepeats - 1
+              ? `and now elevate your chin to the ceiling`
+              : `Great job!`
+          }",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "${i !== numRepeats - 1 ? `and now elevate your chin to the ceiling` : `Great job!`}"
+          SpeechSynthesisAction: "${
+            i !== numRepeats - 1
+              ? `and now elevate your chin to the ceiling`
+              : `Great job!`
+          }"
         }
       };
     } else {

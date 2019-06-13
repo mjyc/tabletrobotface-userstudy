@@ -4,6 +4,7 @@ if (process.argv.length < 3) {
 }
 
 const fs = require("fs");
+const path = require("path");
 
 const defaultParams = {
   engagedMinNoseAngle: -10,
@@ -51,6 +52,7 @@ function transition(stateStamped, inputD, inputC, params) {` +
       }
     };`;
 
+const name = path.parse(process.argv[2]).name;
 const lines = fs
   .readFileSync(process.argv[2])
   .toString()
@@ -75,9 +77,16 @@ lines.map((line, i) => {
     return {
       state: "S${i + 2}",
       outputs: {
-        RobotSpeechbubbleAction: ${JSON.stringify(line)},
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/${name}-${i + 1}.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: ${JSON.stringify(line)}
+        SpeechSynthesisAction: {
+          text: ${JSON.stringify(line)},
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };`;
 });
@@ -93,7 +102,11 @@ output += `
       outputs: {
         RobotSpeechbubbleAction: "The END",
         HumanSpeechbubbleAction: "",
-        SpeechSynthesisAction: "The END"
+        SpeechSynthesisAction: {
+          text: "The END",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };`;
 
@@ -132,9 +145,16 @@ lines.map((line, i) => {
     return {
       state: "S${i + 2}",
       outputs: {
-        RobotSpeechbubbleAction: ${JSON.stringify(line)},
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/${name}-${i + 1}.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: ${JSON.stringify(line)}
+        SpeechSynthesisAction: {
+          text: ${JSON.stringify(line)},\
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };`;
 });
@@ -184,9 +204,16 @@ lines.map((line, i) => {
       return {
         state: "S${i + 2}",
         outputs: {
-          RobotSpeechbubbleAction: ${JSON.stringify(line)},
+          RobotSpeechbubbleAction: {
+            type: "IMAGE",
+            value: "/public/img/${name}-${i + 1}.png"
+          },
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: ${JSON.stringify(line)}
+          SpeechSynthesisAction: {
+            text: ${JSON.stringify(line)},
+            rate: 0.9,
+            afterpauseduration: 500
+          }
         }
       };
     } else {

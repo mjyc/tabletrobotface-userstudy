@@ -24,9 +24,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S2",
       outputs: {
-        RobotSpeechbubbleAction: "RANGER FORESTER",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-1.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "RANGER FORESTER"
+        SpeechSynthesisAction: {
+          text: "RANGER FORESTER",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -37,9 +44,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S3",
       outputs: {
-        RobotSpeechbubbleAction: "Ranger Forester will check on the animals.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-2.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Ranger Forester will check on the animals."
+        SpeechSynthesisAction: {
+          text: "Ranger Forester will check on the animals.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -50,11 +64,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S4",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Forester sees insects. This sort of bee cannot sting.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-3.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Forester sees insects. This sort of bee cannot sting."
+        SpeechSynthesisAction: {
+          text: "Forester sees insects. This sort of bee cannot sting.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -65,9 +84,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S5",
       outputs: {
-        RobotSpeechbubbleAction: "Tweet! Forester can see soft fluff.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-4.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Tweet! Forester can see soft fluff."
+        SpeechSynthesisAction: {
+          text: "Tweet! Forester can see soft fluff.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -78,11 +104,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S6",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Hiss! A snake is looking for a rock to sit on in the sun.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-5.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Hiss! A snake is looking for a rock to sit on in the sun."
+        SpeechSynthesisAction: {
+          text: "Hiss! A snake is looking for a rock to sit on in the sun.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -93,10 +124,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S7",
       outputs: {
-        RobotSpeechbubbleAction:
-          "The spiders need to fix the web to get insects.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-6.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "The spiders need to fix the web to get insects."
+        SpeechSynthesisAction: {
+          text: "The spiders need to fix the web to get insects.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -107,11 +144,17 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S8",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Here is the kangaroo family. Forester cannot see the little kangaroo.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-7.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Here is the kangaroo family. Forester cannot see the little kangaroo."
+        SpeechSynthesisAction: {
+          text:
+            "Here is the kangaroo family. Forester cannot see the little kangaroo.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -122,11 +165,17 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S9",
       outputs: {
-        RobotSpeechbubbleAction:
-          "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-8.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester."
+        SpeechSynthesisAction: {
+          text:
+            "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -137,11 +186,17 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S10",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Forester keeps the trap. He is very upset. He will tell the cops.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-9.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Forester keeps the trap. He is very upset. He will tell the cops."
+        SpeechSynthesisAction: {
+          text:
+            "Forester keeps the trap. He is very upset. He will tell the cops.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -152,11 +207,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S11",
       outputs: {
-        RobotSpeechbubbleAction:
-          "The cops get the man that set the trap. The animals are safe.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-10.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "The cops get the man that set the trap. The animals are safe."
+        SpeechSynthesisAction: {
+          text: "The cops get the man that set the trap. The animals are safe.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -169,7 +229,11 @@ function transition(stateStamped, inputD, inputC, params) {
       outputs: {
         RobotSpeechbubbleAction: "The END",
         HumanSpeechbubbleAction: "",
-        SpeechSynthesisAction: "The END"
+        SpeechSynthesisAction: {
+          text: "The END",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
 
@@ -325,9 +389,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S2",
       outputs: {
-        RobotSpeechbubbleAction: "RANGER FORESTER",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-1.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "RANGER FORESTER"
+        SpeechSynthesisAction: {
+          text: "RANGER FORESTER",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -339,9 +410,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S3",
       outputs: {
-        RobotSpeechbubbleAction: "Ranger Forester will check on the animals.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-2.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Ranger Forester will check on the animals."
+        SpeechSynthesisAction: {
+          text: "Ranger Forester will check on the animals.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -353,11 +431,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S4",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Forester sees insects. This sort of bee cannot sting.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-3.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Forester sees insects. This sort of bee cannot sting."
+        SpeechSynthesisAction: {
+          text: "Forester sees insects. This sort of bee cannot sting.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -369,9 +452,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S5",
       outputs: {
-        RobotSpeechbubbleAction: "Tweet! Forester can see soft fluff.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-4.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "Tweet! Forester can see soft fluff."
+        SpeechSynthesisAction: {
+          text: "Tweet! Forester can see soft fluff.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -383,11 +473,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S6",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Hiss! A snake is looking for a rock to sit on in the sun.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-5.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Hiss! A snake is looking for a rock to sit on in the sun."
+        SpeechSynthesisAction: {
+          text: "Hiss! A snake is looking for a rock to sit on in the sun.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -399,10 +494,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S7",
       outputs: {
-        RobotSpeechbubbleAction:
-          "The spiders need to fix the web to get insects.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-6.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction: "The spiders need to fix the web to get insects."
+        SpeechSynthesisAction: {
+          text: "The spiders need to fix the web to get insects.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -414,11 +515,17 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S8",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Here is the kangaroo family. Forester cannot see the little kangaroo.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-7.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Here is the kangaroo family. Forester cannot see the little kangaroo."
+        SpeechSynthesisAction: {
+          text:
+            "Here is the kangaroo family. Forester cannot see the little kangaroo.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -430,11 +537,17 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S9",
       outputs: {
-        RobotSpeechbubbleAction:
-          "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-8.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester."
+        SpeechSynthesisAction: {
+          text:
+            "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -446,11 +559,17 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S10",
       outputs: {
-        RobotSpeechbubbleAction:
-          "Forester keeps the trap. He is very upset. He will tell the cops.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-9.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "Forester keeps the trap. He is very upset. He will tell the cops."
+        SpeechSynthesisAction: {
+          text:
+            "Forester keeps the trap. He is very upset. He will tell the cops.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
   } else if (
@@ -462,11 +581,16 @@ function transition(stateStamped, inputD, inputC, params) {
     return {
       state: "S11",
       outputs: {
-        RobotSpeechbubbleAction:
-          "The cops get the man that set the trap. The animals are safe.",
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/ranger_forester-10.png"
+        },
         HumanSpeechbubbleAction: ["Pause"],
-        SpeechSynthesisAction:
-          "The cops get the man that set the trap. The animals are safe."
+        SpeechSynthesisAction: {
+          text: "The cops get the man that set the trap. The animals are safe.",
+          rate: 0.9,
+          afterpauseduration: 500
+        }
       }
     };
 
@@ -712,9 +836,16 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S2",
         outputs: {
-          RobotSpeechbubbleAction: "RANGER FORESTER",
+          RobotSpeechbubbleAction: {
+            type: "IMAGE",
+            value: "/public/img/ranger_forester-1.png"
+          },
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: "RANGER FORESTER"
+          SpeechSynthesisAction: {
+            text: "RANGER FORESTER",
+            rate: 0.9,
+            afterpauseduration: 500
+          }
         }
       };
     } else {
@@ -732,9 +863,16 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S3",
         outputs: {
-          RobotSpeechbubbleAction: "Ranger Forester will check on the animals.",
+          RobotSpeechbubbleAction: {
+            type: "IMAGE",
+            value: "/public/img/ranger_forester-2.png"
+          },
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: "Ranger Forester will check on the animals."
+          SpeechSynthesisAction: {
+            text: "Ranger Forester will check on the animals.",
+            rate: 0.9,
+            afterpauseduration: 500
+          }
         }
       };
     } else {
@@ -752,11 +890,16 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S4",
         outputs: {
-          RobotSpeechbubbleAction:
-            "Forester sees insects. This sort of bee cannot sting.",
+          RobotSpeechbubbleAction: {
+            type: "IMAGE",
+            value: "/public/img/ranger_forester-3.png"
+          },
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction:
-            "Forester sees insects. This sort of bee cannot sting."
+          SpeechSynthesisAction: {
+            text: "Forester sees insects. This sort of bee cannot sting.",
+            rate: 0.9,
+            afterpauseduration: 500
+          }
         }
       };
     } else {
@@ -774,9 +917,16 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S5",
         outputs: {
-          RobotSpeechbubbleAction: "Tweet! Forester can see soft fluff.",
+          RobotSpeechbubbleAction: {
+            type: "IMAGE",
+            value: "/public/img/ranger_forester-4.png"
+          },
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction: "Tweet! Forester can see soft fluff."
+          SpeechSynthesisAction: {
+            text: "Tweet! Forester can see soft fluff.",
+            rate: 0.9,
+            afterpauseduration: 500
+          }
         }
       };
     } else {
@@ -794,11 +944,16 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S6",
         outputs: {
-          RobotSpeechbubbleAction:
-            "Hiss! A snake is looking for a rock to sit on in the sun.",
+          RobotSpeechbubbleAction: {
+            type: "IMAGE",
+            value: "/public/img/ranger_forester-5.png"
+          },
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction:
-            "Hiss! A snake is looking for a rock to sit on in the sun."
+          SpeechSynthesisAction: {
+            text: "Hiss! A snake is looking for a rock to sit on in the sun.",
+            rate: 0.9,
+            afterpauseduration: 500
+          }
         }
       };
     } else {
@@ -816,11 +971,16 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S7",
         outputs: {
-          RobotSpeechbubbleAction:
-            "The spiders need to fix the web to get insects.",
+          RobotSpeechbubbleAction: {
+            type: "IMAGE",
+            value: "/public/img/ranger_forester-6.png"
+          },
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction:
-            "The spiders need to fix the web to get insects."
+          SpeechSynthesisAction: {
+            text: "The spiders need to fix the web to get insects.",
+            rate: 0.9,
+            afterpauseduration: 500
+          }
         }
       };
     } else {
@@ -838,11 +998,17 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S8",
         outputs: {
-          RobotSpeechbubbleAction:
-            "Here is the kangaroo family. Forester cannot see the little kangaroo.",
+          RobotSpeechbubbleAction: {
+            type: "IMAGE",
+            value: "/public/img/ranger_forester-7.png"
+          },
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction:
-            "Here is the kangaroo family. Forester cannot see the little kangaroo."
+          SpeechSynthesisAction: {
+            text:
+              "Here is the kangaroo family. Forester cannot see the little kangaroo.",
+            rate: 0.9,
+            afterpauseduration: 500
+          }
         }
       };
     } else {
@@ -860,11 +1026,17 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S9",
         outputs: {
-          RobotSpeechbubbleAction:
-            "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester.",
+          RobotSpeechbubbleAction: {
+            type: "IMAGE",
+            value: "/public/img/ranger_forester-8.png"
+          },
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction:
-            "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester."
+          SpeechSynthesisAction: {
+            text:
+              "The little kangaroo got stuck in a trap. Forester helps. The little roo is happy. Back to its family. Thanks Forester.",
+            rate: 0.9,
+            afterpauseduration: 500
+          }
         }
       };
     } else {
@@ -882,11 +1054,17 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S10",
         outputs: {
-          RobotSpeechbubbleAction:
-            "Forester keeps the trap. He is very upset. He will tell the cops.",
+          RobotSpeechbubbleAction: {
+            type: "IMAGE",
+            value: "/public/img/ranger_forester-9.png"
+          },
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction:
-            "Forester keeps the trap. He is very upset. He will tell the cops."
+          SpeechSynthesisAction: {
+            text:
+              "Forester keeps the trap. He is very upset. He will tell the cops.",
+            rate: 0.9,
+            afterpauseduration: 500
+          }
         }
       };
     } else {
@@ -904,11 +1082,17 @@ function transition(stateStamped, inputD, inputC, params) {
       return {
         state: "S11",
         outputs: {
-          RobotSpeechbubbleAction:
-            "The cops get the man that set the trap. The animals are safe.",
+          RobotSpeechbubbleAction: {
+            type: "IMAGE",
+            value: "/public/img/ranger_forester-10.png"
+          },
           HumanSpeechbubbleAction: ["Pause"],
-          SpeechSynthesisAction:
-            "The cops get the man that set the trap. The animals are safe."
+          SpeechSynthesisAction: {
+            text:
+              "The cops get the man that set the trap. The animals are safe.",
+            rate: 0.9,
+            afterpauseduration: 500
+          }
         }
       };
     } else {

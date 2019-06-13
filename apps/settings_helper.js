@@ -6,7 +6,24 @@ var defaultVal = {
   },
   robot: {
     name: "demo",
-    withTabletFaceRobotActionsOptions: {},
+    withTabletFaceRobotActionsOptions: {
+      styles: {
+        robotSpeechbubble: {
+          styles: {
+            img: {
+              height: "75vmin"
+            }
+          }
+        },
+        humanSpeechbubble: {
+          styles: {
+            button: {
+              fontSize: "8vmin"
+            }
+          }
+        }
+      }
+    },
     recording: {
       enabled: true
     },

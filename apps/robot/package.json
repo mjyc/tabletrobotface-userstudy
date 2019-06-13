@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@cycle-robot-drivers/action": "^1.0.0",
-    "@cycle-robot-drivers/run": "^1.0.0",
+    "@cycle-robot-drivers/run": "^1.0.22",
     "@cycle-robot-drivers/screen": "^1.0.0",
     "@cycle/isolate": "5.0.0",
     "@cycle/state": "1.2.0",

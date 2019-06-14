@@ -9,9 +9,9 @@ const path = require("path");
 const defaultParams = {
   engagedMinNoseAngle: -10,
   engagedMaxNoseAngle: 10,
-  disengagedMinNoseAngle: -30,
-  disengagedMaxNoseAngle: 30,
-  // disengagedMaxNoseAngleStability: 20,
+  disengagedMinNoseAngle: -15,
+  disengagedMaxNoseAngle: 15,
+  disengagedMaxMaxNoseAngle1Sec: 20,
   disengagedTimeoutIntervalCs: 200,
   sets: {
     passive: {
@@ -19,15 +19,15 @@ const defaultParams = {
       engagedMaxNoseAngle: 0,
       disengagedMinNoseAngle: -90,
       disengagedMaxNoseAngle: 90,
-      // disengagedMaxNoseAngleStability: 20,
+      disengagedMaxMaxNoseAngle1Sec: -1,
       disengagedTimeoutIntervalCs: -1
     },
     proactive: {
       engagedMinNoseAngle: -10,
       engagedMaxNoseAngle: 10,
-      disengagedMinNoseAngle: -30,
-      disengagedMaxNoseAngle: 30,
-      // disengagedMaxNoseAngleStability: 20,
+      disengagedMinNoseAngle: -15,
+      disengagedMaxNoseAngle: 15,
+      disengagedMaxMaxNoseAngle1Sec: 20,
       disengagedTimeoutIntervalCs: 200
     }
   }
@@ -64,34 +64,92 @@ const lines = fs
     return line.trim();
   });
 
-lines.map((line, i) => {
-  output += `
+output += `
   } else if (
-    stateStamped.state === "S${i + 1}" &&
-    ${
-      i === 0
-        ? `inputD.type === "HumanSpeechbubbleAction" &&
+    stateStamped.state === "S1" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
     inputD.status === "SUCCEEDED" &&
-    inputD.result === "Hello"`
-        : `inputD.type === "SpeechSynthesisAction" &&
-    inputD.status === "SUCCEEDED"`
-    }
+    inputD.result === "Hello"
   ) {
     return {
-      state: "S${i + 2}",
+      state: "S2",
       outputs: {
         RobotSpeechbubbleAction: {
           type: "IMAGE",
-          value: "/public/img/${name}-${i + 1}.png"
+          value: "/public/img/${name}-1.png"
         },
-        HumanSpeechbubbleAction: ["Pause"],
+        HumanSpeechbubbleAction: ["Pause", "Next"],
         SpeechSynthesisAction: {
-          text: ${JSON.stringify(line)},
-          rate: 0.8,
-          afterpauseduration: 3000
+          goal_id: {
+            id: ${JSON.stringify(lines[0])},
+            stamp: Date.now()
+          },
+          goal: {
+            text: ${JSON.stringify(lines[0])},
+            rate: 0.8,
+            afterpauseduration: 3000
+          }
         }
       }
     };`;
+
+lines.map((line, i) => {
+  if (i === 0) return;
+  output += `
+  } else if (
+    stateStamped.state === "S${i + 1}" && inputD.type === "Features"
+  ) {
+    if (  // Proactive Next
+      disengagedMaxMaxNoseAngle1Sec >= 0 && // use disengagedMaxMaxNoseAngle1Sec < 0 to disable proactive next
+      inputC.history.speechSynthesisActionResultStamped[0].goal_id.id ===
+        ${JSON.stringify(lines[i - 1])} &&
+      inputC.face.isVisible &&
+      inputC.face.noseAngle < disengagedMaxNoseAngle &&
+      inputC.face.noseAngle > disengagedMinNoseAngle &&
+      inputC.temporal.maxNoseAngle1Sec < disengagedMaxMaxNoseAngle1Sec
+    ) {
+      return {
+        state: "S${i + 2}",
+        outputs: {
+          RobotSpeechbubbleAction: {
+            type: "IMAGE",
+            value: "/public/img/${name}-${i + 1}.png"
+          },
+          HumanSpeechbubbleAction: ["Pause", "Next"],
+          SpeechSynthesisAction: {
+            goal_id: {
+              id: ${JSON.stringify(line)},
+              stamp: Date.now()
+            },
+            goal: {
+              text: ${JSON.stringify(line)},
+              rate: 0.8,
+              afterpauseduration: 3000
+            }
+          }
+        }
+      };
+    } else if (  // Proactive Pause
+      disengagedTimeoutIntervalCs >= 0 && // use disengagedTimeoutIntervalCs < 0 to disable proactive pause
+      inputC.history.humanSpeechbubbleActionResultStamped[0].result !=
+          "Resume" && // don't override human
+      !inputC.history.isVisibleStamped[0].isVisible &&  // not visible
+      inputC.face.stamp - inputC.history.isVisibleStamped[0].stamp > disengagedTimeoutIntervalCs * 10
+    ) {
+      return {
+        state: "SP${i + 2}",
+        outputs: {
+          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
+          HumanSpeechbubbleAction: ["Resume"],
+          SpeechSynthesisAction: " "
+        }
+      };
+    } else {
+      return {
+        state: stateStamped.state,
+        outputs: null
+      };
+    }`;
 });
 
 output += `
@@ -106,9 +164,75 @@ output += `
         RobotSpeechbubbleAction: "The END",
         HumanSpeechbubbleAction: "",
         SpeechSynthesisAction: {
-          text: "The END",
-          rate: 0.8,
-          afterpauseduration: 3000
+          goal_id: {
+            id: "The END",
+            stamp: Date.now()
+          },
+          goal: {
+            text: "The END",
+            rate: 0.8,
+            afterpauseduration: 3000
+          }
+        }
+      }
+    };`;
+
+output += `
+
+    // Handle Next`;
+lines.map((line, i) => {
+  output += `
+  } else if (
+    stateStamped.state === "S${i + 1}" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Next"
+  ) {
+    return {
+      state: "S${i + 2}",
+      outputs: {
+        RobotSpeechbubbleAction: {
+          type: "IMAGE",
+          value: "/public/img/${name}-${i + 1}.png"
+        },
+        HumanSpeechbubbleAction: ["Pause", "Next"],
+        SpeechSynthesisAction: {
+          goal_id: {
+            id: ${JSON.stringify(line)},
+            stamp: Date.now()
+          },
+          goal: {
+            text: ${JSON.stringify(line)},
+            rate: 0.8,
+            afterpauseduration: 3000
+          }
+        }
+      }
+    };`;
+});
+
+output += `
+  } else if (
+    stateStamped.state === "S${lines.length + 1}" &&
+    inputD.type === "HumanSpeechbubbleAction" &&
+    inputD.status === "SUCCEEDED" &&
+    inputD.result === "Next"
+  ) {
+    return {
+      state: "S${lines.length + 2}",
+      outputs: {
+        RobotSpeechbubbleAction: "The END",
+        HumanSpeechbubbleAction: "",
+        SpeechSynthesisAction: {
+          goal_id: {
+            id: "The END",
+            stamp: Date.now()
+          },
+          goal: {
+            text: "The END",
+            rate: 0.8,
+            afterpauseduration: 3000
+          }
         }
       }
     };`;
@@ -152,49 +276,20 @@ lines.map((line, i) => {
           type: "IMAGE",
           value: "/public/img/${name}-${i + 1}.png"
         },
-        HumanSpeechbubbleAction: ["Pause"],
+        HumanSpeechbubbleAction: ["Pause", "Next"],
         SpeechSynthesisAction: {
-          text: ${JSON.stringify(line)},
-          rate: 0.8,
-          afterpauseduration: 3000
+          goal_id: {
+            id: ${JSON.stringify(line)},
+            stamp: Date.now()
+          },
+          goal: {
+            text: ${JSON.stringify(line)},
+            rate: 0.8,
+            afterpauseduration: 3000
+          }
         }
       }
     };`;
-});
-
-output += `
-
-    // Proactive Pause`;
-lines.map((line, i) => {
-  output += `
-  } else if (
-    stateStamped.state === "S${i + 2}" && inputD.type === "Features"
-  ) {
-    if (
-      inputC.history.humanSpeechbubbleActionResultStamped[0].result !=
-          "Resume" && // don't override human
-      ((inputC.history.isVisibleStamped[0].isVisible &&
-        (inputC.face.noseAngle > disengagedMaxNoseAngle ||
-          inputC.face.noseAngle < disengagedMinNoseAngle) &&
-        inputC.temporal.maxNoseAngle2Sec < 20) ||  // TODO: use var not 20
-        (!inputC.history.isVisibleStamped[0].isVisible &&
-          disengagedTimeoutIntervalCs >= 0 && // use disengagedTimeoutIntervalCs < 0 to disable timeout-based proactive pause
-          inputC.face.stamp - inputC.history.isVisibleStamped[0].stamp >disengagedTimeoutIntervalCs))
-    ) {
-      return {
-        state: "SP${i + 2}",
-        outputs: {
-          RobotSpeechbubbleAction: 'Tap "Resume" when you are ready',
-          HumanSpeechbubbleAction: ["Resume"],
-          SpeechSynthesisAction: " "
-        }
-      };
-    } else {
-      return {
-        state: stateStamped.state,
-        outputs: null
-      };
-    }`;
 });
 
 output += `
@@ -205,11 +300,11 @@ lines.map((line, i) => {
   } else if (stateStamped.state === "SP${i +
     2}" && inputD.type === "Features") {
     if (
+      inputC.history.humanSpeechbubbleActionResultStamped[0].result !=
+        "Pause" && // don't override human
       inputC.face.isVisible &&
       (inputC.face.noseAngle < engagedMaxNoseAngle &&
-        inputC.face.noseAngle > engagedMinNoseAngle) &&
-      inputC.history.humanSpeechbubbleActionResultStamped[0].result !=
-        "Pause" // don't override human
+        inputC.face.noseAngle > engagedMinNoseAngle)
     ) {
       return {
         state: "S${i + 2}",
@@ -218,11 +313,17 @@ lines.map((line, i) => {
             type: "IMAGE",
             value: "/public/img/${name}-${i + 1}.png"
           },
-          HumanSpeechbubbleAction: ["Pause"],
+          HumanSpeechbubbleAction: ["Pause", "Next"],
           SpeechSynthesisAction: {
-            text: ${JSON.stringify(`, , , ${line}`)},
-            rate: 0.8,
-            afterpauseduration: 3000
+            goal_id: {
+              id: ${JSON.stringify(line)},
+              stamp: Date.now()
+            },
+            goal: {
+              text: ${JSON.stringify(`, , , , , , Let's see... ${line}`)},
+              rate: 0.8,
+              afterpauseduration: 3000
+            }
           }
         }
       };

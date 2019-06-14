@@ -10,7 +10,8 @@ export function input({
   fsmUniqueStateStamped,
   actionResults,
   faceFeatures,
-  voiceFeatures
+  voiceFeatures,
+  temporalFeatures
 }) {
   const command$ = command.filter(cmd => cmd.type === "LOAD_FSM");
 
@@ -76,6 +77,7 @@ export function input({
     .combine(
       faceFeatures,
       voiceFeatures,
+      temporalFeatures,
       stateStampedHistory$,
       isVisibleStampedHistory$,
       vadStateStampedHistory$,
@@ -86,28 +88,28 @@ export function input({
       ([
         faceFeatures,
         voiceFeatures,
+        temporalFeatures,
         stateStampedHistory,
         isVisibleStampedHistory,
         vadStateStampedHistory,
         humanSpeechbubbleActionResultStamped,
         speechSynthesisActionResultStamped
-      ]) => {
-        return {
-          face: faceFeatures,
-          voice: voiceFeatures,
-          history: {
-            stateStamped: stateStampedHistory,
-            isVisibleStamped: isVisibleStampedHistory,
-            vadStateStamped: vadStateStampedHistory,
-            humanSpeechbubbleActionResultStamped: [
-              humanSpeechbubbleActionResultStamped
-            ],
-            speechSynthesisActionResultStamped: [
-              speechSynthesisActionResultStamped
-            ]
-          }
-        };
-      }
+      ]) => ({
+        face: faceFeatures,
+        voice: voiceFeatures,
+        history: {
+          stateStamped: stateStampedHistory,
+          isVisibleStamped: isVisibleStampedHistory,
+          vadStateStamped: vadStateStampedHistory,
+          humanSpeechbubbleActionResultStamped: [
+            humanSpeechbubbleActionResultStamped
+          ],
+          speechSynthesisActionResultStamped: [
+            speechSynthesisActionResultStamped
+          ]
+        },
+        temporal: temporalFeatures
+      })
     );
   return xs.merge(
     command$,

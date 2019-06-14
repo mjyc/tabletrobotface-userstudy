@@ -39,6 +39,8 @@ import transitions from "./transitions";
 import FeatureChart, { config as featureChartConfig } from "./FeatureChart";
 import StateChart, { config as stateChartConfig } from "./StateChart";
 
+const postDetectionFPS = 10;
+
 function TabletRobotFaceApp(sources) {
   // sources.state.stream.addListener({next: s => console.debug('reducer state', s)});
 
@@ -124,13 +126,28 @@ function TabletRobotFaceApp(sources) {
   const voiceFeatures$ = vadState$
     .map(state => extractVoiceFeatures(state))
     .startWith(defaultVoiceFeatures);
+  const maxNoseAngle2Sec$ = faceFeatures$
+    .fold((prev, val) => {
+      prev.unshift(!val.isVisible ? null : val.noseAngle);
+      if (prev.length > postDetectionFPS * 2) prev.pop();
+      return prev;
+    }, [])
+    .map(val => {
+      val.filter(v => v !== null);
+      if (val.length < 2) return 0;
+      const sorted = val.slice(0).sort((x, y) => x - y);
+      return sorted[sorted.length - 1] - sorted[0];
+    });
   const robotSinks = isolate(RobotApp, "RobotApp")({
     state: sources.state,
     command: command$,
     fsmUniqueStateStamped: fsmUniqueStateStamped$,
     actionResults: actionResults$,
     faceFeatures: faceFeatures$,
-    voiceFeatures: voiceFeatures$
+    voiceFeatures: voiceFeatures$,
+    temporalFeatures: maxNoseAngle2Sec$.map(maxNoseAngle2Sec => ({
+      maxNoseAngle2Sec
+    }))
   });
   return {
     ...robotSinks,
@@ -243,7 +260,7 @@ function main(sources) {
 
 const drivers = {
   TabletFace: makeTabletFaceDriver(),
-  PoseDetection: makePoseDetectionDriver({ fps: 10 }),
+  PoseDetection: makePoseDetectionDriver({ fps: postDetectionFPS }),
   VAD: makeVoiceActivityDetectionDriver({
     useNoiseCapture: false,
     activityCounterThresh: 10,

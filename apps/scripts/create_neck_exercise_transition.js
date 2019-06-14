@@ -7,18 +7,21 @@ var defaultParams = {
   rotateLeftNoseAngle: 20,
   touchRighFaceAngle: 30,
   touchLeftFaceAngle: -30,
+  nextMaxMaxNoseAngle1Sec: 20,
   sets: {
     passive: {
       rotateRightNoseAngle: -60,
       rotateLeftNoseAngle: 60,
       touchRighFaceAngle: 90,
-      touchLeftFaceAngle: -90
+      touchLeftFaceAngle: -90,
+      nextMaxMaxNoseAngle1Sec: -1
     },
     proactive: {
       rotateRightNoseAngle: -20,
       rotateLeftNoseAngle: 20,
       touchRighFaceAngle: 30,
-      touchLeftFaceAngle: -30
+      touchLeftFaceAngle: -30,
+      nextMaxMaxNoseAngle1Sec: 20
     }
   }
 };
@@ -57,7 +60,13 @@ function transition(stateStamped, inputD, inputC, params) {` +
       outputs: {
         RobotSpeechbubbleAction: "Let's start from looking forward",
         HumanSpeechbubbleAction: "",
-        SpeechSynthesisAction: "Let's start from looking forward"
+        SpeechSynthesisAction: {
+          goal_id: {
+            id: "Let's start from looking forward",
+            stamp: Date.now()
+          },
+          goal: "Let's start from looking forward"
+        }
       }
     };`;
 
@@ -77,9 +86,15 @@ for (var i = 0; i < numRepeats; i++) {
     return {
       state: "S${idx + 1}",
       outputs: {
-        RobotSpeechbubbleAction: "and slowly rotate to your right",
+        RobotSpeechbubbleAction: "and now slowly rotate to your right",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and slowly rotate to your right"
+        SpeechSynthesisAction: {
+          goal_id: {
+            id: "and now slowly rotate to your right",
+            stamp: Date.now()
+          },
+          goal: "and now slowly rotate to your right"
+        }
       }
     };`
       : `
@@ -92,21 +107,42 @@ for (var i = 0; i < numRepeats; i++) {
     return {
       state: "S${idx + 1}",
       outputs: {
-        RobotSpeechbubbleAction: "and slowly rotate to your right",
+        RobotSpeechbubbleAction: "and now slowly rotate to your right",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and slowly rotate to your right"
+        SpeechSynthesisAction: {
+          goal_id: {
+            id: "and now slowly rotate to your right",
+            stamp: Date.now()
+          },
+          goal: "and now slowly rotate to your right"
+        }
       }
     };`
   }
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.noseAngle < rotateRightNoseAngle) {
+    if (
+      nextMaxMaxNoseAngle1Sec >= 0 &&
+      inputC.temporal.maxNoseAngle1Sec < nextMaxMaxNoseAngle1Sec &&
+      inputC.history.speechSynthesisActionResultStamped[0].goal_id.id ===
+        "and now slowly rotate to your right" &&
+      inputC.face.stamp -
+        inputC.history.speechSynthesisActionResultStamped[0].stamp >
+        3000 &&
+      inputC.face.noseAngle < rotateRightNoseAngle
+    ) {
       return {
         state: "S${idx + 2}",
         outputs: {
           RobotSpeechbubbleAction: "and now slowly rotate to your left",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now slowly rotate to your left"
+          SpeechSynthesisAction: {
+            goal_id: {
+              id: "and now slowly rotate to your left",
+              stamp: Date.now()
+            },
+            goal: "and now slowly rotate to your left"
+          }
         }
       };
     } else {
@@ -126,12 +162,27 @@ for (var i = 0; i < numRepeats; i++) {
       outputs: {
         RobotSpeechbubbleAction: "and now slowly rotate to your left",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now slowly rotate to your left"
+        SpeechSynthesisAction: {
+          goal_id: {
+            id: "and now slowly rotate to your left",
+            stamp: Date.now()
+          },
+          goal: "and now slowly rotate to your left"
+        }
       }
     };
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.noseAngle > rotateLeftNoseAngle) {
+    if (
+      nextMaxMaxNoseAngle1Sec >= 0 &&
+      inputC.temporal.maxNoseAngle1Sec < nextMaxMaxNoseAngle1Sec &&
+      inputC.history.speechSynthesisActionResultStamped[0].goal_id.id ===
+        "and now slowly rotate to your left" &&
+      inputC.face.stamp -
+        inputC.history.speechSynthesisActionResultStamped[0].stamp >
+        3000 &&
+      inputC.face.noseAngle > rotateLeftNoseAngle
+    ) {
       return {
         state: "S${idx + 3}",
         outputs: {
@@ -143,13 +194,25 @@ for (var i = 0; i < numRepeats; i++) {
               : `and now take your ear and act like trying to touch right shoulder`
           }",
           HumanSpeechbubbleAction: ${!rotateOnly ? `["Next"]` : `["Repeat"]`},
-          SpeechSynthesisAction: "${
-            i !== numRepeats - 1
-              ? !rotateOnly
-                ? `and now slowly rotate to your right`
-                : `Great job!`
-              : `and now take your ear and act like trying to touch right shoulder`
-          }"
+          SpeechSynthesisAction: {
+            goal_id: {
+              id: "${
+                i !== numRepeats - 1
+                  ? !rotateOnly
+                    ? `and now slowly rotate to your right`
+                    : `Great job!`
+                  : `and now take your ear and act like trying to touch right shoulder`
+              }",
+              stamp: Date.now()
+            },
+            goal: "${
+              i !== numRepeats - 1
+                ? !rotateOnly
+                  ? `and now slowly rotate to your right`
+                  : `Great job!`
+                : `and now take your ear and act like trying to touch right shoulder`
+            }"
+          }
         }
       };
     } else {
@@ -178,18 +241,39 @@ for (var i = 0; i < numRepeats; i++) {
       outputs: {
         RobotSpeechbubbleAction: "and now take your ear and act like trying to touch right shoulder",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now take your ear and act like trying to touch right shoulder"
+        SpeechSynthesisAction: {
+          goal_id: {
+            id: "and now take your ear and act like trying to touch right shoulder",
+            stamp: Date.now()
+          },
+          goal: "and now take your ear and act like trying to touch right shoulder"
+        }
       }
     };
   } else if (stateStamped.state === "S${idx +
     1}" && inputD.type === "Features") {
-    if (inputC.face.faceAngle > touchRighFaceAngle) {
+    if (
+      nextMaxMaxNoseAngle1Sec >= 0 &&
+      inputC.temporal.maxNoseAngle1Sec < nextMaxMaxNoseAngle1Sec &&
+      inputC.history.speechSynthesisActionResultStamped[0].goal_id.id ===
+        "and now take your ear and act like trying to touch right shoulder" &&
+      inputC.face.stamp -
+        inputC.history.speechSynthesisActionResultStamped[0].stamp >
+        3000 &&
+      inputC.face.faceAngle > touchRighFaceAngle
+    ) {
       return {
         state: "S${idx + 2}",
         outputs: {
           RobotSpeechbubbleAction: "and now take your ear and act like trying to touch left shoulder",
           HumanSpeechbubbleAction: ["Next"],
-          SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
+          SpeechSynthesisAction: {
+            goal_id: {
+              id: "and now take your ear and act like trying to touch left shoulder",
+              stamp: Date.now()
+            },
+            goal: "and now take your ear and act like trying to touch left shoulder"
+          }
         }
       };
     } else {
@@ -209,12 +293,27 @@ for (var i = 0; i < numRepeats; i++) {
       outputs: {
         RobotSpeechbubbleAction: "and now take your ear and act like trying to touch left shoulder",
         HumanSpeechbubbleAction: ["Next"],
-        SpeechSynthesisAction: "and now take your ear and act like trying to touch left shoulder"
+        SpeechSynthesisAction: {
+          goal_id: {
+            id: "and now take your ear and act like trying to touch left shoulder",
+            stamp: Date.now()
+          },
+          goal: "and now take your ear and act like trying to touch left shoulder"
+        }
       }
     };
   } else if (stateStamped.state === "S${idx +
     2}" && inputD.type === "Features") {
-    if (inputC.face.faceAngle < touchLeftFaceAngle) {
+    if (
+      nextMaxMaxNoseAngle1Sec >= 0 &&
+      inputC.temporal.maxNoseAngle1Sec < nextMaxMaxNoseAngle1Sec &&
+      inputC.history.speechSynthesisActionResultStamped[0].goal_id.id ===
+        "and now take your ear and act like trying to touch left shoulder" &&
+      inputC.face.stamp -
+        inputC.history.speechSynthesisActionResultStamped[0].stamp >
+        3000 &&
+      inputC.face.faceAngle < touchLeftFaceAngle
+    ) {
       return {
         state: "S${idx + 3}",
         outputs: {
@@ -226,11 +325,21 @@ for (var i = 0; i < numRepeats; i++) {
           HumanSpeechbubbleAction: ${
             i !== numRepeats - 1 ? `["Next"]` : `["Repeat"]`
           },
-          SpeechSynthesisAction: "${
-            i !== numRepeats - 1
-              ? `and now take your ear and act like trying to touch right shoulder`
-              : `Great job!`
-          }"
+          SpeechSynthesisAction: {
+            goal_id: {
+              id: "${
+                i !== numRepeats - 1
+                  ? `and now take your ear and act like trying to touch right shoulder`
+                  : `Great job!`
+              }",
+              stamp: Date.now(),
+            },
+            goal: "${
+              i !== numRepeats - 1
+                ? `and now take your ear and act like trying to touch right shoulder`
+                : `Great job!`
+            }"
+          }
         }
       };
     } else {

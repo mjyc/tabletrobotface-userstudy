@@ -3,7 +3,7 @@ import dropRepeats from "xstream/extra/dropRepeats";
 import pairwise from "xstream/extra/pairwise";
 import sampleCombine from "xstream/extra/sampleCombine";
 import throttle from "xstream/extra/throttle";
-import { initGoal } from "@cycle-robot-drivers/action";
+import { initGoal, isEqualGoalID } from "@cycle-robot-drivers/action";
 
 export function input({
   command,
@@ -43,6 +43,19 @@ export function input({
     .compose(pairwise)
     .map(([[x, y], [_, z]]) => [z, y, x])
     .startWith([...Array(3)].map(_ => ({ vadState: "", stamp: 0 })));
+  const speechSynthesisActionResultStamped$ = inputD$
+    .filter(inputD => inputD.type === "SpeechSynthesisAction")
+    .compose(
+      dropRepeats(
+        (x, y) => x.status === y.status && isEqualGoalID(x.goal_id, y.goal_id)
+      )
+    )
+    .startWith({
+      type: "",
+      goal_id: { stamp: 0, id: "" },
+      status: "",
+      result: ""
+    });
 
   const inputC$ = xs
     .combine(
@@ -50,7 +63,8 @@ export function input({
       voiceFeatures,
       stateStampedHistory$,
       isVisibleStampedHistory$,
-      vadStateStampedHistory$
+      vadStateStampedHistory$,
+      speechSynthesisActionResultStamped$
     )
     .map(
       ([
@@ -58,7 +72,8 @@ export function input({
         voiceFeatures,
         stateStampedHistory,
         isVisibleStampedHistory,
-        vadStateStampedHistory
+        vadStateStampedHistory,
+        speechSynthesisActionResultStamped
       ]) => {
         return {
           face: faceFeatures,
@@ -66,7 +81,10 @@ export function input({
           history: {
             stateStamped: stateStampedHistory,
             isVisibleStamped: isVisibleStampedHistory,
-            vadStateStamped: vadStateStampedHistory
+            vadStateStamped: vadStateStampedHistory,
+            speechSynthesisActionResultStamped: [
+              speechSynthesisActionResultStamped
+            ]
           }
         };
       }

@@ -73,31 +73,37 @@ function TabletRobotFaceApp(sources) {
   const actionResults$ = xs.merge(
     sources.FacialExpressionAction.result.map(r => ({
       type: "FacialExpressionAction",
+      goal_id: r.status.goal_id,
       status: r.status.status,
       result: r.result
     })),
     sources.RobotSpeechbubbleAction.result.map(r => ({
       type: "RobotSpeechbubbleAction",
+      goal_id: r.status.goal_id,
       status: r.status.status,
       result: r.result
     })),
     sources.HumanSpeechbubbleAction.result.map(r => ({
       type: "HumanSpeechbubbleAction",
+      goal_id: r.status.goal_id,
       status: r.status.status,
       result: r.result
     })),
     sources.AudioPlayerAction.result.map(r => ({
       type: "AudioPlayerAction",
+      goal_id: r.status.goal_id,
       status: r.status.status,
       result: r.result
     })),
     sources.SpeechSynthesisAction.result.map(r => ({
       type: "SpeechSynthesisAction",
+      goal_id: r.status.goal_id,
       status: r.status.status,
       result: r.result
     })),
     sources.SpeechRecognitionAction.result.map(r => ({
       type: "SpeechRecognitionAction",
+      goal_id: r.status.goal_id,
       status: r.status.status,
       result: r.result
     }))

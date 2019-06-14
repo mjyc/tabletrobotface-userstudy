@@ -35,10 +35,11 @@ const defaultFaceFeatures = {
   stamp: 0,
   isVisible: false,
   faceSize: 0,
+  faceHeight: 0,
   faceCenterX: 0,
   faceCenterY: 0,
-  faceRotation: 0,
-  noseRotation: 0
+  faceAngle: 0,
+  noseAngle: 0
 };
 
 function norm(pt) {
@@ -69,10 +70,11 @@ function extractFaceFeatures(poses) {
       stamp: Date.now(),
       isVisible: false,
       faceSize: defaultFaceFeatures.faceSize,
+      faceHeight: defaultFaceFeatures.faceHeight,
       faceCenterX: defaultFaceFeatures.faceCenterX,
       faceCenterY: defaultFaceFeatures.faceCenterY,
-      faceRotation: defaultFaceFeatures.faceRotation,
-      noseRotation: defaultFaceFeatures.noseRotation
+      faceAngle: defaultFaceFeatures.faceAngle,
+      noseAngle: defaultFaceFeatures.noseAngle
     };
   }
 
@@ -113,6 +115,9 @@ function extractFaceFeatures(poses) {
   const dvbn = Math.sqrt(Math.pow(vbn.x, 2) + Math.pow(vbn.y, 2));
   let noseRotation = Math.acos((vbl.x * vbn.x + vbl.y * vbn.y) / (dvbl * dvbn));
 
+  const faceAngle = (faceRotation / Math.PI) * 180;
+  const noseAngle = ((noseRotation - Math.PI / 2) / Math.PI) * 180;
+
   return {
     stamp: Date.now(),
     isVisible: true,
@@ -120,8 +125,8 @@ function extractFaceFeatures(poses) {
     faceHeight: norm(vbn),
     faceCenterX: faceCenterX,
     faceCenterY: faceCenterY,
-    faceAngle: (faceRotation / Math.PI) * 180,
-    noseAngle: ((noseRotation - Math.PI / 2) / Math.PI) * 180
+    faceAngle: faceAngle,
+    noseAngle: noseAngle
   };
 }
 

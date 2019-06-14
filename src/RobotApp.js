@@ -53,7 +53,7 @@ export function input({
     .map(([x, y]) => [y, x]);
   const humanSpeechbubbleActionResultStamped$ = inputD$
     .filter(inputD => inputD.type === "HumanSpeechbubbleAction")
-    .map(inputD => ({ stamp: inputD.goal_id.stamp, ...inputD }))
+    .map(inputD => ({ stamp: Date.now(), ...inputD }))
     .compose(
       dropRepeats(
         (x, y) => x.status === y.status && isEqualGoalID(x.goal_id, y.goal_id)
@@ -67,7 +67,7 @@ export function input({
     });
   const speechSynthesisActionResultStamped$ = inputD$
     .filter(inputD => inputD.type === "SpeechSynthesisAction")
-    .map(inputD => ({ stamp: inputD.goal_id.stamp, ...inputD }))
+    .map(inputD => ({ stamp: Date.now(), ...inputD }))
     .compose(
       dropRepeats(
         (x, y) => x.status === y.status && isEqualGoalID(x.goal_id, y.goal_id)

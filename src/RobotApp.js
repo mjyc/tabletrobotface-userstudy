@@ -26,24 +26,31 @@ export function input({
 
   // extract history features
   const stateStampedHistory$ = fsmUniqueStateStamped
+    .compose(pairwise) // IMPORTANT! assumes first two unique states are S0 and S1
+    .map(([x, y]) => [y, x])
+    .startWith([...Array(2)].map(_ => ({ state: "", stamp: 0 })));
+  const isVisibleStampedHistory$ = xs
+    .merge(
+      faceFeatures // for filling up pairwise
+        .map(ff => ({ isVisible: ff.isVisible, stamp: ff.stamp }))
+        .take(2),
+      faceFeatures
+        .map(ff => ({ isVisible: ff.isVisible, stamp: ff.stamp }))
+        .compose(dropRepeats((x, y) => x.isVisible === y.isVisible))
+    )
     .compose(pairwise)
+    .map(([x, y]) => [y, x]);
+  const vadStateStampedHistory$ = xs
+    .merge(
+      voiceFeatures // for filling up pairwise
+        .map(vf => ({ vadState: vf.vadState, stamp: vf.stamp }))
+        .take(2),
+      voiceFeatures
+        .map(vf => ({ vadState: vf.vadState, stamp: vf.stamp }))
+        .compose(dropRepeats((x, y) => x.vadState === y.vadState))
+    )
     .compose(pairwise)
-    .map(([[x, y], [_, z]]) => [z, y, x])
-    .startWith([...Array(3)].map(_ => ({ state: "", stamp: 0 })));
-  const isVisibleStampedHistory$ = faceFeatures
-    .map(ff => ({ isVisible: ff.isVisible, stamp: ff.stamp }))
-    .compose(dropRepeats((x, y) => x.isVisible === y.isVisible))
-    .compose(pairwise)
-    .compose(pairwise)
-    .map(([[x, y], [_, z]]) => [z, y, x])
-    .startWith([...Array(3)].map(_ => ({ isVisible: "", stamp: 0 })));
-  const vadStateStampedHistory$ = voiceFeatures
-    .map(vf => ({ vadState: vf.vadState, stamp: vf.stamp }))
-    .compose(dropRepeats((x, y) => x.vadState === y.vadState))
-    .compose(pairwise)
-    .compose(pairwise)
-    .map(([[x, y], [_, z]]) => [z, y, x])
-    .startWith([...Array(3)].map(_ => ({ vadState: "", stamp: 0 })));
+    .map(([x, y]) => [y, x]);
   const humanSpeechbubbleActionResultStamped$ = inputD$
     .filter(inputD => inputD.type === "HumanSpeechbubbleAction")
     .map(inputD => ({ stamp: inputD.goal_id.stamp, ...inputD }))

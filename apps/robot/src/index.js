@@ -126,6 +126,18 @@ function TabletRobotFaceApp(sources) {
   const voiceFeatures$ = vadState$
     .map(state => extractVoiceFeatures(state))
     .startWith(defaultVoiceFeatures);
+  const maxNoseAngle1Sec$ = faceFeatures$
+    .fold((prev, val) => {
+      prev.unshift(!val.isVisible ? null : val.noseAngle);
+      if (prev.length > postDetectionFPS * 1) prev.pop();
+      return prev;
+    }, [])
+    .map(val => {
+      val.filter(v => v !== null);
+      if (val.length < 2) return 0;
+      const sorted = val.slice(0).sort((x, y) => x - y);
+      return sorted[sorted.length - 1] - sorted[0];
+    });
   const maxNoseAngle2Sec$ = faceFeatures$
     .fold((prev, val) => {
       prev.unshift(!val.isVisible ? null : val.noseAngle);
@@ -145,9 +157,12 @@ function TabletRobotFaceApp(sources) {
     actionResults: actionResults$,
     faceFeatures: faceFeatures$,
     voiceFeatures: voiceFeatures$,
-    temporalFeatures: maxNoseAngle2Sec$.map(maxNoseAngle2Sec => ({
-      maxNoseAngle2Sec
-    }))
+    temporalFeatures: xs
+      .combine(maxNoseAngle1Sec$, maxNoseAngle2Sec$)
+      .map(([maxNoseAngle1Sec, maxNoseAngle2Sec]) => ({
+        maxNoseAngle1Sec,
+        maxNoseAngle2Sec
+      }))
   });
   return {
     ...robotSinks,

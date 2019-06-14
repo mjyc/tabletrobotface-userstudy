@@ -43,8 +43,23 @@ export function input({
     .compose(pairwise)
     .map(([[x, y], [_, z]]) => [z, y, x])
     .startWith([...Array(3)].map(_ => ({ vadState: "", stamp: 0 })));
+  const humanSpeechbubbleActionResultStamped$ = inputD$
+    .filter(inputD => inputD.type === "HumanSpeechbubbleAction")
+    .map(inputD => ({ stamp: inputD.goal_id.stamp, ...inputD }))
+    .compose(
+      dropRepeats(
+        (x, y) => x.status === y.status && isEqualGoalID(x.goal_id, y.goal_id)
+      )
+    )
+    .startWith({
+      type: "",
+      goal_id: { stamp: 0, id: "" },
+      status: "",
+      result: ""
+    });
   const speechSynthesisActionResultStamped$ = inputD$
     .filter(inputD => inputD.type === "SpeechSynthesisAction")
+    .map(inputD => ({ stamp: inputD.goal_id.stamp, ...inputD }))
     .compose(
       dropRepeats(
         (x, y) => x.status === y.status && isEqualGoalID(x.goal_id, y.goal_id)
@@ -64,6 +79,7 @@ export function input({
       stateStampedHistory$,
       isVisibleStampedHistory$,
       vadStateStampedHistory$,
+      humanSpeechbubbleActionResultStamped$,
       speechSynthesisActionResultStamped$
     )
     .map(
@@ -73,6 +89,7 @@ export function input({
         stateStampedHistory,
         isVisibleStampedHistory,
         vadStateStampedHistory,
+        humanSpeechbubbleActionResultStamped,
         speechSynthesisActionResultStamped
       ]) => {
         return {
@@ -82,6 +99,9 @@ export function input({
             stateStamped: stateStampedHistory,
             isVisibleStamped: isVisibleStampedHistory,
             vadStateStamped: vadStateStampedHistory,
+            humanSpeechbubbleActionResultStamped: [
+              humanSpeechbubbleActionResultStamped
+            ],
             speechSynthesisActionResultStamped: [
               speechSynthesisActionResultStamped
             ]

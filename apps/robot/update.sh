@@ -7,4 +7,5 @@ sed -i 's|"../../../data/parameters|"./parameters|g' ./src/transitions/index.js
 sed -i 's|"../../settings_helper"|"./settings.json"|g' src/index.js
 
 npx json -I -f package.json -e 'this.dependencies["tabletrobotface-userstudy"]="~0.0.0"'
-npm install tabletrobotface-userstudy
+rm -rf node_modules package-lock.json
+npm install

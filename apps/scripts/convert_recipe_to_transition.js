@@ -6,13 +6,13 @@ if (process.argv.length < 3) {
 const fs = require("fs");
 
 const defaultParams = {
-  nextTimeoutIntervalMs: 1000,
+  nextTimeoutIntervalCs: 100,
   sets: {
     passive: {
-      nextTimeoutIntervalMs: 60000 // 1hr
+      nextTimeoutIntervalCs: 0
     },
     proactive: {
-      nextTimeoutIntervalMs: 1000
+      nextTimeoutIntervalCs: 100
     }
   }
 };
@@ -72,10 +72,12 @@ lines.map((line, i) => {
   } else if (stateStamped.state === "S${i + 2}" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
+      nextTimeoutIntervalCs >= 0 && // use disengagedTimeoutIntervalCs < 0 to disable proactive pause
       inputC.face.stamp - inputC.history.stateStamped[0].stamp >
         inputC.face.stamp - inputC.history.isVisibleStamped[1].stamp &&
+      inputC.history.isVisibleStamped[1].isVisible === false &&
       inputC.face.stamp - inputC.history.isVisibleStamped[1].stamp >
-        nextTimeoutIntervalMs
+        nextTimeoutIntervalCs * 10
     ) {
       return {
         state: "S${i + 3}",

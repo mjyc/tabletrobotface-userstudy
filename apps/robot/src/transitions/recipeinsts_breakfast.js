@@ -1,6 +1,6 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {
-  var nextTimeoutIntervalMs = params.nextTimeoutIntervalMs;
+  var nextTimeoutIntervalCs = params.nextTimeoutIntervalCs;
 
   // Happy path
   if (stateStamped.state === "S0" && inputD.type === "START") {
@@ -28,10 +28,12 @@ function transition(stateStamped, inputD, inputC, params) {
   } else if (stateStamped.state === "S2" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
+      nextTimeoutIntervalCs >= 0 && // use disengagedTimeoutIntervalCs < 0 to disable proactive pause
       inputC.face.stamp - inputC.history.stateStamped[0].stamp >
         inputC.face.stamp - inputC.history.isVisibleStamped[1].stamp &&
+      inputC.history.isVisibleStamped[1].isVisible === false &&
       inputC.face.stamp - inputC.history.isVisibleStamped[1].stamp >
-        nextTimeoutIntervalMs
+        nextTimeoutIntervalCs * 10
     ) {
       return {
         state: "S3",
@@ -64,10 +66,12 @@ function transition(stateStamped, inputD, inputC, params) {
   } else if (stateStamped.state === "S3" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
+      nextTimeoutIntervalCs >= 0 && // use disengagedTimeoutIntervalCs < 0 to disable proactive pause
       inputC.face.stamp - inputC.history.stateStamped[0].stamp >
         inputC.face.stamp - inputC.history.isVisibleStamped[1].stamp &&
+      inputC.history.isVisibleStamped[1].isVisible === false &&
       inputC.face.stamp - inputC.history.isVisibleStamped[1].stamp >
-        nextTimeoutIntervalMs
+        nextTimeoutIntervalCs * 10
     ) {
       return {
         state: "S4",
@@ -100,10 +104,12 @@ function transition(stateStamped, inputD, inputC, params) {
   } else if (stateStamped.state === "S4" && inputD.type === "Features") {
     if (
       inputC.face.isVisible &&
+      nextTimeoutIntervalCs >= 0 && // use disengagedTimeoutIntervalCs < 0 to disable proactive pause
       inputC.face.stamp - inputC.history.stateStamped[0].stamp >
         inputC.face.stamp - inputC.history.isVisibleStamped[1].stamp &&
+      inputC.history.isVisibleStamped[1].isVisible === false &&
       inputC.face.stamp - inputC.history.isVisibleStamped[1].stamp >
-        nextTimeoutIntervalMs
+        nextTimeoutIntervalCs * 10
     ) {
       return {
         state: "S5",
@@ -185,13 +191,13 @@ function transition(stateStamped, inputD, inputC, params) {
 }
 
 var defaultParams = {
-  nextTimeoutIntervalMs: 1000,
+  nextTimeoutIntervalCs: 100,
   sets: {
     passive: {
-      nextTimeoutIntervalMs: 60000
+      nextTimeoutIntervalCs: 0
     },
     proactive: {
-      nextTimeoutIntervalMs: 1000
+      nextTimeoutIntervalCs: 100
     }
   }
 };

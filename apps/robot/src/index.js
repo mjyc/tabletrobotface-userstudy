@@ -198,8 +198,8 @@ function main(sources) {
         DOM: sources.DOM,
         isVisible: sinks.faceFeatures
           .map(faceFeatures => faceFeatures.isVisible)
-          .compose(dropRepeats()),
-        vadState: sinks.vadState.compose(dropRepeats()).map(s => VADState[s])
+          .compose(throttle(100)),
+        vadState: sinks.vadState.compose(throttle(100)).map(s => VADState[s])
       })
     : {
         DOM: xs.of(""),

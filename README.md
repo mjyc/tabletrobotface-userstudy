@@ -1,26 +1,37 @@
 # Tablet Robot Face User Study
 
-A collection of Cycle.js apps for running a simple human robot interaction user study.
+A collection of [tabletrobotface](https://github.com/mjyc/tablet-robot-face) apps for running a human robot interaction user study.
+
+# Demos
+
+-   Robot apps
+    -   [Storytelling](https://codesandbox.io/s/github/mjyc/tabletrobotface-userstudy/tree/codesandbox_storytelling_ranger_forester/apps/robot)
+    -   [Neck exercise](https://codesandbox.io/s/github/mjyc/tabletrobotface-userstudy/tree/codesandbox_neckexercise/apps/robot)
 
 # Getting started
 
-1. Build the pkg:
+1. Install the latest version of node using [nvm](https://github.com/nvm-sh/nvm). NOTE: the maintainer is using `nvm=0.33.2`, `node=v8.11.0`, and `npm=5.6.0`
+
+1. Build pkgs:
+
     ```
+    cd {path/to/tabletrobotface-userstudy}
     npm install
     npm build
-    npm build:apps
+    cd apps/{appname}
+    npm install
+    # repeat the last two steps for remaining apps
     ```
-2. Customize your robot behavior by modifying [`apps/robot`](./apps/robot) and run:
+
+1. Run [`robot`](./apps/robot) app:
+
     ```
     npm run robot
     ```
-    You can download the recorded data by clicking the "download" button located on the bottom of the robot webapp.
-3. If you want to automate giving instructions to your participant, customize [`apps/instructor`](./apps/instructor) and run:
+
+<!-- 1. Run [`instructor`](./apps/instructor) app (for giving instructions to participants):
+
     ```
     npm run instructor
     ```
-4. Analyze the interaction data using [`apps/replayer`](./apps/replayer):
-    ```
-    npm run replayer
-    ```
-    You should place your interaction file, e.g., the one downloaded in 2., in `./apps/dataplayer/` and specify the filename in [`apps/settings.json`](./apps/settings.json), e.g., `{"dataplayer": {"fileprefix": "your_file_name"}}`.
+ -->

@@ -19,7 +19,7 @@
     "@mjyc/cycle-time-travel": "0.1.3",
     "chartjs-plugin-streaming": "^1.8.0",
     "cycle-posenet-driver": "^1.0.5",
-    "tabletrobotface-userstudy": "file:../..",
+    "tabletrobotface-userstudy": "~0.0.0",
     "xstream": "11.10.0"
   },
   "devDependencies": {

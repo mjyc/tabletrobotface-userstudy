@@ -1,0 +1,32 @@
+{
+  "robot": {
+    "name": "recipeinsts_breakfast",
+    "withTabletFaceRobotActionsOptions": {
+      "styles": {
+        "robotSpeechbubble": {
+          "styles": {
+            "img": {
+              "height": "75vmin"
+            }
+          }
+        },
+        "humanSpeechbubble": {
+          "styles": {
+            "button": {
+              "fontSize": "8vmin"
+            }
+          }
+        }
+      }
+    },
+    "recording": {
+      "enabled": false
+    },
+    "charts": {
+      "enabled": true
+    },
+    "parameters": {
+      "setName": "proactive"
+    }
+  }
+}

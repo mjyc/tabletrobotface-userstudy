@@ -34,7 +34,7 @@ import {
   extractVoiceFeatures,
   RobotApp
 } from "tabletrobotface-userstudy";
-import settings from "../../settings_helper";
+import settings from "./settings.json";
 import transitions from "./transitions";
 import FeatureChart, { config as featureChartConfig } from "./FeatureChart";
 import StateChart, { config as stateChartConfig } from "./StateChart";

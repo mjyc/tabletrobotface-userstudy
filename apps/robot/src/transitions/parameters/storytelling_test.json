@@ -1,0 +1,7 @@
+{
+  "engagedMinNoseAngle": -10,
+  "engagedMaxNoseAngle": 10,
+  "disengagedMinNoseAngle": -20,
+  "disengagedMaxNoseAngle": 20,
+  "disengagedTimeoutIntervalMs": 1000
+}

@@ -7,14 +7,14 @@ import * as storytelling_professor_archie_makes_a_bang from "./storytelling_prof
 import * as storytelling_test from "./storytelling_test";
 import * as storytelling_ranger_forester from "./storytelling_ranger_forester";
 
-demo.params = require("../../../data/parameters/demo.json");
-neck_exercise.params = require("../../../data/parameters/neck_exercise.json");
-neck_exercise_test.params = require("../../../data/parameters/neck_exercise_test.json");
-recipeinsts_breakfast.params = require("../../../data/parameters/recipeinsts_breakfast.json");
-qa_set1.params = require("../../../data/parameters/qa_set1.json");
-storytelling_professor_archie_makes_a_bang.params = require("../../../data/parameters/storytelling_professor_archie_makes_a_bang.json");
-storytelling_ranger_forester.params = require("../../../data/parameters/storytelling_ranger_forester.json");
-storytelling_test.params = require("../../../data/parameters/storytelling_test.json");
+demo.params = require("./parameters/demo.json");
+neck_exercise.params = require("./parameters/neck_exercise.json");
+neck_exercise_test.params = require("./parameters/neck_exercise_test.json");
+recipeinsts_breakfast.params = require("./parameters/recipeinsts_breakfast.json");
+qa_set1.params = require("./parameters/qa_set1.json");
+storytelling_professor_archie_makes_a_bang.params = require("./parameters/storytelling_professor_archie_makes_a_bang.json");
+storytelling_ranger_forester.params = require("./parameters/storytelling_ranger_forester.json");
+storytelling_test.params = require("./parameters/storytelling_test.json");
 
 demo.params =
   Object.keys(demo.params).length === 0 ? demo.defaultParams : demo.params;

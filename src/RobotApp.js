@@ -4,6 +4,7 @@ import pairwise from "xstream/extra/pairwise";
 import sampleCombine from "xstream/extra/sampleCombine";
 import throttle from "xstream/extra/throttle";
 import { initGoal, isEqualGoalID } from "@cycle-robot-drivers/action";
+import { defaultFaceFeatures } from "./features";
 
 export function input({
   command,
@@ -89,7 +90,8 @@ export function input({
       isVisibleStampedHistory$,
       vadStateStampedHistory$,
       humanSpeechbubbleActionResultStamped$,
-      speechSynthesisActionResultStamped$
+      speechSynthesisActionResultStamped$,
+      faceFeatures.filter(ff => !!ff.isVisible).startWith(defaultFaceFeatures)
     )
     .map(
       ([
@@ -100,7 +102,8 @@ export function input({
         isVisibleStampedHistory,
         vadStateStampedHistory,
         humanSpeechbubbleActionResultStamped,
-        speechSynthesisActionResultStamped
+        speechSynthesisActionResultStamped,
+        lastVisibleFaceFeatures
       ]) => ({
         face: faceFeatures,
         voice: voiceFeatures,
@@ -113,7 +116,8 @@ export function input({
           ],
           speechSynthesisActionResultStamped: [
             speechSynthesisActionResultStamped
-          ]
+          ],
+          lastVisibleFaceFeatures
         },
         temporal: temporalFeatures
       })

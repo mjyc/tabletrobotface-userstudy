@@ -5,7 +5,6 @@ function transition(stateStamped, inputD, inputC, params) {
   var touchRighFaceAngle = params.touchRighFaceAngle;
   var touchLeftFaceAngle = params.touchLeftFaceAngle;
   var nextMaxMaxNoseAngle1Sec = params.nextMaxMaxNoseAngle1Sec;
-
   if (stateStamped.state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
@@ -67,7 +66,11 @@ function transition(stateStamped, inputD, inputC, params) {
       inputC.face.stamp -
         inputC.history.speechSynthesisActionResultStamped[0].stamp >
         3000 &&
-      inputC.face.noseAngle < rotateRightNoseAngle
+      ((inputC.face.isVisible &&
+        inputC.face.noseAngle < rotateRightNoseAngle) ||
+        (!inputC.face.isVisible &&
+          inputC.history.lastVisibleFaceFeatures.noseAngle <
+            rotateRightNoseAngle))
     ) {
       return {
         state: "S4",
@@ -118,7 +121,10 @@ function transition(stateStamped, inputD, inputC, params) {
       inputC.face.stamp -
         inputC.history.speechSynthesisActionResultStamped[0].stamp >
         3000 &&
-      inputC.face.noseAngle > rotateLeftNoseAngle
+      ((inputC.face.isVisible && inputC.face.noseAngle > rotateLeftNoseAngle) ||
+        (!inputC.face.isVisible &&
+          inputC.history.lastVisibleFaceFeatures.noseAngle >
+            rotateLeftNoseAngle))
     ) {
       return {
         state: "S5",
@@ -169,7 +175,11 @@ function transition(stateStamped, inputD, inputC, params) {
       inputC.face.stamp -
         inputC.history.speechSynthesisActionResultStamped[0].stamp >
         3000 &&
-      inputC.face.noseAngle < rotateRightNoseAngle
+      ((inputC.face.isVisible &&
+        inputC.face.noseAngle < rotateRightNoseAngle) ||
+        (!inputC.face.isVisible &&
+          inputC.history.lastVisibleFaceFeatures.noseAngle <
+            rotateRightNoseAngle))
     ) {
       return {
         state: "S6",
@@ -220,7 +230,10 @@ function transition(stateStamped, inputD, inputC, params) {
       inputC.face.stamp -
         inputC.history.speechSynthesisActionResultStamped[0].stamp >
         3000 &&
-      inputC.face.noseAngle > rotateLeftNoseAngle
+      ((inputC.face.isVisible && inputC.face.noseAngle > rotateLeftNoseAngle) ||
+        (!inputC.face.isVisible &&
+          inputC.history.lastVisibleFaceFeatures.noseAngle >
+            rotateLeftNoseAngle))
     ) {
       return {
         state: "S7",

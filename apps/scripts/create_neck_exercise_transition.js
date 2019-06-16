@@ -37,7 +37,6 @@ function transition(stateStamped, inputD, inputC, params) {` +
     })
     .join("") +
   `
-
   if (stateStamped.state === "S0" && inputD.type === "START") {
     return {
       state: "S1",
@@ -129,7 +128,8 @@ for (var i = 0; i < numRepeats; i++) {
       inputC.face.stamp -
         inputC.history.speechSynthesisActionResultStamped[0].stamp >
         3000 &&
-      inputC.face.noseAngle < rotateRightNoseAngle
+      (inputC.face.isVisible && (inputC.face.noseAngle < rotateRightNoseAngle)
+        || !inputC.face.isVisible && inputC.history.lastVisibleFaceFeatures.noseAngle < rotateRightNoseAngle)
     ) {
       return {
         state: "S${idx + 2}",
@@ -181,7 +181,8 @@ for (var i = 0; i < numRepeats; i++) {
       inputC.face.stamp -
         inputC.history.speechSynthesisActionResultStamped[0].stamp >
         3000 &&
-      inputC.face.noseAngle > rotateLeftNoseAngle
+      (inputC.face.isVisible && (inputC.face.noseAngle > rotateLeftNoseAngle)
+        || !inputC.face.isVisible && inputC.history.lastVisibleFaceFeatures.noseAngle > rotateLeftNoseAngle)
     ) {
       return {
         state: "S${idx + 3}",

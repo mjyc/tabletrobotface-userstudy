@@ -279,7 +279,8 @@ const drivers = {
   VAD: makeVoiceActivityDetectionDriver({
     useNoiseCapture: false,
     activityCounterThresh: 10,
-    activityCounterMax: 30
+    activityCounterMax: 30,
+    useDefaultActivityCounting: false
   }),
   Time: timeDriver,
   VideoRecorder: settings.robot.recording.enabled

@@ -6,17 +6,25 @@ if (process.argv.length < 3) {
 const fs = require("fs");
 
 const defaultParams = {
-  timeout: 500,
+  timeoutCm: 300,
+  minSpeakDurationCm: 100,
+  minTurnDurationCm: 500,
   engagedMinNoseAngle: -10,
   engagedMaxNoseAngle: 10,
+  engagedMaxMaxNoseAngle1Sec: 20,
   sets: {
     passive: {
-      timeout: 6000,
+      timeoutCm: -1,
+      minSpeakDurationCm: -1,
+      minTurnDurationCm: -1,
+      engagedMaxMaxNoseAngle1Sec: -1,
       engagedMinNoseAngle: -90,
       engagedMaxNoseAngle: 90
     },
     proactive: {
-      timeout: 500,
+      timeoutCm: 300,
+      minSpeakDurationCm: 100,
+      minTurnDurationCm: 500,
       engagedMinNoseAngle: -10,
       engagedMaxNoseAngle: 10
     }
@@ -77,12 +85,21 @@ lines.map((line, i) => {
     };
   } else if (stateStamped.state === "S${i + 2}" && inputD.type === "Features") {
     if (
+      timeoutCm >= 0 &&
+      minSpeakDurationCm >= 0 &&
+      minTurnDurationCm >= 0 &&
+      engagedMaxMaxNoseAngle1Sec >= 0 &&
       inputC.voice.vadState === "INACTIVE" &&
-      inputC.history.stateStamped[1].stamp < inputC.history.vadStateStamped[1].stamp &&
-      stateStamped.stamp - inputC.history.vadStateStamped[1].stamp > timeout &&
+      inputC.history.stateStamped[0].state === "S${i + 2}" &&
+      inputC.history.vadStateStamped[0].vadState === "INACTIVE" &&
+      inputC.history.stateStamped[0].stamp < inputC.history.vadStateStamped[1].stamp &&
+      inputC.history.vadStateStamped[0].stamp - inputC.history.vadStateStamped[1].stamp > minSpeakDurationCm * 10 &&
+      inputC.face.stamp - inputC.history.stateStamped[0].stamp > minTurnDurationCm * 10 &&
+      inputC.face.stamp - inputC.history.vadStateStamped[0].stamp > timeoutCm * 10 &&
       (inputC.face.isVisible &&
         (inputC.face.noseAngle < engagedMaxNoseAngle &&
-          inputC.face.noseAngle > engagedMinNoseAngle))
+          inputC.face.noseAngle > engagedMinNoseAngle) &&
+        inputC.temporal.maxNoseAngle1Sec < disengagedMaxMaxNoseAngle1Sec)
     ) {
       return {${
         i !== lines.length - 1

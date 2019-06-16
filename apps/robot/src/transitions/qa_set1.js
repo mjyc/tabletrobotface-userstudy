@@ -1,8 +1,11 @@
 // NOTE: might be called twice if transition and emission fncs are called separately
 function transition(stateStamped, inputD, inputC, params) {
-  var timeout = params.timeout;
+  var timeoutCm = params.timeoutCm;
+  var minSpeakDurationCm = params.minSpeakDurationCm;
+  var minTurnDurationCm = params.minTurnDurationCm;
   var engagedMinNoseAngle = params.engagedMinNoseAngle;
   var engagedMaxNoseAngle = params.engagedMaxNoseAngle;
+  var engagedMaxMaxNoseAngle1Sec = params.engagedMaxMaxNoseAngle1Sec;
 
   // Happy path
   if (stateStamped.state === "S0" && inputD.type === "START") {
@@ -29,13 +32,26 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S2" && inputD.type === "Features") {
     if (
+      timeoutCm >= 0 &&
+      minSpeakDurationCm >= 0 &&
+      minTurnDurationCm >= 0 &&
+      engagedMaxMaxNoseAngle1Sec >= 0 &&
       inputC.voice.vadState === "INACTIVE" &&
-      inputC.history.stateStamped[1].stamp <
+      inputC.history.stateStamped[0].state === "S2" &&
+      inputC.history.vadStateStamped[0].vadState === "INACTIVE" &&
+      inputC.history.stateStamped[0].stamp <
         inputC.history.vadStateStamped[1].stamp &&
-      stateStamped.stamp - inputC.history.vadStateStamped[1].stamp > timeout &&
+      inputC.history.vadStateStamped[0].stamp -
+        inputC.history.vadStateStamped[1].stamp >
+        minSpeakDurationCm * 10 &&
+      inputC.face.stamp - inputC.history.stateStamped[0].stamp >
+        minTurnDurationCm * 10 &&
+      inputC.face.stamp - inputC.history.vadStateStamped[0].stamp >
+        timeoutCm * 10 &&
       (inputC.face.isVisible &&
         (inputC.face.noseAngle < engagedMaxNoseAngle &&
-          inputC.face.noseAngle > engagedMinNoseAngle))
+          inputC.face.noseAngle > engagedMinNoseAngle) &&
+        inputC.temporal.maxNoseAngle1Sec < disengagedMaxMaxNoseAngle1Sec)
     ) {
       return {
         state: "S3",
@@ -67,13 +83,26 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S3" && inputD.type === "Features") {
     if (
+      timeoutCm >= 0 &&
+      minSpeakDurationCm >= 0 &&
+      minTurnDurationCm >= 0 &&
+      engagedMaxMaxNoseAngle1Sec >= 0 &&
       inputC.voice.vadState === "INACTIVE" &&
-      inputC.history.stateStamped[1].stamp <
+      inputC.history.stateStamped[0].state === "S3" &&
+      inputC.history.vadStateStamped[0].vadState === "INACTIVE" &&
+      inputC.history.stateStamped[0].stamp <
         inputC.history.vadStateStamped[1].stamp &&
-      stateStamped.stamp - inputC.history.vadStateStamped[1].stamp > timeout &&
+      inputC.history.vadStateStamped[0].stamp -
+        inputC.history.vadStateStamped[1].stamp >
+        minSpeakDurationCm * 10 &&
+      inputC.face.stamp - inputC.history.stateStamped[0].stamp >
+        minTurnDurationCm * 10 &&
+      inputC.face.stamp - inputC.history.vadStateStamped[0].stamp >
+        timeoutCm * 10 &&
       (inputC.face.isVisible &&
         (inputC.face.noseAngle < engagedMaxNoseAngle &&
-          inputC.face.noseAngle > engagedMinNoseAngle))
+          inputC.face.noseAngle > engagedMinNoseAngle) &&
+        inputC.temporal.maxNoseAngle1Sec < disengagedMaxMaxNoseAngle1Sec)
     ) {
       return {
         state: "S4",
@@ -105,13 +134,26 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S4" && inputD.type === "Features") {
     if (
+      timeoutCm >= 0 &&
+      minSpeakDurationCm >= 0 &&
+      minTurnDurationCm >= 0 &&
+      engagedMaxMaxNoseAngle1Sec >= 0 &&
       inputC.voice.vadState === "INACTIVE" &&
-      inputC.history.stateStamped[1].stamp <
+      inputC.history.stateStamped[0].state === "S4" &&
+      inputC.history.vadStateStamped[0].vadState === "INACTIVE" &&
+      inputC.history.stateStamped[0].stamp <
         inputC.history.vadStateStamped[1].stamp &&
-      stateStamped.stamp - inputC.history.vadStateStamped[1].stamp > timeout &&
+      inputC.history.vadStateStamped[0].stamp -
+        inputC.history.vadStateStamped[1].stamp >
+        minSpeakDurationCm * 10 &&
+      inputC.face.stamp - inputC.history.stateStamped[0].stamp >
+        minTurnDurationCm * 10 &&
+      inputC.face.stamp - inputC.history.vadStateStamped[0].stamp >
+        timeoutCm * 10 &&
       (inputC.face.isVisible &&
         (inputC.face.noseAngle < engagedMaxNoseAngle &&
-          inputC.face.noseAngle > engagedMinNoseAngle))
+          inputC.face.noseAngle > engagedMinNoseAngle) &&
+        inputC.temporal.maxNoseAngle1Sec < disengagedMaxMaxNoseAngle1Sec)
     ) {
       return {
         state: "S5",
@@ -143,13 +185,26 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S5" && inputD.type === "Features") {
     if (
+      timeoutCm >= 0 &&
+      minSpeakDurationCm >= 0 &&
+      minTurnDurationCm >= 0 &&
+      engagedMaxMaxNoseAngle1Sec >= 0 &&
       inputC.voice.vadState === "INACTIVE" &&
-      inputC.history.stateStamped[1].stamp <
+      inputC.history.stateStamped[0].state === "S5" &&
+      inputC.history.vadStateStamped[0].vadState === "INACTIVE" &&
+      inputC.history.stateStamped[0].stamp <
         inputC.history.vadStateStamped[1].stamp &&
-      stateStamped.stamp - inputC.history.vadStateStamped[1].stamp > timeout &&
+      inputC.history.vadStateStamped[0].stamp -
+        inputC.history.vadStateStamped[1].stamp >
+        minSpeakDurationCm * 10 &&
+      inputC.face.stamp - inputC.history.stateStamped[0].stamp >
+        minTurnDurationCm * 10 &&
+      inputC.face.stamp - inputC.history.vadStateStamped[0].stamp >
+        timeoutCm * 10 &&
       (inputC.face.isVisible &&
         (inputC.face.noseAngle < engagedMaxNoseAngle &&
-          inputC.face.noseAngle > engagedMinNoseAngle))
+          inputC.face.noseAngle > engagedMinNoseAngle) &&
+        inputC.temporal.maxNoseAngle1Sec < disengagedMaxMaxNoseAngle1Sec)
     ) {
       return {
         state: "S6",
@@ -184,13 +239,26 @@ function transition(stateStamped, inputD, inputC, params) {
     };
   } else if (stateStamped.state === "S6" && inputD.type === "Features") {
     if (
+      timeoutCm >= 0 &&
+      minSpeakDurationCm >= 0 &&
+      minTurnDurationCm >= 0 &&
+      engagedMaxMaxNoseAngle1Sec >= 0 &&
       inputC.voice.vadState === "INACTIVE" &&
-      inputC.history.stateStamped[1].stamp <
+      inputC.history.stateStamped[0].state === "S6" &&
+      inputC.history.vadStateStamped[0].vadState === "INACTIVE" &&
+      inputC.history.stateStamped[0].stamp <
         inputC.history.vadStateStamped[1].stamp &&
-      stateStamped.stamp - inputC.history.vadStateStamped[1].stamp > timeout &&
+      inputC.history.vadStateStamped[0].stamp -
+        inputC.history.vadStateStamped[1].stamp >
+        minSpeakDurationCm * 10 &&
+      inputC.face.stamp - inputC.history.stateStamped[0].stamp >
+        minTurnDurationCm * 10 &&
+      inputC.face.stamp - inputC.history.vadStateStamped[0].stamp >
+        timeoutCm * 10 &&
       (inputC.face.isVisible &&
         (inputC.face.noseAngle < engagedMaxNoseAngle &&
-          inputC.face.noseAngle > engagedMinNoseAngle))
+          inputC.face.noseAngle > engagedMinNoseAngle) &&
+        inputC.temporal.maxNoseAngle1Sec < disengagedMaxMaxNoseAngle1Sec)
     ) {
       return {
         state: "S7",
@@ -229,17 +297,25 @@ function transition(stateStamped, inputD, inputC, params) {
 }
 
 var defaultParams = {
-  timeout: 500,
+  timeoutCm: 300,
+  minSpeakDurationCm: 100,
+  minTurnDurationCm: 500,
   engagedMinNoseAngle: -10,
   engagedMaxNoseAngle: 10,
+  engagedMaxMaxNoseAngle1Sec: 20,
   sets: {
     passive: {
-      timeout: 6000,
+      timeoutCm: -1,
+      minSpeakDurationCm: -1,
+      minTurnDurationCm: -1,
+      engagedMaxMaxNoseAngle1Sec: -1,
       engagedMinNoseAngle: -90,
       engagedMaxNoseAngle: 90
     },
     proactive: {
-      timeout: 500,
+      timeoutCm: 300,
+      minSpeakDurationCm: 100,
+      minTurnDurationCm: 500,
       engagedMinNoseAngle: -10,
       engagedMaxNoseAngle: 10
     }

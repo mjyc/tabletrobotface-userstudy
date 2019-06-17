@@ -54,8 +54,6 @@
     "loglevel-debug": "0.0.1",
     "mkdirp": "~0.5.0",
     "npm-watch": "^0.6.0",
-    "rimraf": "^2.6.3",
-    "srtr": "file:../srtr",
-    "z3js": "file:../z3js"
+    "rimraf": "^2.6.3"
   }
 }

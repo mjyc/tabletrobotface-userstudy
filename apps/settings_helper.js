@@ -33,9 +33,6 @@ var defaultVal = {
     parameters: {
       setName: ""
     }
-  },
-  applysrtr: {
-    options: { H: 1 }
   }
 };
 

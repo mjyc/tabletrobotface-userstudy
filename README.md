@@ -5,7 +5,6 @@ A collection of [tabletrobotface](https://github.com/mjyc/tablet-robot-face) app
 # Demos
 
 -   Robot apps
-    -   [Storytelling](https://codesandbox.io/s/github/mjyc/tabletrobotface-userstudy/tree/codesandbox_storytelling_ranger_forester/apps/robot)
     -   [Neck exercise](https://codesandbox.io/s/github/mjyc/tabletrobotface-userstudy/tree/codesandbox_neck_exercise/apps/robot)
     -   [Recipe instructions](https://codesandbox.io/s/github/mjyc/tabletrobotface-userstudy/tree/codesandbox_recipeinsts_breakfast/apps/robot)
     -   [Questions](https://codesandbox.io/s/github/mjyc/tabletrobotface-userstudy/tree/codesandbox_qa_set1/apps/robot)

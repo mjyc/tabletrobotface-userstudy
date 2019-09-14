@@ -128,7 +128,12 @@ export function makeDownloadDataDriver({
         .compose(sampleCombine(data$))
         .addListener({
           next: ([_, data]) => {
-            const filename = `${filenamePrefix} ${new Date().toLocaleString()}`;
+            const filename = `${filenamePrefix}_${new Date()
+              .toISOString()
+              .replace(/-/g, "_")
+              .replace(/:/g, "_")
+              .replace("T", "_")
+              .slice(0, -5)}`;
             const a1 = createDownloadLinkElement("dl-json", data[0], filename);
             const a2 = createDownloadLinkElement("dl-video", data[1], filename);
             a1.click();
@@ -141,7 +146,12 @@ export function makeDownloadDataDriver({
         .compose(sampleCombine(jsonData$))
         .addListener({
           next: ([_, jsonData]) => {
-            const filename = `${filenamePrefix} ` + new Date().toLocaleString();
+            const filename = `${filenamePrefix}_${new Date()
+              .toISOString()
+              .replace(/-/g, "_")
+              .replace(/:/g, "_")
+              .replace("T", "_")
+              .slice(0, -5)}`;
             const a1 = createDownloadLinkElement("dl-json", jsonData, filename);
             a1.click();
           }

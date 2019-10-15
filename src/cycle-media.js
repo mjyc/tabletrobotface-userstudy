@@ -114,7 +114,9 @@ export function makeDownloadDataDriver({
       .filter(v => v.type === "JSON")
       .map(v =>
         window.URL.createObjectURL(
-          new Blob([JSON.stringify(v.value)], { type: "application/json" })
+          new Blob([JSON.stringify(jsonPostProcessFnc(v.value))], {
+            type: "application/json"
+          })
         )
       );
     const videoData$ = sink$
@@ -135,11 +137,7 @@ export function makeDownloadDataDriver({
               .replace(/:/g, "_")
               .replace("T", "_")
               .slice(0, -5)}`;
-            const a1 = createDownloadLinkElement(
-              "dl-json",
-              jsonPostProcessFnc(data[0]),
-              filename
-            );
+            const a1 = createDownloadLinkElement("dl-json", data[0], filename);
             const a2 = createDownloadLinkElement("dl-video", data[1], filename);
             a1.click();
             a2.click();

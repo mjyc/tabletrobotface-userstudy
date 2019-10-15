@@ -99,7 +99,8 @@ export function mockDownloadDataSource() {
 
 export function makeDownloadDataDriver({
   filenamePrefix = "Data",
-  recordVideo = true
+  recordVideo = true,
+  jsonPostProcessFnc = data => data
 } = {}) {
   const downloadDataDriver = sink$ => {
     const createDownloadLinkElement = (id, href, filename) => {
@@ -134,7 +135,11 @@ export function makeDownloadDataDriver({
               .replace(/:/g, "_")
               .replace("T", "_")
               .slice(0, -5)}`;
-            const a1 = createDownloadLinkElement("dl-json", data[0], filename);
+            const a1 = createDownloadLinkElement(
+              "dl-json",
+              jsonPostProcessFnc(data[0]),
+              filename
+            );
             const a2 = createDownloadLinkElement("dl-video", data[1], filename);
             a1.click();
             a2.click();

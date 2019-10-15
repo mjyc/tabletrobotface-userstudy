@@ -110,20 +110,8 @@ export function makeDownloadDataDriver({
       a.download = filename;
       return a;
     };
-    const jsonData$ = sink$
-      .filter(v => v.type === "JSON")
-      .map(v =>
-        window.URL.createObjectURL(
-          new Blob([JSON.stringify(jsonPostProcessFnc(v.value))], {
-            type: "application/json"
-          })
-        )
-      );
-    const videoData$ = sink$
-      .filter(v => v.type === "VIDEO")
-      .map(v =>
-        window.URL.createObjectURL(new Blob(v.value, { type: "video/mp4" }))
-      );
+    const jsonData$ = sink$.filter(v => v.type === "JSON").map(v => v.value);
+    const videoData$ = sink$.filter(v => v.type === "VIDEO").map(v => v.value);
     if (recordVideo) {
       const data$ = xs.combine(jsonData$, videoData$);
       sink$
@@ -137,8 +125,22 @@ export function makeDownloadDataDriver({
               .replace(/:/g, "_")
               .replace("T", "_")
               .slice(0, -5)}`;
-            const a1 = createDownloadLinkElement("dl-json", data[0], filename);
-            const a2 = createDownloadLinkElement("dl-video", data[1], filename);
+            const a1 = createDownloadLinkElement(
+              "dl-json",
+              window.URL.createObjectURL(
+                new Blob([JSON.stringify(jsonPostProcessFnc(data[0]))], {
+                  type: "application/json"
+                })
+              ),
+              filename
+            );
+            const a2 = createDownloadLinkElement(
+              "dl-video",
+              window.URL.createObjectURL(
+                new Blob(data[1], { type: "video/mp4" })
+              ),
+              filename
+            );
             a1.click();
             a2.click();
           }
